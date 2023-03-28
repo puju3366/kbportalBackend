@@ -1,0 +1,141 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: VendRequestAddVendorHelper unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #VendRequestAddVendorHelper
+    PROPERTIES
+      Name                #VendRequestAddVendorHelper
+      Origin              #{2D1A0000-0000-1000-3EC1-D024F1F9B5AD}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #class VendRequestAddVendorHelper
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #createVendor
+        #/// <summary>
+        #/// Adds a vendor to a legal entity that is based on an existing <c>DirPartyTable</c> record.
+        #/// </summary>
+        #/// <param name="_addVendor">
+        #/// The <c>VendRequestAddVendor</c> record that contains the vendor information.
+        #/// </param>
+        #/// <param name="_partyId">
+        #/// The vendor party record ID.
+        #/// </param>
+        #public static server void createVendor(VendRequestAddVendor _addVendor, recId _partyId)
+        #{
+        #    VendTable                       vendor;
+        #    VendRequestCompany              requestCompany;
+        #    VendRequestCategory             requestCategory;
+        #    VendRequestProspectiveProfile   prospectiveProfile;
+        #    VendAccount                     vendAccountNum;
+        #    ContactPerson                   contactPerson;
+        #
+        #    select forUpdate firstOnly crossCompany requestCompany where requestCompany.RecId == _addVendor.VendRequest;
+        #
+        #    ttsbegin;
+        #
+        #    changecompany(_addVendor.Company)
+        #    {
+        #        if (VendParameters::numRefVendAccount().numberSequenceTable().Manual)
+        #        {
+        #            throw error("@SYS343009");
+        #        }
+        #
+        #        if (requestCompany.SignUp != 0 && requestCompany.VendRequestCompanyStatus == VendRequestCompanyStatus::Draft)
+        #        {
+        #            // if from unsolicited vendor then update prospective profile vendor group and currency
+        #            // provided in Vendor Add record
+        #            prospectiveProfile = VendRequestProspectiveProfile::find(requestCompany.ProspectiveProfile, true);
+        #            prospectiveProfile.VendGroup    = _addVendor.VendGroup;
+        #            prospectiveProfile.Currency     = _addVendor.Currency;
+        #            prospectiveProfile.update();
+        #
+        #            // update vendor request status
+        #            requestCompany.VendRequestCompanyType   = VendRequestCompanyType::NewVendorCompanyProfile;
+        #            requestCompany.VendRequestCompanyStatus = VendRequestCompanyStatus::RequestComplete;
+        #
+        #            // update categories for a vendor request
+        #            while select forupdate recId, VendRequest, VendorConfirmed
+        #            from requestCategory
+        #                where requestCategory.VendRequest == requestCompany.RecId
+        #            {
+        #                requestCategory.VendorConfirmed = VendRequestVendorConfirmed::Yes;
+        #                requestCategory.update();
+        #            }
+        #
+        #            VendRequestCompanyWorkflowManager::convertProspectToVendor(requestCompany);
+        #            // get vendor account number
+        #            vendAccountNum = vendRequestCompany::findRecId(_addVendor.VendRequest).AccountNum;
+        #        }
+        #        else
+        #        {
+        #            // if vendor is created from existing vendor profile
+        #            // get a new Account number in requested company
+        #            vendAccountNum = _addVendor.VendAccountNum;//smmParameters::getNumber(smmNumbSeqUsed::Vendor);
+        #
+        #            // insert vendor record with parameters set up in Vendor Add record
+        #            vendor.clear();
+        #            vendor.AccountNum   = vendAccountNum;
+        #            vendor.VendGroup    = _addVendor.VendGroup;
+        #            vendor.Currency     = _addVendor.Currency;
+        #            vendor.Blocked      = _addVendor.Blocked;
+        #            vendor.Party        = _partyId;
+        #            vendor.PaymMode     = _addVendor.PaymMode;
+        #            vendor.PaymTermId     = _addVendor.PaymTermId;
+        #            vendor.insert();
+        #
+        #            if (requestCompany.RecId != 0)
+        #            {
+        #                contactPerson.clear();
+        #                contactPerson.initValue();
+        #                contactPerson.Party = requestCompany.ContactParty;
+        #                contactPerson.initFromVendTable(vendor);
+        #                contactPerson.insert();
+        #            }
+        #        }
+        #    }
+        #
+        #    _addVendor.VendAccountNum = vendAccountNum;
+        #    _addVendor.update();
+        #
+        #    ttscommit;
+        #}
+      ENDSOURCE
+      SOURCE #getAvailableCompanyQuery
+        #/// <summary>
+        #///    Get the companies where there does not exist a vendor for an address book party.
+        #/// </summary>
+        #/// <param name="_vendPartyRecId">
+        #///    The vendor party record ID for which to find available companies.
+        #/// </param>
+        #/// <returns>
+        #///    A query that represents the available companies.
+        #/// </returns>
+        #public static Query getAvailableCompanyQuery(recId _vendPartyRecId)
+        #{
+        #    Query query = new Query();
+        #    QueryBuildDataSource dataArea_DS;
+        #    QueryBuildDataSource vendTable_DS;
+        #
+        #    query.allowCrossCompany(true);
+        #    dataArea_DS = query.addDataSource(tablenum(DataArea));
+        #    vendTable_DS = dataArea_DS.addDataSource(tablenum(VendTable));
+        #    vendTable_DS.addRange(fieldnum(VendTable, Party)).value(queryValue(_vendPartyRecId));
+        #    vendTable_DS.addLink(fieldnum(DataArea, Id), fieldnum(VendTable, DataAreaId));
+        #    vendTable_DS.joinMode(JoinMode::NoExistsJoin);
+        #
+        #    return query;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

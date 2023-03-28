@@ -1,0 +1,272 @@
+.main {
+  position: relative;
+  background-color: black;
+  height: 100vh;
+  min-height: 25rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.main video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0;
+  transform: translateX(-50%) translateY(-50%);
+  width: 100%;
+}
+
+.main .container {
+  position: relative;
+  z-index: 2;
+}
+
+.main .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.main .diamond_div .logo {
+  z-index: 10;
+  width: 290px;
+  height: 290px;
+  position: relative;
+  transform: scale(1.8);
+  opacity: 0;
+  margin: auto;
+}
+
+.main .diamond_div .logo a {
+  display: block;
+}
+
+.main .diamond_div .logo img {
+  margin: 0;
+  display: block;
+}
+
+.main .diamond_div .logo .logo-rollover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #191919;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.main .diamond_div .logo .logo-rollover span {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: #808082;
+  font-size: 10px;
+}
+
+.main .diamond_div .logo .logo-left {
+  position: absolute;
+  top: 79px;
+  left: 16px;
+  opacity: 0;
+  z-index: 10;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+
+.main .diamond_div .logo .logo-left .logo-rollover {
+  top: 46px;
+  left: 5px;
+}
+
+.main .diamond_div .logo .logo-left:hover {
+  opacity: 1;
+}
+
+.main .diamond_div .logo .logo-left img {
+  width: 110px;
+  height: 187px;
+}
+
+.main .diamond_div .logo .logo-left.active {
+  opacity: 1;
+}
+
+.main .diamond_div .logo .logo-bottom {
+  position: absolute;
+  top: 145px;
+  right: 16px;
+  opacity: 0;
+  z-index: 10;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+
+.main .diamond_div .logo .logo-bottom img {
+  width: 172px;
+  height: 140px;
+}
+
+.main .diamond_div .logo .logo-bottom .logo-rollover {
+  top: 35px;
+  left: 44px;
+}
+
+.main .diamond_div .logo .logo-bottom:hover {
+  opacity: 1;
+}
+
+.main .diamond_div .logo .logo-bottom.active {
+  opacity: 1;
+}
+
+.main .diamond_div .logo .logo-top {
+  position: absolute;
+  top: 5px;
+  right: 18px;
+  opacity: 0;
+  z-index: 10;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+
+.main .diamond_div .logo .logo-top img {
+  width: 190px;
+  height: 138px;
+}
+
+.main .diamond_div .logo .logo-top .logo-rollover {
+  top: 64px;
+  left: 15px;
+  max-width: 130px;
+}
+
+.main .diamond_div .logo .logo-top:hover {
+  opacity: 1;
+}
+
+.main .diamond_div .logo .logo-top.active {
+  opacity: 1;
+}
+
+.main .diamond_div .logo .Rectangle {
+  width: 205px;
+  height: 205px;
+  border: 12px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-315deg);
+  z-index: 5;
+}
+
+.main .diamond_div .logo .Line-1 {
+  position: absolute;
+  width: 270px;
+  height: 12px;
+  background: #fff;
+  top: 139px;
+  left: 10px;
+  z-index: 6;
+}
+
+.main .diamond_div .logo .Line-2 {
+  position: absolute;
+  width: 200px;
+  height: 12px;
+  transform: rotate(74deg);
+  background: #fff;
+  top: 166px;
+  left: 5px;
+  z-index: 6;
+}
+
+.main .diamond_div .logo.active {
+  transition: all 2s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transform: scale(0.8);
+  opacity: 1;
+}
+
+.main .diamond_div .logo.active:hover {
+  transform: scale(0.9);
+}
+
+@media (min-width: 768px) {
+  .main .diamond_div .logo {
+    width: 390px;
+    height: 390px;
+  }
+  .main .diamond_div .logo .logo-rollover {
+    font-size: 18px;
+  }
+  .main .diamond_div .logo .logo-rollover span {
+    font-size: 12px;
+  }
+  .main .diamond_div .logo .logo-left {
+    top: 56px;
+    left: -59px;
+  }
+  .main .diamond_div .logo .logo-left .logo-rollover {
+    top: 110px;
+    left: 38px;
+  }
+  .main .diamond_div .logo .logo-left img {
+    width: 226px;
+    height: 389px;
+    transform: rotate(-1deg);
+  }
+  .main .diamond_div .logo .logo-bottom {
+    top: 190px;
+    right: -60px;
+  }
+  .main .diamond_div .logo .logo-bottom img {
+    width: 341px;
+    height: 278px;
+    transform: rotate(1deg);
+  }
+  .main .diamond_div .logo .logo-bottom .logo-rollover {
+    top: 66px;
+    left: 98px;
+  }
+  .main .diamond_div .logo .logo-top {
+    top: -80px;
+    right: -55px;
+  }
+  .main .diamond_div .logo .logo-top img {
+    width: 370px;
+    height: 276px;
+  }
+  .main .diamond_div .logo .logo-top .logo-rollover {
+    width: 170px;
+    top: 142px;
+    left: 63px;
+    max-width: 100%;
+  }
+  .main .diamond_div .logo .Rectangle {
+    border: 16px solid #fff;
+    width: 390px;
+    height: 390px;
+  }
+  .main .diamond_div .logo .Line-1 {
+    width: 530px;
+    height: 16px;
+    top: 185px;
+    left: -70px;
+  }
+  .main .diamond_div .logo .Line-2 {
+    width: 392px;
+    height: 16px;
+    top: 243px;
+    left: -73px;
+  }
+}
+/*# sourceMappingURL=style.css.map */

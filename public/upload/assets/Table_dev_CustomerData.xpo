@@ -1,0 +1,256 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_CustomerData unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_CustomerData
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_CustomerData
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      Origin              #{D9513DEF-77F7-47AA-9087-143E85D3DBCD}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #City
+        STRING
+        PROPERTIES
+          Name                #City
+          Table               #dev_CustomerData
+          Origin              #{70DF2F86-C2CD-492A-9667-2F9F60E0F447}
+          StringSize          #25
+        ENDPROPERTIES
+        
+      FIELD #CountryRegionId
+        STRING
+        PROPERTIES
+          Name                #CountryRegionId
+          Label               #Country/region
+          Table               #dev_CustomerData
+          Origin              #{2B83C018-15A8-4FE1-A84B-8767BDB8A37A}
+        ENDPROPERTIES
+        
+      FIELD #County
+        STRING
+        PROPERTIES
+          Name                #County
+          Table               #dev_CustomerData
+          Origin              #{A6D3B440-EF30-4678-A7F3-AD11D6612DEF}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #CRN
+        STRING
+        PROPERTIES
+          Name                #CRN
+          Label               #Company registration number
+          Table               #dev_CustomerData
+          Origin              #{699A1D38-E433-46A9-B0B6-84FF663AF31B}
+          StringSize          #25
+        ENDPROPERTIES
+        
+      FIELD #Currency
+        STRING
+        PROPERTIES
+          Name                #Currency
+          Table               #dev_CustomerData
+          Origin              #{3CAB72FA-D69D-4B94-8DF2-EDDDCEA02CDF}
+        ENDPROPERTIES
+        
+      FIELD #CustAccount
+        STRING
+        PROPERTIES
+          Name                #CustAccount
+          Table               #dev_CustomerData
+          Origin              #{73241638-DA18-4C49-A428-8A3388261742}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #CustGroup
+        STRING
+        PROPERTIES
+          Name                #CustGroup
+          Table               #dev_CustomerData
+          Origin              #{A2BC5591-D212-40EE-BCC9-394914B82FC5}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #CustomerRecId
+        INT64
+        PROPERTIES
+          Name                #CustomerRecId
+          Table               #dev_CustomerData
+          Origin              #{738CEB8A-069A-46EA-BDA4-5A83429847B2}
+        ENDPROPERTIES
+        
+      FIELD #dev_ProcessMaster
+        INT64
+        PROPERTIES
+          Name                #dev_ProcessMaster
+          Label               #RefRecId
+          Table               #dev_CustomerData
+          Origin              #{A8B646CD-12F9-4397-98CD-B9ED196DAB18}
+        ENDPROPERTIES
+        
+      FIELD #EmailAddress
+        STRING
+        PROPERTIES
+          Name                #EmailAddress
+          Label               #Email address
+          Table               #dev_CustomerData
+          Origin              #{69E25420-FCF0-4A71-A0E7-549338541E47}
+          StringSize          #40
+        ENDPROPERTIES
+        
+      FIELD #IsOK
+        ENUM
+        PROPERTIES
+          Name                #IsOK
+          Table               #dev_CustomerData
+          Origin              #{0E8991E1-FDA9-4634-9ED8-1D16DF26D933}
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LineNumber
+        REAL
+        PROPERTIES
+          Name                #LineNumber
+          Label               #Line number
+          Table               #dev_CustomerData
+          Origin              #{88A1C2D2-0504-4254-8DAD-7B9144F585C2}
+        ENDPROPERTIES
+        
+      FIELD #Name
+        STRING
+        PROPERTIES
+          Name                #Name
+          Table               #dev_CustomerData
+          Origin              #{87F82EFA-5D52-4228-A0CD-9CC1048B1EB9}
+          StringSize          #250
+        ENDPROPERTIES
+        
+      FIELD #PayTerms
+        STRING
+        PROPERTIES
+          Name                #PayTerms
+          Label               #Payment terms
+          Table               #dev_CustomerData
+          Origin              #{FE8D13F6-3B08-4EAE-B657-8C488CCC9F39}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #PhoneNumber
+        STRING
+        PROPERTIES
+          Name                #PhoneNumber
+          Label               #Phone number
+          Table               #dev_CustomerData
+          Origin              #{546B639A-B6CC-43E4-8FED-9DE3C503CCFC}
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #Postcode
+        STRING
+        PROPERTIES
+          Name                #Postcode
+          Table               #dev_CustomerData
+          Origin              #{929EB3A5-6A65-4325-B910-4975011E425A}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #State
+        STRING
+        PROPERTIES
+          Name                #State
+          Table               #dev_CustomerData
+          Origin              #{DBFE5D92-66B1-4714-A26A-C767FB603D8A}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Street
+        STRING
+        PROPERTIES
+          Name                #Street
+          Table               #dev_CustomerData
+          Origin              #{C3182ADA-3C54-4E2F-A8B6-C157944510F5}
+          StringSize          #200
+        ENDPROPERTIES
+        
+      FIELD #VATGroup
+        STRING
+        PROPERTIES
+          Name                #VATGroup
+          Label               #VAT Group
+          Table               #dev_CustomerData
+          Origin              #{E91219F0-EE46-483E-8B93-223D1DDB91FF}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #VATNumber
+        STRING
+        PROPERTIES
+          Name                #VATNumber
+          Label               #VAT number
+          Table               #dev_CustomerData
+          Origin              #{51D529A0-111B-47C8-A17E-6D59FE1D7F15}
+          StringSize          #25
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+      REFERENCE #dev_ProcessMaster
+        PROPERTIES
+          Name                #dev_ProcessMaster
+          Table               #dev_ProcessMaster
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #dev_ProcessMaster
+            RelatedField        #RecId
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      SOURCE #find
+        #static dev_CustomerData find(Str 20 _CustAccount,RecId _RecId, RecId _ParentRecId)
+        #{
+        #    dev_CustomerData dev_CustomerData;
+        #
+        #    if (_CustAccount && _RecId && _ParentRecId)
+        #    {
+        #        select firstonly dev_CustomerData
+        #            where dev_CustomerData.CustAccount == _CustAccount
+        #            && dev_CustomerData.RecId != _RecId
+        #            && dev_CustomerData.dev_ProcessMaster == _ParentRecId;
+        #    }
+        #
+        #    return dev_CustomerData;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

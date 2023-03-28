@@ -1,0 +1,473 @@
+System.Array                files;
+int                         fileCount,i;
+//str                       nextFile;
+str 100                     filePath,fileNameOnly,Delimiter = ",";
+real                        HeaderLineNum,DetailLineNum;
+Filename                    foundBaseFileName,CsvFilename;
+//FilePath                    _path; 
+FileNameType                _pattern;
+FileType                    type;
+CommaTextIo                 importFile;
+dev_ProcessFileMaster       Objdev_ProcessFileMaster;
+dev_ProcessMaster           Objdev_ProcessMaster,Objdev_ProcessMaster1,dev_ProcessMaster2,dev_ProcessMaster3,dev_ProcessMaster4;
+dev_CustomerData            Objdev_CustomerData,Objdev_CustomerData1,Objdev_CustomerData2;
+PaymTerm                    PaymTerm;
+TaxVATNumTable              objTaxVATNumTable;
+CustTable                   custTable;
+CustAccount                 custAccount;
+DirParty                    dirParty;
+DirPartyPostalAddressView   dirPartyPostalAddressView;
+DirPartyContactInfoView     dirPartyContactInfo;
+DirOrganization             DirOrganization;
+NumberSeq                   numSeq;
+TaxGroup                    TaxGroup;
+PriceGroupId                PriceGroupId;
+InfologData                 msg;
+container                   record;
+boolean                     PayTermsCheck,CountyCheck,VATNumberCheck;
+Name                        name;
+RecId                       _CustomerRecId;
+
+files           = System.IO.Directory::GetFiles("FolderPath", "FileType");
+if (files)
+{
+	HeaderLineNum = dev_ProcessMaster::ReturnLastLineNumber();
+	fileCount =    files.get_Length();
+	for(i=0; i < fileCount; i++)
+	{
+		try
+		{
+			ttsbegin;
+			CsvFilename=files.GetValue(i);
+			[filePath, foundBaseFileName, type] = fileNameSplit(@''+CsvFilename+'');
+			foundBaseFileName +=".csv";
+			//Remove Duplicate file if had error status start
+			dev_ProcessMaster4.clear();
+			select * from dev_ProcessMaster4
+			where dev_ProcessMaster4.FileName == foundBaseFileName
+			&& dev_ProcessMaster4.Entity == dev_Entity::Clients
+			&& (dev_ProcessMaster4.Status == dev_ProcessStatus::Error || dev_ProcessMaster4.Status == dev_ProcessStatus::Pending);
+			if(dev_ProcessMaster4.RecId != 0)
+			{
+				dev_ProcessMaster2.clear();
+				delete_from dev_ProcessMaster2
+				where (dev_ProcessMaster2.Status == dev_ProcessStatus::Error || dev_ProcessMaster2.Status == dev_ProcessStatus::Pending)
+				&& dev_ProcessMaster2.FileName == foundBaseFileName
+				&& dev_ProcessMaster2.Entity == dev_Entity::Clients
+				&& dev_ProcessMaster2.RecId == dev_ProcessMaster4.RecId;
+			}
+			//Check for Current File is on Master table if not then insert start
+			Objdev_ProcessMaster.clear();
+			select firstOnly Objdev_ProcessMaster
+			where  Objdev_ProcessMaster.FileName == foundBaseFileName
+			&& Objdev_ProcessMaster.Entity == dev_Entity::Clients;
+			if(Objdev_ProcessMaster.RecId == 0)
+			{
+				Objdev_ProcessMaster1.clear();
+				HeaderLineNum++;
+				Objdev_ProcessMaster1.clear();
+				Objdev_ProcessMaster1.Path = Objdev_ProcessFileMaster.Path;
+				Objdev_ProcessMaster1.FileName = foundBaseFileName;
+				Objdev_ProcessMaster1.Status = dev_ProcessStatus::Pending;
+				Objdev_ProcessMaster1.IsImported2Ax = NoYes::No;
+				Objdev_ProcessMaster1.Entity = dev_Entity::Clients;
+				Objdev_ProcessMaster1.LineNum = HeaderLineNum;
+				if(Objdev_ProcessMaster1.validateWrite())
+				{
+					DetailLineNum=0;
+					Objdev_ProcessMaster1.insert();
+					importFile = new CommaTextIo(@''+CsvFilename+'', 'R');
+
+					//Check for File opening
+					if((!importFile) || (importFile.status() != IO_Status::Ok))
+					{
+						warning("Error in opening import file");
+						msg = infolog.infologData();
+						dev_ProcessMaster2.clear();
+						select forUpdate dev_ProcessMaster2 where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+						if(dev_ProcessMaster2.RecId != 0)
+						{
+							dev_ProcessMaster2.Status = dev_ProcessStatus::Error;
+							dev_ProcessMaster2.IsImported2Ax = NoYes::No;
+							dev_ProcessMaster2.InfoMessage = msg;
+							dev_ProcessMaster2.update();
+						}
+						warning("Error in opening import file");
+					}
+					if(importFile != null)
+					{
+						importFile.inFieldDelimiter(Delimiter);
+						try
+						{
+							record = importFile.read();
+							//CSV File Columns Header Info
+							//info(strFmt("%1, %2, %3, %4, %5",conPeek(record,1),conPeek(record,2),conPeek(record,3),conPeek(record,4),conPeek(record,5)));
+							while(importFile.status() ==  IO_Status::Ok)
+							{
+								record = importFile.read();
+								if(!record)
+								{
+									break;
+								}
+								else
+								{
+									DetailLineNum++;
+									//CSV File Columns Row Data Start
+									Objdev_CustomerData.clear();
+									Objdev_CustomerData.LineNumber          = DetailLineNum;
+									Objdev_CustomerData.Name                = conPeek(record,1);
+									Objdev_CustomerData.CustAccount         = conPeek(record,2);
+									Objdev_CustomerData.CustGroup           = conPeek(record,3);
+									Objdev_CustomerData.CRN                 = conPeek(record,4);
+									Objdev_CustomerData.Street              = conPeek(record,5);
+									Objdev_CustomerData.City                = conPeek(record,6);
+									//Objdev_CustomerData.County              = conPeek(record,7);
+									Objdev_CustomerData.Postcode            = conPeek(record,7);
+									Objdev_CustomerData.CountryRegionId     = conPeek(record,8);
+									if(Objdev_CustomerData.CountryRegionId == "GB")
+									{
+										Objdev_CustomerData.CountryRegionId = "GBR";
+									}
+									if(Objdev_CustomerData.CountryRegionId == "UAE")
+									{
+										Objdev_CustomerData.CountryRegionId = "ARE";
+									}
+									if(Objdev_CustomerData.CountryRegionId == "SWI")
+									{
+										Objdev_CustomerData.CountryRegionId = "CHE";
+									}
+									Objdev_CustomerData.PhoneNumber         = conPeek(record,9);
+									Objdev_CustomerData.EmailAddress        = conPeek(record,10);
+									Objdev_CustomerData.Currency            = conPeek(record,11);
+									Objdev_CustomerData.PayTerms            = conPeek(record,12);
+									PaymTerm.clear();
+									select * from PaymTerm where PaymTerm.NumOfDays == str2int(Objdev_CustomerData.PayTerms);
+									if(PaymTerm.PaymTermId != '')
+									{
+										Objdev_CustomerData.PayTerms        = PaymTerm.PaymTermId;
+									}
+									Objdev_CustomerData.VATGroup            = conPeek(record,13);
+									Objdev_CustomerData.VATNumber           = conPeek(record,14);
+									Objdev_CustomerData.dev_ProcessMaster   = Objdev_ProcessMaster1.RecId;
+									if(Objdev_CustomerData.validateWrite())
+									{
+										Objdev_CustomerData.insert();
+									}
+								}
+							}
+						}
+						catch(Exception::Error)
+						{
+							dev_ProcessMaster2.clear();
+							update_recordSet dev_ProcessMaster2
+							setting Status = dev_ProcessStatus::Error
+							where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+							ttsAbort;
+						}
+						//Validation start
+						Objdev_CustomerData1.clear();
+						while select * from Objdev_CustomerData1
+							where Objdev_CustomerData1.dev_ProcessMaster == Objdev_ProcessMaster1.RecId
+						{
+							PayTermsCheck=false;CountyCheck=false;VATNumberCheck=false;
+							if(dev_CustomerData::find(Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.RecId,Objdev_ProcessMaster1.RecId).RecId == 0
+							&& Objdev_CustomerData1.CustAccount != '' && Objdev_CustomerData1.CustGroup != ''
+							&& CustGroup::find(Objdev_CustomerData1.CustGroup).RecId != 0
+							&& Objdev_CustomerData1.Currency != '' && Currency::find(Objdev_CustomerData1.Currency).CurrencyCode != ''
+							&& Objdev_CustomerData1.VATGroup != '' && Objdev_CustomerData1.CountryRegionId != ''
+							&& LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId != '')
+							{
+								//Check payment terms if enter in excelfile check in ax master start
+								if(Objdev_CustomerData1.PayTerms != '')
+								{
+									if(PaymTerm::find(Objdev_CustomerData1.PayTerms).PaymTermId != '')
+									{
+										PayTermsCheck=true;
+									}
+									else
+									{
+										dev_ProcessMaster2.clear();
+										update_recordSet dev_ProcessMaster2
+										setting Status = dev_ProcessStatus::Error,IsImported2Ax = NoYes::No
+										where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+										error(strFmt("LineNumber :%1, Client: '%2' CustomerGroup:'%3', Payment terms:'%4' not exists in ax master!",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.CustGroup,Objdev_CustomerData1.PayTerms));
+									}
+								}
+								else
+								{
+									PayTermsCheck=true;
+								}
+								//Check payment terms if enter in excelfile check in ax master end
+								if(Objdev_CustomerData1.VATNumber != '')
+								{
+									if(TaxVATNumTable::find(Objdev_CustomerData1.VATNumber,Objdev_CustomerData1.CountryRegionId).VATNum != '')
+									{
+										VATNumberCheck=true;
+									}
+									else // VATnumber not exist in table then insert in table before updating for client
+									{
+										objTaxVATNumTable.CountryRegionId = Objdev_CustomerData1.CountryRegionId;
+										objTaxVATNumTable.VATNum = Objdev_CustomerData1.VATNumber;
+										objTaxVATNumTable.Name = Objdev_CustomerData1.Name;
+										objTaxVATNumTable.insert();
+										VATNumberCheck=true;
+									}
+								}
+								else
+								{
+									VATNumberCheck=true;
+								}
+								//Check for county exists start
+								if(Objdev_CustomerData1.County != '')
+								{
+									if(LogisticsAddressCounty::findCountyCode(LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId,Objdev_CustomerData1.County).CountyId != '')
+									{
+										CountyCheck=true;
+									}
+									else
+									{
+										dev_ProcessMaster2.clear();
+										update_recordSet dev_ProcessMaster2 setting Status = dev_ProcessStatus::Error,
+										IsImported2Ax = NoYes::No
+										where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+										error(strFmt("LineNumber :%1, Client: '%2' Country/Region:'%3', County:'%4' not exists in ax master!",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.CountryRegionId,Objdev_CustomerData1.County));
+									}
+								}
+								else
+								{
+									CountyCheck=true;
+								}
+								if(CountyCheck == true && PayTermsCheck == true && VATNumberCheck == true)
+								{
+									if(CustTable::find(Objdev_CustomerData1.CustAccount).RecId == 0)
+									{
+										Objdev_CustomerData2.clear();
+										update_recordSet Objdev_CustomerData2
+										setting IsOK = NoYes::Yes
+										where Objdev_CustomerData2.RecId == Objdev_CustomerData1.RecId;
+									}
+								}
+							}
+							else
+							{
+								dev_ProcessMaster2.clear();
+								update_recordSet dev_ProcessMaster2
+								setting Status = dev_ProcessStatus::Error,IsImported2Ax = NoYes::No
+								where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+
+								//Customer CountryRegionId check start
+								if(Objdev_CustomerData1.CountryRegionId == '')
+								{
+									error(strFmt("LineNumber :%1, Client: '%2', Country/Region not found in excel file !",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount));
+								}
+								else
+								{
+									if(LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId == '')
+									{
+										error(strFmt("LineNumber :%1, Client: '%2', Country/Region:'%3' not found in ax master !",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.CountryRegionId));
+									}
+								}
+								if(Objdev_CustomerData1.VATGroup == '')
+								{
+									error(strFmt("LineNumber :%1, Client: '%2' CustomerGroup:'%3', VAT Group not exists in excel file!",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.CustGroup));
+								}
+								//Currency check start
+								if(Objdev_CustomerData1.Currency == '')
+								{
+									error(strFmt("LineNumber :%1, Client: '%2', currency not exists in excel file",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount));
+								}
+								else
+								{
+									if(Currency::find(Objdev_CustomerData1.Currency).CurrencyCode == '')
+									{
+										error(strFmt("LineNumber :%1, Client: '%2', currency:'%3' not exists in ax master",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.Currency));
+									}
+								}
+								//Customer group check start
+								if(Objdev_CustomerData1.CustGroup == '')
+								{
+									error(strFmt("LineNumber :%1, Client: '%2' Customer Group not exists in excel file!",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount));
+								}
+								else
+								{
+									if(CustGroup::find(Objdev_CustomerData1.CustGroup).RecId == 0)
+									{
+										error(strFmt("LineNumber :%1, Client: '%2', CustomerGroup:'%3' not exists in ax master!",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.CustGroup));
+									}
+								}
+								//Customer check in Excel file and ax master start
+								if(Objdev_CustomerData1.CustAccount == '')
+								{
+									error(strFmt("LineNumber :%1, Client: %2 not exists !",Objdev_CustomerData1.LineNumber,Objdev_CustomerData1.CustAccount));
+								}
+								else
+								{
+									if(dev_CustomerData::find(Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.RecId,Objdev_ProcessMaster1.RecId).RecId != 0)
+									{
+										error(strFmt("Multiple entry of Client: '%1' in excel file!",Objdev_CustomerData1.CustAccount));
+									}
+								}
+							}
+						}
+						//While Loop for Validation and Impoet into Ax Master Start
+						dev_ProcessMaster3.clear();
+						select * from dev_ProcessMaster3 where dev_ProcessMaster3.RecId == Objdev_ProcessMaster1.RecId;
+						if(dev_ProcessMaster3.Status != dev_ProcessStatus::Error)
+						{
+							Objdev_CustomerData1.clear();
+							while select * from Objdev_CustomerData1 where Objdev_CustomerData1.dev_ProcessMaster == Objdev_ProcessMaster1.RecId
+							{
+								if(Objdev_CustomerData1.IsOK == NoYes::Yes)
+								{
+									custTable.clear();
+
+									//Insert Customer Start
+									name = Objdev_CustomerData1.Name;
+									custTable.initValue();
+									if(CustTable::find(Objdev_CustomerData1.CustAccount).RecId == 0)
+									{
+										custTable.AccountNum = Objdev_CustomerData1.CustAccount;
+									}
+									if(Currency::find(Objdev_CustomerData1.Currency).RecId != 0)
+									{
+										custTable.Currency = Currency::find(Objdev_CustomerData1.Currency).CurrencyCode;
+									}
+									if(CustGroup::find(Objdev_CustomerData1.CustGroup).RecId != 0)
+									{
+										custTable.CustGroup  = CustGroup::find(Objdev_CustomerData1.CustGroup).CustGroup;
+										custTable.TaxGroup = Objdev_CustomerData1.VATGroup;
+									}
+									if(PaymTerm::find(Objdev_CustomerData1.PayTerms).RecId != 0)
+									{
+										custTable.PaymTermId = PaymTerm::find(Objdev_CustomerData1.PayTerms).PaymTermId;
+									}
+									if(TaxVATNumTable::find(Objdev_CustomerData1.VATNumber,Objdev_CustomerData1.CountryRegionId).RecId != 0)
+									{
+										custTable.VATNum = TaxVATNumTable::find(Objdev_CustomerData1.VATNumber,Objdev_CustomerData1.CountryRegionId).VATNum;
+									}
+									if(custTable.validateWrite())
+									{
+										custTable.insert(DirPartyType::Organization, name);
+									}
+									//DirParty start
+									dirParty = DirParty::constructFromCommon(custTable);
+									dirPartyPostalAddressView.clear();
+									dirPartyPostalAddressView.LocationName  = name;
+									dirPartyPostalAddressView.Street = Objdev_CustomerData1.Street;
+									dirPartyPostalAddressView.ZipCode = Objdev_CustomerData1.Postcode;
+									dirPartyPostalAddressView.City = Objdev_CustomerData1.City;
+									if(LogisticsAddressCounty::findCountyCode(LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId,Objdev_CustomerData1.County).CountyId != '')
+									{
+										dirPartyPostalAddressView.County = LogisticsAddressCounty::findCountyCode(LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId,Objdev_CustomerData1.County).CountyId;
+										dirPartyPostalAddressView.State = LogisticsAddressCounty::findCountyCode(LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId,Objdev_CustomerData1.County).StateId;
+									}
+									if(LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId != '')
+									{
+										dirPartyPostalAddressView.CountryRegionId = LogisticsAddressCountryRegionTranslation::find(Objdev_CustomerData1.CountryRegionId).CountryRegionId;
+									}
+
+									//Insert dirparty table start
+									if(dirPartyPostalAddressView.Street && dirPartyPostalAddressView.CountryRegionId)
+									{
+										dirParty.createOrUpdatePostalAddress(dirPartyPostalAddressView);
+									}
+									//Phone start
+									dirPartyContactInfo.clear();
+									dirPartyContactInfo.LocationName    = 'Phone Number';
+									dirPartyContactInfo.Locator         = Objdev_CustomerData1.PhoneNumber;
+									dirPartyContactInfo.Type            = LogisticsElectronicAddressMethodType::Phone;
+									dirPartyContactInfo.IsPrimary       = NoYes::Yes;
+									dirParty.createOrUpdateContactInfo(dirPartyContactInfo);
+									//Email start
+									dirPartyContactInfo.clear();
+									dirPartyContactInfo.LocationName    = 'Email Address';
+									dirPartyContactInfo.Locator         = Objdev_CustomerData1.EmailAddress;
+									dirPartyContactInfo.Type            = LogisticsElectronicAddressMethodType::Email;
+									dirPartyContactInfo.IsPrimary       = NoYes::Yes;
+									dirParty.createOrUpdateContactInfo(dirPartyContactInfo);
+
+									select forUpdate DirOrganization
+									where DirOrganization.PartyNumber == DirPartyTable::findRec(CustTable::find(custTable.AccountNum).Party).PartyNumber;
+									if(DirOrganization.PartyNumber != '')
+									{
+										DirOrganization.OrgNumber = Objdev_CustomerData1.CRN;
+										DirOrganization.update();
+									}
+
+									//Update Status and info message start
+									info(strFmt("Client: '%1', Name:'%2' created successfully.",custTable.AccountNum,name));
+									dev_ProcessMaster2.clear();
+									update_recordSet dev_ProcessMaster2
+									setting Status = dev_ProcessStatus::processed,
+											IsImported2Ax = NoYes::Yes
+									where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+
+									update_recordSet  Objdev_CustomerData2
+									setting CustomerRecId = custTable.RecId
+									where Objdev_CustomerData2.RecId == Objdev_CustomerData1.RecId
+										&& Objdev_CustomerData2.dev_ProcessMaster == Objdev_ProcessMaster1.RecId;
+								}
+								else
+								{
+									if(CustTable::find(Objdev_CustomerData1.CustAccount).RecId != 0)
+									{
+										_CustomerRecId=0;
+										warning(strFmt("Client: '%1', Name:'%2' exists in master table.",Objdev_CustomerData1.CustAccount,Objdev_CustomerData1.Name));
+										dev_ProcessMaster2.clear();
+										update_recordSet dev_ProcessMaster2
+										setting Status = dev_ProcessStatus::processed,
+												IsImported2Ax = NoYes::Yes
+										where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+										_CustomerRecId = CustTable::find(Objdev_CustomerData1.CustAccount).RecId;
+										update_recordSet  Objdev_CustomerData2
+										setting CustomerRecId = _CustomerRecId
+										where Objdev_CustomerData2.RecId == Objdev_CustomerData1.RecId
+											&& Objdev_CustomerData2.dev_ProcessMaster == Objdev_ProcessMaster1.RecId;
+									}
+									else
+									{
+										dev_ProcessMaster2.clear();
+										update_recordSet dev_ProcessMaster2
+										setting Status = dev_ProcessStatus::Error,
+												IsImported2Ax = NoYes::No
+										where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+									}                                                    
+								}
+							}
+						}
+					}
+				}
+				msg = infolog.infologData();
+				dev_ProcessMaster2.clear();
+				select forUpdate dev_ProcessMaster2 where dev_ProcessMaster2.RecId == Objdev_ProcessMaster1.RecId;
+				if(dev_ProcessMaster2.RecId != 0)
+				{
+					dev_ProcessMaster2.InfoMessage = msg;
+					dev_ProcessMaster2.update();
+				}
+			}
+			else
+			{
+				//if Exists file has error status start
+				if(Objdev_ProcessMaster.Status == dev_ProcessStatus::Error)
+				{
+					Box::info(strFmt("File already exists %1, Path: %2, Status: %3",Objdev_ProcessMaster.FileName,Objdev_ProcessMaster.Path,Objdev_ProcessMaster.Status));
+				}
+				//if Exists file has processed status start
+				if(Objdev_ProcessMaster.Status == dev_ProcessStatus::processed)
+				{
+					Box::info(strFmt("File already exists %1, Path: %2, Status: %3",Objdev_ProcessMaster.FileName,Objdev_ProcessMaster.Path,Objdev_ProcessMaster.Status));
+				}
+
+			}
+			ttscommit;
+		}
+		catch(Exception::Error)
+		{
+			info(strFmt("%1",Exception::Error));
+			ttsAbort;
+		}
+		infolog.clear();
+	}
+	importFile.finalize();
+}

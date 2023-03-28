@@ -1,0 +1,146 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_VendorContactDetails_Insert unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_VendorContactDetails_Insert
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_VendorContactDetails_Insert
+      CreateRecIdIndex    #Yes
+      SaveDataPerCompany  #No
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{7F1D6D2B-2639-4716-A762-B57278840584}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountNum
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{2FDE44DF-4CE7-4E06-A099-1E42D5A46F04}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #CellularPhone
+        STRING
+        PROPERTIES
+          Name                #CellularPhone
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{129BE14A-E86A-4CBD-B737-C6FAF59CB4EF}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #Email
+        STRING
+        PROPERTIES
+          Name                #Email
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{AF9F1478-ABC5-4191-BC5A-8ED55AC6F724}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #Pager
+        STRING
+        PROPERTIES
+          Name                #Pager
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{428A1EC2-3524-4411-A74A-47BA0F740123}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #Phone
+        STRING
+        PROPERTIES
+          Name                #Phone
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{D2614275-9E09-478E-AC5A-6F01DFB06C7A}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #PhoneLocal
+        STRING
+        PROPERTIES
+          Name                #PhoneLocal
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{75091539-7C25-4CBF-B134-9EC327926D41}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #SMS
+        STRING
+        PROPERTIES
+          Name                #SMS
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{9CFFA7F3-45B3-4754-8203-23EFBCCBBBE6}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #TeleFex
+        STRING
+        PROPERTIES
+          Name                #TeleFex
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{7407DF4B-AAE5-4B92-B012-DA7862A2510C}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #Telex
+        STRING
+        PROPERTIES
+          Name                #Telex
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{338C0DC7-C2DD-4369-803F-CE6D03BF1C7B}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #URL
+        STRING
+        PROPERTIES
+          Name                #URL
+          Table               #dev_VendorContactDetails_Insert
+          Origin              #{24910080-F50E-4B82-A601-8B23B4FEE852}
+          StringSize          #100
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #IdxAccountNum
+      PROPERTIES
+        Name                #IdxAccountNum
+        Origin              #{D036D5DF-E0F2-44C2-A30C-6AF5123C458F}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

@@ -1,0 +1,221 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_BudgetImportTable unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_BudgetImportTable
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_BudgetImportTable
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      Origin              #{F34F2771-1BC7-4B01-8D04-8B263094E0EE}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountingCurrencyAmount1
+        REAL
+        PROPERTIES
+          Name                #AccountingCurrencyAmount1
+          Table               #dev_BudgetImportTable
+          Origin              #{563FC250-ED77-4178-A9AF-D9D2F71E077A}
+          ExtendedDataType    #AmountMST
+        ENDPROPERTIES
+        
+      FIELD #BudgetACName
+        STRING
+        PROPERTIES
+          Name                #BudgetACName
+          Table               #dev_BudgetImportTable
+          Origin              #{A558A1B3-16FA-42AA-B85D-ADD0D2C731B5}
+          ExtendedDataType    #Name
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #BudgetCenter
+        STRING
+        PROPERTIES
+          Name                #BudgetCenter
+          Table               #dev_BudgetImportTable
+          Origin              #{82D9E090-9C0F-4C96-AAF4-580C4DAA0D4B}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #BudgetDepartment
+        STRING
+        PROPERTIES
+          Name                #BudgetDepartment
+          Table               #dev_BudgetImportTable
+          Origin              #{0E7014B5-3246-4E6A-83DE-18E737C352CA}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #BudgetMainAccount
+        STRING
+        PROPERTIES
+          Name                #BudgetMainAccount
+          Table               #dev_BudgetImportTable
+          Origin              #{0218D750-7F0F-400D-9B3D-02C4CA2641A4}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #BudgetModelDataAreaId1
+        STRING
+        PROPERTIES
+          Name                #BudgetModelDataAreaId1
+          Table               #dev_BudgetImportTable
+          Origin              #{EF737AF1-FE93-4142-9DD3-6D467F806D55}
+          ExtendedDataType    #DataAreaId
+          StringSize          #4
+        ENDPROPERTIES
+        
+      FIELD #BudgetModelID1
+        STRING
+        PROPERTIES
+          Name                #BudgetModelID1
+          Table               #dev_BudgetImportTable
+          Origin              #{BBC5C62D-A40C-416E-B6A6-6BBBA0555D53}
+          ExtendedDataType    #BudgetModelId
+        ENDPROPERTIES
+        
+      FIELD #BudgetModelType1
+        ENUM
+        PROPERTIES
+          Name                #BudgetModelType1
+          Table               #dev_BudgetImportTable
+          Origin              #{346054BB-1C17-432C-BBD0-0B74E2D93D9E}
+          EnumType            #HeadingSub
+        ENDPROPERTIES
+        
+      FIELD #BudgetTransactionCode1
+        INT64
+        PROPERTIES
+          Name                #BudgetTransactionCode1
+          Table               #dev_BudgetImportTable
+          Origin              #{420DE8C3-1EAF-4D53-9422-EAE893416BE1}
+          ExtendedDataType    #RefRecId
+        ENDPROPERTIES
+        
+      FIELD #BudgetTransactionType1
+        ENUM
+        PROPERTIES
+          Name                #BudgetTransactionType1
+          Table               #dev_BudgetImportTable
+          Origin              #{773396C8-9DBA-42D5-B8FB-9226DE94F8B1}
+          EnumType            #BudgetTransactionType
+        ENDPROPERTIES
+        
+      FIELD #BudgetType1
+        ENUM
+        PROPERTIES
+          Name                #BudgetType1
+          Table               #dev_BudgetImportTable
+          Origin              #{E51EE2A1-315A-4C26-B22E-AF7B9903EAC3}
+          EnumType            #BudgetType
+        ENDPROPERTIES
+        
+      FIELD #DefaultDate
+        DATE
+        PROPERTIES
+          Name                #DefaultDate
+          Table               #dev_BudgetImportTable
+          Origin              #{2E099524-9CEE-4C64-BD13-DB3AA078ACC5}
+          ExtendedDataType    #TransDate
+        ENDPROPERTIES
+        
+      FIELD #LineDate
+        DATE
+        PROPERTIES
+          Name                #LineDate
+          Table               #dev_BudgetImportTable
+          Origin              #{C9BB50B1-D0C5-434A-AAB8-C62699A3F87E}
+          ExtendedDataType    #TransDate
+        ENDPROPERTIES
+        
+      FIELD #LineNumber1
+        REAL
+        PROPERTIES
+          Name                #LineNumber1
+          Table               #dev_BudgetImportTable
+          Origin              #{C76C669E-6CD2-450F-BE50-41006B907BB0}
+          ExtendedDataType    #LineNum
+        ENDPROPERTIES
+        
+      FIELD #TransactionCurrency1
+        STRING
+        PROPERTIES
+          Name                #TransactionCurrency1
+          Table               #dev_BudgetImportTable
+          Origin              #{2B9868B8-EB5A-4FE6-9C38-C0D3D20B0DA7}
+          ExtendedDataType    #CurrencyCode
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #TransactionCurrencyAmount1
+        REAL
+        PROPERTIES
+          Name                #TransactionCurrencyAmount1
+          Table               #dev_BudgetImportTable
+          Origin              #{974D23BA-F136-4747-8102-5E82879D0BD7}
+          ExtendedDataType    #AmountCur
+        ENDPROPERTIES
+        
+      FIELD #TransactionNumber1
+        STRING
+        PROPERTIES
+          Name                #TransactionNumber1
+          Table               #dev_BudgetImportTable
+          Origin              #{4CB83C11-3BEE-41FA-B101-268EF0621D71}
+          ExtendedDataType    #BudgetTransactionId
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #UserId
+        STRING
+        PROPERTIES
+          Name                #UserId
+          Table               #dev_BudgetImportTable
+          Origin              #{32A13EC8-E5A9-4D98-A0C3-BFED296F2467}
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+      REFERENCE #Currency
+        PROPERTIES
+          Name                #Currency
+          Table               #Currency
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE PKFK
+          PROPERTIES
+            Field               #TransactionCurrency1
+            RelatedField        #CurrencyCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

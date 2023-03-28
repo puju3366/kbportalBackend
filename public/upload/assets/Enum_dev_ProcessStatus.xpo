@@ -1,0 +1,44 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBE
+
+; Microsoft Dynamics AX Enumtype : dev_ProcessStatus unloaded
+; --------------------------------------------------------------------------------
+  ENUMTYPEVERSION 1
+  
+  ENUMTYPE #dev_ProcessStatus
+    PROPERTIES
+      Name                #dev_ProcessStatus
+      Label               #Process Status
+      UseEnumValue        #Yes
+      Origin              #{E3490DF7-C0A9-450A-8A2C-7C5F8FC28B2B}
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #processed
+      PROPERTIES
+        Name                #processed
+        Label               #processed
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #Pending
+      PROPERTIES
+        Name                #Pending
+        Label               #Empty file
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #Error
+      PROPERTIES
+        Name                #Error
+        Label               #Error
+        EnumValue           #2
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE
+  
+
+***Element: END

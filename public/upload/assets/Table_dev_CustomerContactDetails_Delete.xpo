@@ -1,0 +1,107 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_CustomerContactDetails_Delete unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_CustomerContactDetails_Delete
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_CustomerContactDetails_Delete
+      CreateRecIdIndex    #Yes
+      SaveDataPerCompany  #No
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{AE8EBE61-388D-46C6-BAE0-3941703FEE9D}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountNum
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Table               #dev_CustomerContactDetails_Delete
+          Origin              #{9D460214-391E-4B09-9669-01FEA8016E55}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #LocationName
+        STRING
+        PROPERTIES
+          Name                #LocationName
+          HelpText            #@SYS344204
+          Table               #dev_CustomerContactDetails_Delete
+          Origin              #{2FD3CAAD-4299-41BB-974D-5F23413646FC}
+          ExtendedDataType    #Description
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Locator
+        STRING
+        PROPERTIES
+          Name                #Locator
+          Table               #dev_CustomerContactDetails_Delete
+          Origin              #{820F8FF8-366E-4922-ADF2-86E36141430B}
+          ExtendedDataType    #LogisticsElectronicAddressLocator
+          StringSize          #255
+        ENDPROPERTIES
+        
+      FIELD #Party
+        INT64
+        PROPERTIES
+          Name                #Party
+          Mandatory           #Yes
+          Table               #dev_CustomerContactDetails_Delete
+          Origin              #{958A5C35-CFC7-4B89-9824-61254AB757DE}
+          ExtendedDataType    #DirPartyRecId
+        ENDPROPERTIES
+        
+      FIELD #Type
+        ENUM
+        PROPERTIES
+          Name                #Type
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #dev_CustomerContactDetails_Delete
+          Origin              #{2E025445-E726-4006-A121-8F7697AF47EA}
+          EnumType            #LogisticsElectronicAddressMethodType
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #IdxAccountNum
+      PROPERTIES
+        Name                #IdxAccountNum
+        Origin              #{1D40AFFE-01D8-4D10-BFBB-5FAC74047779}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

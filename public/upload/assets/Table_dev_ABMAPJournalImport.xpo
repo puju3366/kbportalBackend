@@ -1,0 +1,341 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_ABMAPJournalImport unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_ABMAPJournalImport
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_ABMAPJournalImport
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{77E6284D-EFBA-433D-B49D-CD1B1347D6A9}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountNum
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Table               #dev_ABMAPJournalImport
+          Origin              #{A97690A0-786D-4CA5-BB34-302D2A341F51}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #accountType
+        ENUM
+        PROPERTIES
+          Name                #accountType
+          Table               #dev_ABMAPJournalImport
+          Origin              #{086B474D-19AE-451A-A495-4FFC2BB99BED}
+          EnumType            #LedgerJournalACType
+        ENDPROPERTIES
+        
+      FIELD #amountCredit
+        REAL
+        PROPERTIES
+          Name                #amountCredit
+          Table               #dev_ABMAPJournalImport
+          Origin              #{5B668AA2-84E2-4D3E-8D09-AC0E879E663B}
+        ENDPROPERTIES
+        
+      FIELD #amountDebit
+        REAL
+        PROPERTIES
+          Name                #amountDebit
+          Table               #dev_ABMAPJournalImport
+          Origin              #{C43CC265-DE0D-4640-A471-BF7A224ED901}
+        ENDPROPERTIES
+        
+      FIELD #bankChequeNumber
+        STRING
+        PROPERTIES
+          Name                #bankChequeNumber
+          Table               #dev_ABMAPJournalImport
+          Origin              #{720097D3-F571-4D16-8A5C-934504E8B438}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #CompanyAccount
+        STRING
+        PROPERTIES
+          Name                #CompanyAccount
+          Table               #dev_ABMAPJournalImport
+          Origin              #{CF3553DC-6CE1-4BB4-B585-312AF8873516}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #CostCenter
+        STRING
+        PROPERTIES
+          Name                #CostCenter
+          Table               #dev_ABMAPJournalImport
+          Origin              #{2FB5760F-1C97-41E5-88FD-1B750C865D2E}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #currencyCode
+        STRING
+        PROPERTIES
+          Name                #currencyCode
+          Table               #dev_ABMAPJournalImport
+          Origin              #{56B03922-935D-4004-8DC0-C714EEFA32E1}
+        ENDPROPERTIES
+        
+      FIELD #Departement
+        STRING
+        PROPERTIES
+          Name                #Departement
+          Table               #dev_ABMAPJournalImport
+          Origin              #{AF143F0E-7134-479E-9E04-46687DA09F0D}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #DocumentDate
+        DATE
+        PROPERTIES
+          Name                #DocumentDate
+          Table               #dev_ABMAPJournalImport
+          Origin              #{342D8EBD-5A83-415F-BAF6-D99CF5DA0E10}
+          ExtendedDataType    #DocumentDate
+        ENDPROPERTIES
+        
+      FIELD #DocumentNum
+        STRING
+        PROPERTIES
+          Name                #DocumentNum
+          Table               #dev_ABMAPJournalImport
+          Origin              #{7FEC50C0-4178-48F3-B38A-C900134288DD}
+          ExtendedDataType    #DocumentNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #InvoiceId
+        STRING
+        PROPERTIES
+          Name                #InvoiceId
+          Table               #dev_ABMAPJournalImport
+          Origin              #{8D5C39E4-C705-41FE-A7CF-895C0D61551A}
+          ExtendedDataType    #InvoiceId
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Journal_UserID
+        STRING
+        PROPERTIES
+          Name                #Journal_UserID
+          Table               #dev_ABMAPJournalImport
+          Origin              #{DCFA2118-9E41-4C17-8CEE-21D881A96F12}
+        ENDPROPERTIES
+        
+      FIELD #JournalNo
+        STRING
+        PROPERTIES
+          Name                #JournalNo
+          Table               #dev_ABMAPJournalImport
+          Origin              #{00EA632D-6F9E-4B0D-A280-36EEDA05E216}
+          ExtendedDataType    #LedgerJournalId
+        ENDPROPERTIES
+        
+      FIELD #offsetAccountNum
+        STRING
+        PROPERTIES
+          Name                #offsetAccountNum
+          Table               #dev_ABMAPJournalImport
+          Origin              #{FF0927F4-D191-41B0-B1EB-B775F33E6AB2}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #offsetAccountType
+        ENUM
+        PROPERTIES
+          Name                #offsetAccountType
+          Table               #dev_ABMAPJournalImport
+          Origin              #{55F0EA49-4D3F-4216-B822-A08C0D7739F2}
+          EnumType            #LedgerJournalACType
+        ENDPROPERTIES
+        
+      FIELD #OffsetCompanyAccount
+        STRING
+        PROPERTIES
+          Name                #OffsetCompanyAccount
+          Table               #dev_ABMAPJournalImport
+          Origin              #{D020E10F-C7EF-4665-97EC-86C52EB25722}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #OffsetCostCenter
+        STRING
+        PROPERTIES
+          Name                #OffsetCostCenter
+          Table               #dev_ABMAPJournalImport
+          Origin              #{D5E8398A-05B4-4CD5-B0B5-35863D4742F4}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #OffsetDepartement
+        STRING
+        PROPERTIES
+          Name                #OffsetDepartement
+          Table               #dev_ABMAPJournalImport
+          Origin              #{C568F500-E8C5-4CB6-AAA6-50119B94A216}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #OffsetPurpose
+        STRING
+        PROPERTIES
+          Name                #OffsetPurpose
+          Table               #dev_ABMAPJournalImport
+          Origin              #{B44A5607-0971-46A5-8D9B-55D5E8A45BD2}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #OffsetTxt
+        STRING
+        PROPERTIES
+          Name                #OffsetTxt
+          Table               #dev_ABMAPJournalImport
+          Origin              #{39195B32-5F0D-4D36-930B-F13807753F32}
+          StringSize          #500
+        ENDPROPERTIES
+        
+      FIELD #paymentmode
+        STRING
+        PROPERTIES
+          Name                #paymentmode
+          Table               #dev_ABMAPJournalImport
+          Origin              #{6EDFE966-45E5-4144-83BC-9F8ABC318341}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #paymentStatus
+        STRING
+        PROPERTIES
+          Name                #paymentStatus
+          Table               #dev_ABMAPJournalImport
+          Origin              #{50956CA1-2C57-4561-849A-0C5557BDE5C1}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Purpose
+        STRING
+        PROPERTIES
+          Name                #Purpose
+          Table               #dev_ABMAPJournalImport
+          Origin              #{49EAB2B3-0972-40F3-8E62-02C7CD76C0A7}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #recipientName
+        STRING
+        PROPERTIES
+          Name                #recipientName
+          Table               #dev_ABMAPJournalImport
+          Origin              #{49F102D4-B8FD-41AD-90FC-DA5A0024E600}
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #TransDate
+        DATE
+        PROPERTIES
+          Name                #TransDate
+          Table               #dev_ABMAPJournalImport
+          Origin              #{7FBAC686-387C-4F4E-AE81-0AD8A73DD61D}
+          ExtendedDataType    #TransDate
+        ENDPROPERTIES
+        
+      FIELD #transType
+        STRING
+        PROPERTIES
+          Name                #transType
+          Table               #dev_ABMAPJournalImport
+          Origin              #{81F8389B-55BB-4041-8EC9-65A93031708F}
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Txt
+        STRING
+        PROPERTIES
+          Name                #Txt
+          Table               #dev_ABMAPJournalImport
+          Origin              #{B2012C48-63FE-40F9-972F-82C754E08FB9}
+          StringSize          #500
+        ENDPROPERTIES
+        
+      FIELD #UserId
+        INT64
+        PROPERTIES
+          Name                #UserId
+          Table               #dev_ABMAPJournalImport
+          Origin              #{E6FB614F-E06C-4A58-A331-CB8DE2A2FB9A}
+          ExtendedDataType    #smmActivityWorker
+        ENDPROPERTIES
+        
+      FIELD #Voucher
+        STRING
+        PROPERTIES
+          Name                #Voucher
+          Table               #dev_ABMAPJournalImport
+          Origin              #{6DA79C59-88F0-43AF-8BCE-9FAD5BF8C329}
+          ExtendedDataType    #Voucher
+          StringSize          #20
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #IdxJournalNum
+      PROPERTIES
+        Name                #IdxJournalNum
+        Origin              #{AF997262-1B95-458C-AA05-7F6BD121EBE6}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #JournalNo
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+      REFERENCE #HcmWorker
+        PROPERTIES
+          Name                #HcmWorker
+          Table               #HcmWorker
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE PKFK
+          PROPERTIES
+            Field               #UserId
+            RelatedField        #RecId
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

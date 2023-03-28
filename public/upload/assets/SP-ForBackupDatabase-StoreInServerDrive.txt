@@ -1,0 +1,49 @@
+USE [GIDC]
+GO
+/****** Object:  StoredProcedure [dbo].[SPDailyGIDCDabataseBackup]    Script Date: 12/10/2017 03:07:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Pritesh Raval
+-- Create date: 19/12/2013
+-- Description:	Daily Backup of GIDC database
+-- =============================================
+ALTER PROCEDURE [dbo].[SPDailyGIDCDabataseBackup]
+AS
+BEGIN
+	DECLARE @name VARCHAR(50) -- database name 
+	DECLARE @path VARCHAR(256) -- path for backup files 
+	DECLARE @fileName VARCHAR(256) -- filename for backup 
+	DECLARE @fileDate VARCHAR(20) -- used for file name
+
+	-- Path name for store database backup in server drive
+	SET @path = 'F:\DailyDatabaseBackup\GIDC\' 
+
+
+	SELECT @fileDate = CONVERT(VARCHAR(20),GETDATE(),112) + '_' + REPLACE(CONVERT(VARCHAR(20),GETDATE(),108),':','')
+
+	DECLARE db_cursor CURSOR FOR
+
+	-- Select database name which you want to take database backup. Replace 'GIDC' to 'YourDatabaseName'.
+
+	SELECT name FROM master.dbo.sysdatabases WHERE name IN ('GIDC') 
+
+	OPEN db_cursor
+
+	FETCH NEXT FROM db_cursor INTO @name
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+
+	SET @fileName = @path + @name + '_' + @fileDate + '.BAK' 
+	BACKUP DATABASE @name TO DISK = @fileName 
+	FETCH NEXT FROM db_cursor INTO @name
+END
+
+CLOSE db_cursor
+
+DEALLOCATE db_cursor
+
+END

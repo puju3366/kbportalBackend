@@ -1,0 +1,390 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: DMFBudgetEntityClass unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #DMFBudgetEntityClass
+    PROPERTIES
+      Name                #DMFBudgetEntityClass
+      Extends             #DMFEntityBase
+      Origin              #{9EBD271E-0446-4530-9A08-E92E4D881EF8}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #addStagingLink
+        #/// <summary>
+        #/// Adds a link between staging and target.
+        #/// </summary>
+        #/// <param name="_query">
+        #/// It is used to get a list of fields.
+        #/// </param>
+        #/// <param name="_entityTableId">
+        #/// It is the name of the entity table.
+        #/// </param>
+        #/// <param name="_staging">
+        #/// It is the name of the staging table.
+        #/// </param>
+        #/// <returns>
+        #/// Returns query.
+        #/// </returns>
+        #public Query addStagingLink(Query _query, TableId _entityTableId, Common _staging)
+        #{
+        #    QueryBuildDataSource              qbd;
+        #    Ledger                            ledger;
+        #    DMFBudgetTransactionLineEntity    staging = _staging;
+        #    BudgetTransactionHeader           budgetTransactionHeader;
+        #
+        #    select firstonly RecId from ledger
+        #        where ledger.Name == staging.BudgetHeader_LedgerName;
+        #
+        #    budgetTransactionHeader = BudgetTransactionHeader::findByTransactionNumber(staging.TransactionNumber,ledger.RecId);
+        #    qbd = _query.dataSourceTable(tableNum(BudgetTransactionLine));
+        #    qbd.addRange(fieldNum(BudgetTransactionLine,BudgetTransactionHeader)).value(queryValue(budgetTransactionHeader.RecId));
+        #    qbd.addRange(fieldNum(BudgetTransactionLine,LineNumber)).value(queryValue(staging.LineNumber));
+        #    return _query;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #/// <summary>
+        #///    The <c>DMFBudgetEntityClass</c> class is used to migrate Budget register entries data.
+        #/// </summary>
+        #[DMFAttribute(true)]
+        #class DmfBudgetEntityClass extends DMFEntityBase
+        #{
+        #    DMFBudgetTransactionLineEntity  entity;
+        #    BudgetTransactionLine           target;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #GenerateBudgetHeaderLink
+        #/// <summary>
+        #/// Function that generates the budget header.
+        #/// </summary>
+        #/// <param name="_stagingToTarget">
+        #/// A boolean value, if true then copies data from staging to target otherwise copies data from target to staging.
+        #/// </param>
+        #/// <returns>
+        #/// Returns set of data as a container.
+        #/// </returns>
+        #[DMFTargetTransformationAttribute(true),DMFTargetTransformationDescAttribute("@DMF1585"),
+        #DMFTargetTransformationSequenceAttribute(1)
+        #,DMFTargetTransFieldListAttribute([fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_BudgetModelId),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_BudgetSubModelId),fieldStr(DMFBudgetTransactionLineEntity,BudgetModelType),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_TransactionCodeName),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_Date),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_InUseBy),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_IsOneTimeAmendment),fieldStr(DMFBudgetTransactionLineEntity,TransactionNumber),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_LedgerName),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_Reason),fieldStr(DMFBudgetTransactionLineEntity,BudgetHeader_WorkflowStatus)])
+        #]
+        #public container GenerateBudgetHeaderLink(boolean _stagingToTarget = true)
+        #{
+        #    container                 res;
+        #    BudgetTransactionHeader   budgetTransactionHeader;
+        #    BudgetTransactionCode     budgetTransactionCode;
+        #    Ledger                    ledger;
+        #    ReasonTableRef            reasonTableRef;
+        #    ReasonTable               reasonTable;
+        #    if (_stagingToTarget)
+        #    {
+        #        select firstOnly Name
+        #                from  ledger
+        #                    where ledger.Name == entity.BudgetHeader_LedgerName;
+        #
+        #        budgetTransactionHeader = BudgetTransactionHeader::findByTransactionNumber(entity.TransactionNumber,ledger.RecId,true);
+        #        if (budgetTransactionHeader.TransactionStatus == BudgetTransactionStatus::Draft)
+        #        {
+        #            budgetTransactionCode = BudgetTransactionCode::findByBudgetTransactionCode(entity.BudgetHeader_TransactionCodeName);
+        #            budgetTransactionHeader.BudgetModelDataAreaId = entity.BudgetHeader_LedgerName;//budgetTransactionHeader.dataAreaId;
+        #            budgetTransactionHeader.BudgetModelId = entity.BudgetHeader_BudgetModelId;
+        #            budgetTransactionHeader.BudgetModelType = DMFEntityBase::string2Enum(entity.BudgetModelType,enumNum(HeadingSub));
+        #            budgetTransactionHeader.BudgetSubModelId = Entity.BudgetHeader_BudgetSubModelId;
+        #            budgetTransactionHeader.BudgetTransactionCode = budgetTransactionCode.RecId;
+        #            budgetTransactionHeader.BudgetTransactionType = budgetTransactionCode.BudgetTransactionType;
+        #            if (entity.BudgetHeader_Date)
+        #            {
+        #                budgetTransactionHeader.Date = entity.BudgetHeader_Date;
+        #            }
+        #            else
+        #            {
+        #                budgetTransactionHeader.Date = systemDateGet();
+        #            }
+        #            if (entity.BudgetHeader_InUseBy)
+        #            {
+        #                budgetTransactionHeader.InUseBy = entity.BudgetHeader_InUseBy;
+        #            }
+        #            else
+        #            {
+        #                 budgetTransactionHeader.InUseBy = curUserId();
+        #            }
+        #            budgetTransactionHeader.InUseBy = '';
+        #
+        #            budgetTransactionHeader.IsOneTimeAmendment = DMFEntityBase::string2Enum(entity.BudgetHeader_IsOneTimeAmendment,enumNum(NoYes));
+        #            if (entity.BudgetHeader_LedgerName)
+        #            {
+        #                budgetTransactionHeader.PrimaryLedger = ledger.RecId;
+        #            }
+        #            else
+        #            {
+        #                 budgetTransactionHeader.PrimaryLedger = ledger::current();
+        #            }
+        #            budgetTransactionHeader.TransactionNumber = entity.TransactionNumber;
+        #            budgetTransactionHeader.WorkflowStatus = BudgetTransactionWorkflowStatus::None;
+        #            select firstOnly Reason from reasonTable
+        #                where reasonTable.Reason == entity.BudgetHeader_Reason
+        #                    join reasonTableRef
+        #                        where reasonTableRef.Reason == reasonTable.Reason;
+        #
+        #            budgetTransactionHeader.ReasonTableRef = reasonTableRef.RecId;
+        #            budgetTransactionHeader.TransactionStatus = BudgetTransactionStatus::Draft;
+        #            budgetTransactionHeader.write();
+        #
+        #        }
+        #        res = [budgetTransactionHeader.RecId];
+        #
+        #        return res;
+        #
+        #    }
+        #    else
+        #    {
+        #        budgetTransactionHeader = BudgetTransactionHeader::find(target.BudgetTransactionHeader);
+        #        select firstOnly Reason from reasonTableRef
+        #            where reasonTableRef.RecId == budgetTransactionHeader.ReasonTableRef;
+        #        res = [
+        #            budgetTransactionHeader.BudgetModelId,
+        #            budgetTransactionHeader.BudgetSubModelId,
+        #            enum2str(budgetTransactionHeader.BudgetModelType),
+        #            BudgetTransactionCode::find(budgetTransactionHeader.BudgetTransactionCode).Name,
+        #            budgetTransactionHeader.Date,
+        #            budgetTransactionHeader.InUseBy,
+        #            budgetTransactionHeader.IsOneTimeAmendment,
+        #            budgetTransactionHeader.TransactionNumber,
+        #            Ledger::find(budgetTransactionHeader.PrimaryLedger).Name,
+        #            reasonTableRef.Reason,
+        #            enum2str(BudgetTransactionStatus::Draft)];
+        #
+        #    }
+        #    return res;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #generateLedgerDimension
+        #/// <summary>
+        #/// Function that generates ledger dimension.
+        #/// </summary>
+        #/// <param name="_stagingToTarget">
+        #/// A boolean value, if true then copies data from staging to target otherwise copies data from target to staging.
+        #/// </param>
+        #/// <returns>
+        #/// Returns set of data as a container.
+        #/// </returns>
+        #[DMFTargetTransformationAttribute(true),DMFTargetTransformationDescAttribute("@DMF538"),
+        #DMFTargetTransformationSequenceAttribute(2)
+        #,DMFTargetTransFieldListAttribute([fieldStr(DMFBudgetTransactionLineEntity,AccountStructureName),fieldStr(DMFBudgetTransactionLineEntity,LedgerDimension)])
+        #]
+        #public container generateLedgerDimension(boolean _stagingToTarget = true)
+        #{
+        #    container                   res;
+        #    DimensionHierarchy          accountStructure;
+        #    Name                        accountStructureName;
+        #
+        #    if (_stagingToTarget)
+        #    {
+        #        if (entity.LedgerDimension)
+        #        {
+        #            if (hasTableAccess(tableNum(DimensionAttributeValueCombination))
+        #                && hasTableAccess(tableNum(DimensionHierarchy)))
+        #            {
+        #                accountStructure = DimensionHierarchy::find(DimensionAttributeValueCombination::find(DMFDimensionHelper::generateDynamicDimension(entity.LedgerDimension)).AccountStructure);
+        #            }
+        #        }
+        #
+        #        if (accountStructure &&
+        #            !accountStructure.IsSystemGenerated)
+        #        {
+        #            accountStructureName = accountStructure.Name;
+        #        }
+        #        if(entity.AccountStructureName != accountStructureName)
+        #        {
+        #            throw error(strFmt("@DMF1586",entity.AccountStructureName,accountStructureName));
+        #        }
+        #
+        #       // res = [DMFDimensionHelper::generateDefaultAccount(entity.LedgerDimension)];  --Original code
+        #
+        #        target.LedgerDimension = DMFDimensionHelper::generateDynamicDimension(entity.LedgerDimension);
+        #
+        #        return res;
+        #    }
+        #    else
+        #    {
+        #        if (target.LedgerDimension)
+        #        {
+        #            res = [
+        #                DimensionHierarchy::find(DimensionAttributeValueCombination::find(target.LedgerDimension).AccountStructure).Name,
+        #                conPeek(DMFDimensionHelper::getDefaultAccountValue(target.LedgerDimension), 1)];
+        #        }
+        #    }
+        #    return  res;
+        #}
+      ENDSOURCE
+      SOURCE #insertUpdate
+        #/// <summary>
+        #/// Inserts or updates the data in target.
+        #/// </summary>
+        #/// <param name="_target">
+        #/// A target buffer.
+        #/// </param>
+        #/// <param name="_callInsertLogic">
+        #/// if value is true then call standard insert API otherwise (false) by-pass.
+        #/// </param>
+        #/// <param name="_callValidateLogic">
+        #/// if value is true then call standard validate API otherwise (false) by-pass.
+        #/// </param>
+        #/// <returns>
+        #/// Returns updated target buffer.
+        #/// </returns>
+        #public Common insertUpdate(Common _target, boolean _callInsertLogic = false, boolean _callValidateLogic = false)
+        #{
+        #    Common ret;
+        #
+        #    ret = super(_target, _callInsertLogic, _callValidateLogic);
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #jumpRefMethod
+        #/// <summary>
+        #/// Go to Budget master.
+        #/// </summary>
+        #/// <param name="_buffer">
+        #/// Current entity row.
+        #/// </param>
+        #/// <param name="_caller">
+        #/// It is optional, it will be set depending on caller.
+        #/// </param>
+        #/// <returns>
+        #/// Container with menuitem name and current row.
+        #/// </returns>
+        #public container jumpRefMethod(Common _buffer,Object _caller)
+        #{
+        #    MenuItemName           menuItemName;
+        #    Ledger                 ledger;
+        #
+        #    menuItemName = menuitemDisplayStr(BudgetTransactionListPage);
+        #    entity = _buffer;
+        #
+        #    select firstonly Name
+        #        from  ledger
+        #            where ledger.Name == entity.BudgetHeader_LedgerName;
+        #
+        #    if (!BudgetTransactionHeader::findByTransactionNumber(entity.TransactionNumber,ledger.RecId).RecId)
+        #    {
+        #        throw error(strFmt("@DMF1584", entity.TransactionNumber));
+        #    }
+        #
+        #    _buffer = BudgetTransactionHeader::findByTransactionNumber(entity.TransactionNumber,ledger.RecId);
+        #
+        #    return [menuItemName,_buffer];
+        #}
+        #
+        #
+      ENDSOURCE
+      SOURCE #new
+        #/// <summary>
+        #/// Creates an instance and holds the provided<c>DMFBudgetEntityClass</c>object.
+        #/// </summary>
+        #/// <param name="_entity">
+        #/// A DMFBudgetTransactionLineEntity value.
+        #/// </param>
+        #/// <remarks>
+        #/// When the instance gets out of scope or the<c>DMFBudgetEntityClass.finalize</c> method is called.
+        #/// </remarks>
+        #public void new(DMFBudgetTransactionLineEntity _entity)
+        #{
+        #    entity = _entity;
+        #}
+      ENDSOURCE
+      SOURCE #setTargetBuffer
+        #/// <summary>
+        #/// This method is used to create a buffer for the data.
+        #/// </summary>
+        #/// <param name="_common">
+        #/// A TableId.
+        #/// </param>
+        #/// <param name="_dataSourceName">
+        #/// A Name value
+        #/// </param>
+        #/// <remarks>
+        #/// Target buffer is filled with the set of values from the staging table.
+        #/// </remarks>
+        #public void setTargetBuffer(Common _common, Name _dataSourceName = '')
+        #{
+        #    switch (_common.TableId)
+        #    {
+        #        case tableNum(BudgetTransactionLine) :
+        #            target = _common;
+        #            break;
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #/// <summary>
+        #/// Creates an instance and holds the provided<c>DMFBudgetEntityClass</c>object.
+        #/// </summary>
+        #/// <param name="_entity">
+        #/// ADMFBudgetTransactionLineEntityvalue.
+        #/// </param>
+        #/// <remarks>
+        #/// When the instance gets out of scope or the<c>DMFBudgetEntityClass.finalize</c> method is called.
+        #/// </remarks>
+        #/// <returns>
+        #/// The instance of the class.
+        #/// </returns>
+        #public static DMFBudgetEntityClass construct(DMFBudgetTransactionLineEntity _entity)
+        #{
+        #    DMFBudgetEntityClass entityClass = new DMFBudgetEntityClass(_entity);
+        #
+        #    return entityClass;
+        #}
+      ENDSOURCE
+      SOURCE #getReturnFields
+        #/// <summary>
+        #/// Creates field mapping between staging and target
+        #/// </summary>
+        #/// <param name="_entity">
+        #/// A staging buffer.
+        #/// </param>
+        #/// <param name="_name">
+        #/// A mapping method name.
+        #/// </param>
+        #/// <returns>
+        #/// The list of fields as a container.
+        #/// </returns>
+        #public static container getReturnFields(Name _entity, MethodName _name)
+        #{
+        #    DataSourceName dataSourceName = queryDataSourceStr(DMFBudgetTransactionTargetEntity,BudgetTransactionLine);
+        #    container      con            = [dataSourceName];
+        #
+        #    Name fieldstrToTargetXML(FieldName _fieldName)
+        #    {
+        #        return DMFTargetXML::findEntityTargetField(_entity, dataSourceName, _fieldName).xmlField;
+        #    }
+        #
+        #    switch (_name)
+        #    {
+        #        case methodStr(DMFBudgetEntityClass, GenerateBudgetHeaderLink) :
+        #            con += [fieldstrToTargetXML(fieldStr(BudgetTransactionLine, BudgetTransactionHeader))];
+        #            break;
+        #
+        #        case methodStr(DMFBudgetEntityClass, generateLedgerDimension) :
+        #            con += [fieldstrToTargetXML(fieldStr(BudgetTransactionLine, LedgerDimension))];
+        #            break;
+        #
+        #        default :
+        #            con = conNull();
+        #    }
+        #
+        #    return con;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

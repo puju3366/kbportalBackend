@@ -1,0 +1,178 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_ProcessMaster unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_ProcessMaster
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_ProcessMaster
+      Label               #Process master
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{ECA6FA71-29EA-4EA1-BF8E-648F459E2803}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Entity
+        ENUM
+        PROPERTIES
+          Name                #Entity
+          Label               #Entity name
+          Table               #dev_ProcessMaster
+          Origin              #{EB82AB72-0C7D-4122-8AA3-51464450B60A}
+          EnumType            #dev_Entity
+        ENDPROPERTIES
+        
+      FIELD #FileName
+        STRING
+        PROPERTIES
+          Name                #FileName
+          Table               #dev_ProcessMaster
+          Origin              #{A366E6EB-6B83-4A92-904E-8A5F6EEC8416}
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #InfoMessage
+        QUEUE
+        PROPERTIES
+          Name                #InfoMessage
+          Label               #Infolog message
+          Table               #dev_ProcessMaster
+          Origin              #{35E3D97F-49C7-4C8F-86E3-EE7E18F49639}
+          ExtendedDataType    #InfologData
+        ENDPROPERTIES
+        
+      FIELD #IsImported2Ax
+        ENUM
+        PROPERTIES
+          Name                #IsImported2Ax
+          Label               #IsImported to Ax
+          Table               #dev_ProcessMaster
+          Origin              #{C6291479-0267-4994-8617-DCB217091279}
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LineNum
+        REAL
+        PROPERTIES
+          Name                #LineNum
+          Label               #Line number
+          Table               #dev_ProcessMaster
+          Origin              #{D7E6B313-4076-4A7C-87C9-0A0322B2C553}
+        ENDPROPERTIES
+        
+      FIELD #Path
+        STRING
+        PROPERTIES
+          Name                #Path
+          Table               #dev_ProcessMaster
+          Origin              #{6844205E-1349-4B4A-A3F7-13151A757CE3}
+          StringSize          #1000
+        ENDPROPERTIES
+        
+      FIELD #Status
+        ENUM
+        PROPERTIES
+          Name                #Status
+          Table               #dev_ProcessMaster
+          Origin              #{00A2835E-711D-4FE1-9752-DE137C19738E}
+          EnumType            #dev_ProcessStatus
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #dev_PurchaseImportData(dev_ProcessMaster)
+      PROPERTIES
+        Table               #dev_PurchaseImportData
+        DeleteAction        #Cascade
+        Relation            #dev_ProcessMaster
+      ENDPROPERTIES
+      
+      #dev_SalesExportData(dev_ProcessMaster)
+      PROPERTIES
+        Table               #dev_SalesExportData
+        DeleteAction        #Cascade
+        Relation            #dev_ProcessMaster
+      ENDPROPERTIES
+      
+      #dev_ProjectData(dev_ProcessMaster)
+      PROPERTIES
+        Table               #dev_ProjectData
+        DeleteAction        #Cascade
+        Relation            #dev_ProcessMaster
+      ENDPROPERTIES
+      
+      #dev_VendorData(dev_ProcessMaster)
+      PROPERTIES
+        Table               #dev_VendorData
+        DeleteAction        #Cascade
+        Relation            #dev_ProcessMaster
+      ENDPROPERTIES
+      
+      #dev_CustomerData(dev_ProcessMaster)
+      PROPERTIES
+        Table               #dev_CustomerData
+        DeleteAction        #Cascade
+        Relation            #dev_ProcessMaster
+      ENDPROPERTIES
+      
+      #dev_ProjectContractData(dev_ProcessMaster)
+      PROPERTIES
+        Table               #dev_ProjectContractData
+        DeleteAction        #Cascade
+        Relation            #dev_ProcessMaster
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+    METHODS
+      SOURCE #find
+        #static dev_ProcessMaster find(RecId _RecId)
+        #{
+        #    dev_ProcessMaster dev_ProcessMaster;
+        #
+        #    if (_RecId)
+        #    {
+        #        select firstonly dev_ProcessMaster
+        #            where dev_ProcessMaster.RecId == _RecId;
+        #    }
+        #
+        #    return dev_ProcessMaster;
+        #}
+      ENDSOURCE
+      SOURCE #ReturnLastLineNumber
+        #static real ReturnLastLineNumber()
+        #{
+        #    dev_ProcessMaster dev_ProcessMaster;
+        #
+        #    select * from dev_ProcessMaster
+        #    order by dev_ProcessMaster.LineNum desc;
+        #
+        #    return dev_ProcessMaster.LineNum;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

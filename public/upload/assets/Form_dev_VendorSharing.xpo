@@ -1,0 +1,411 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 12
+
+FORM #dev_VendorSharing
+  PROPERTIES
+    Name                #dev_VendorSharing
+    Origin              #{03756C42-8F08-4BFB-BAF5-BA3CCF76B71F}
+  ENDPROPERTIES
+  
+  METHODS
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    SysLookupMultiSelectCtrl    msCtrl;
+      #    VendTable objVendTable;
+      #}
+    ENDSOURCE
+    SOURCE #GetQueryForMultiSelectLookup
+      #public Query GetQueryForMultiSelectLookup(Query query)
+      #{
+      #    QueryBuildDataSource vendTable_DS1;
+      #    query.allowCrossCompany(true);
+      #    vendTable_DS1 = query.dataSourceTable(tablenum(VendTable));
+      #    //vendTable_DS.addRange(fieldnum(VendTable, Party)).value(queryValue(_vendPartyRecId));
+      #
+      #    return query;
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    //Query queryNew;
+      #
+      #    super();
+      #
+      #    //queryNew=new Query(queryStr(Query1_CompanyList));
+      #    //queryNew = this.GetQueryForMultiSelectLookup(vendPartyRecId,queryNew);
+      #    msCtrl = SysLookupMultiSelectCtrl::construct(element, strCompany, querystr(Query1_CompanyList));
+      #   // msCtrl = SysLookupMultiSelectCtrl::constructWithQuery(element, strCompany, queryNew);
+      #}
+    ENDSOURCE
+    SOURCE #InsertData_VendRequest
+      #public void InsertData_VendRequest()
+      #{
+      #    VendRequestAddVendor vendRequestAddVendor_Chk,vendRequestAddVendor_Ins;
+      #    int i;
+      #    SelectableDataArea newcompany;
+      #    container values = msCtrl.getSelectedFieldValues();
+      #    VendBlocked vendBlocked;
+      #
+      #    for (i = 1; i <= conLen(values);i++)
+      #    {
+      #        newcompany = conPeek(values,i);
+      #
+      #        for (objVendTable = vendtable_ds.getFirst(true) ? vendtable_ds.getFirst(true) : vendtable_ds.cursor();
+      #         objVendTable;
+      #         objVendTable = vendtable_ds.getNext())
+      #        {
+      #
+      #
+      #               // && objVendTable_Chk.dataAreaId == newcompany;
+      #                if(element.ValidateVendor(objVendTable.AccountNum,newcompany) == false)
+      #                {
+      #                    select * from vendRequestAddVendor_Chk where vendRequestAddVendor_Chk.Company == newcompany
+      #                    && vendRequestAddVendor_Chk.VendAccountNum == objVendTable.AccountNum;
+      #                    if(vendRequestAddVendor_Chk.recid == 0)
+      #                    {
+      #                        vendRequestAddVendor_Ins.Company = newcompany;
+      #                        vendRequestAddVendor_Ins.Blocked = str2enum(vendBlocked,'No');
+      #                        vendRequestAddVendor_Ins.Currency = objVendTable.Currency;
+      #                        vendRequestAddVendor_Ins.VendGroup = objVendTable.VendGroup;
+      #
+      #                        vendRequestAddVendor_Ins.Party = objVendTable.Party;
+      #                        vendRequestAddVendor_Ins.VendRequest = 0;
+      #                        vendRequestAddVendor_Ins.VendAccountNum = objVendTable.AccountNum;
+      #                         vendRequestAddVendor_Ins.PaymMode = objVendTable.PaymMode;
+      #                        vendRequestAddVendor_Ins.PaymTermId = objVendTable.PaymTermId;
+      #                        vendRequestAddVendor_Ins.insert();
+      #                    }
+      #                }//end if(VendExist == false )
+      #
+      #        }
+      #
+      #    }
+      #
+      #}
+    ENDSOURCE
+    SOURCE #ValidateVendor
+      #public boolean ValidateVendor(str 50 _VendAc,str 50 _StrCompany)
+      #{
+      #    VendTable objVendTable_Chk;
+      #    VendRequestCompany requestCompany1;
+      #    boolean VendExist;
+      #
+      #    VendExist = true;
+      #    select forUpdate firstOnly crossCompany requestCompany1 where requestCompany1.RecId == 0;
+      #
+      #    ttsBegin;
+      #    changeCompany(_StrCompany)
+      #    {
+      #        objVendTable_Chk= null;
+      #        select * from objVendTable_Chk where objVendTable_Chk.AccountNum == _VendAc;
+      #        if(objVendTable_Chk.RecId ==0 )
+      #        {
+      #            VendExist = false;
+      #        }
+      #    }
+      #    ttsCommit;
+      #    return VendExist;
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #VendTable
+          Table               #VendTable
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  REFERENCEDATASOURCES
+  ENDREFERENCEDATASOURCES
+  
+  JOINS
+  ENDJOINS
+  
+  PARTREFERENCES
+  ENDPARTREFERENCES
+  
+  DESIGN
+    PROPERTIES
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL BUTTONGROUP
+        PROPERTIES
+          Name                #ButtonGroup
+          ElementPosition     #1431655764
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GRID
+        PROPERTIES
+          Name                #Grid
+          ElementPosition     #1476395005
+          HierarchyParent     #Group
+          DataSource          #VendTable
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          ElementPosition     #715827882
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL COMMANDBUTTON
+        PROPERTIES
+          Name                #CommandButtonOK
+          ElementPosition     #1431655764
+          HierarchyParent     #ButtonGroup
+          Text                #Process
+          Command             #263
+        ENDPROPERTIES
+        
+        METHODS
+          SOURCE #clicked
+            #void clicked()
+            #{
+            #    VendRequestAddVendor vendRequestAddVendor_Mins;
+            #    VendTable objVendTable1;//,objVendTable_Chk;
+            #    Args        args;
+            #    FormRun     vendorForm;
+            #    container values1 = msCtrl.getSelectedFieldValues();
+            #    int i1;
+            #    SelectableDataArea newcompany1;
+            #    boolean blVendInserted;
+            #
+            #    super();
+            #    ttsBegin;
+            #    element.InsertData_VendRequest();
+            #
+            #    for (i1 = 1; i1 <= conLen(values1);i1++)
+            #    {
+            #        newcompany1 = conPeek(values1,i1);
+            #
+            #        for (objVendTable1 = vendtable_ds.getFirst(true) ? vendtable_ds.getFirst(true) : vendtable_ds.cursor();
+            #         objVendTable1;
+            #         objVendTable1 = vendtable_ds.getNext())
+            #        {
+            #            if(element.ValidateVendor(objVendTable1.AccountNum,newcompany1) == false)
+            #            {
+            #
+            #                while select forUpdate * from vendRequestAddVendor_Mins where vendRequestAddVendor_Mins.VendAccountNum == objVendTable1.AccountNum
+            #                    && vendRequestAddVendor_Mins.Company == newcompany1
+            #                {
+            #
+            #                    if (vendRequestAddVendor_Mins.validateWrite())
+            #                    {
+            #                        ttsBegin;
+            #                        VendRequestAddVendorHelper::createVendor(vendRequestAddVendor_Mins, objVendTable1.Party);
+            #                        ttsCommit;
+            #                    }
+            #                    else
+            #                    {
+            #                        // ttsAbort;
+            #                        return;
+            #                    }
+            #                    if (vendRequestAddVendor_Mins.VendAccountNum)
+            #                    {
+            #                        // open created vendor record in vendor details
+            #                        changecompany(vendRequestAddVendor_Mins.Company)
+            #                        {
+            #                            args = new Args();
+            #                            args.name(formstr(VendTable));
+            #                            args.caller();
+            #                            args.record(VendTable::find(vendRequestAddVendor_Mins.VendAccountNum));
+            #
+            #                        }
+            #
+            #                        vendorForm = classfactory.formRunClass(args);
+            #                        vendorForm.init();
+            #                        //  vendorForm.run();
+            #                    }
+            #                    info(strFmt("Vendor : %1 created in '%2' entity",vendRequestAddVendor_Mins.VendAccountNum,vendRequestAddVendor_Mins.Company));
+            #
+            #               } //end of while vendRequestAddVendor_Mins
+            #           }//end if ==False
+            #        } // end of vendtable loop
+            #    }//end of company loop
+            #ttsCommit;
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL STATICTEXT
+        PROPERTIES
+          Name                #MainInstruction
+          AutoDeclaration     #Yes
+          ElementPosition     #536870910
+          HierarchyParent     #Group
+          Text                #@SYS301615
+          Style               #MainInstruction
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL STRINGEDIT
+        PROPERTIES
+          Name                #strCompany
+          AutoDeclaration     #Yes
+          Height              #25
+          ElementPosition     #805306365
+          HierarchyParent     #Group
+          Label               #Company
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL STRINGEDIT
+        PROPERTIES
+          Name                #strName
+          AllowEdit           #No
+          Height              #10
+          ElementPosition     #1610612733
+          HierarchyParent     #Grid
+          Label               #Name
+          DataSource          #VendTable
+          DataMethod          #displayVendName
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL STRINGEDIT
+        PROPERTIES
+          Name                #VendTable_AccountNum
+          ElementPosition     #1073741822
+          HierarchyParent     #Grid
+          DataSource          #VendTable
+          DataField           #AccountNum
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+  PERMISSIONS #Permissions
+    PROPERTIES
+    ENDPROPERTIES
+    
+    PERMISSIONSET #Read
+      PROPERTIES
+      ENDPROPERTIES
+      
+      FORM #Controls
+      ENDFORM
+      
+    TABLES #Tables
+    ENDTABLES
+    
+  SERVERMETHODS #Server Methods
+  ENDSERVERMETHODS
+  
+ASSOCIATEDFORMS #Associated Forms
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+PERMISSIONSET #Update
+  PROPERTIES
+  ENDPROPERTIES
+  
+  FORM #Controls
+  ENDFORM
+  
+TABLES #Tables
+ENDTABLES
+
+SERVERMETHODS #Server Methods
+ENDSERVERMETHODS
+
+ASSOCIATEDFORMS #Associated Forms
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+PERMISSIONSET #Create
+  PROPERTIES
+  ENDPROPERTIES
+  
+  FORM #Controls
+  ENDFORM
+  
+TABLES #Tables
+ENDTABLES
+
+SERVERMETHODS #Server Methods
+ENDSERVERMETHODS
+
+ASSOCIATEDFORMS #Associated Forms
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+PERMISSIONSET #Delete
+  PROPERTIES
+  ENDPROPERTIES
+  
+  FORM #Controls
+  ENDFORM
+  
+TABLES #Tables
+ENDTABLES
+
+SERVERMETHODS #Server Methods
+ENDSERVERMETHODS
+
+ASSOCIATEDFORMS #Associated Forms
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+ENDPERMISSIONS
+
+ENDFORM
+
+
+***Element: END

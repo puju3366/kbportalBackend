@@ -1,0 +1,685 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_ImportVendorAddress unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_ImportVendorAddress
+    PROPERTIES
+      Name                #dev_ImportVendorAddress
+      Extends             #RunBase
+      Origin              #{F60A6FDA-9852-4C73-B7C3-84DFCE17CD3C}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #AnyType_to_str
+        #public str AnyType_to_str(int row_1, int coloumn_1,SysExcelCells cells_1)
+        #{
+        #    str Return_Value;
+        #    SysExcelCells cells_2;
+        #    int row_2;
+        #    int coloumn_2;
+        #    row_2=row_1;
+        #    coloumn_2=coloumn_1;
+        #    cells_2=cells_1;
+        #    switch(cells_2.item(row_2,coloumn_2).value().variantType())
+        #{
+        #    case COMVariantType::VT_BSTR:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().bStr());
+        #        break;
+        #    case COMVariantType::VT_DECIMAL, COMVariantType::VT_R4, COMVariantType::VT_R8:
+        #        Return_Value = strFmt("%1", any2int(cells_2.item(row_2,coloumn_2).value().double()));
+        #        break;
+        #    case COMVariantType::VT_I1, COMVariantType::VT_I2, COMVariantType::VT_I4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().int());
+        #        break;
+        #    case COMVariantType::VT_UI1, COMVariantType::VT_UI2, COMVariantType::VT_UI4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().uLong());
+        #        break;
+        #    case COMVariantType::VT_DATE: //, COMVariantType::VT_UI2, COMVariantType::VT_UI4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().date());
+        #        break;
+        #
+        #        case COMVariantType::VT_EMPTY:
+        #        Return_Value = '';
+        #        break;
+        #    default:
+        #        throw error(strfmt('Unhandled variant type (%1).', cells_2.item(row_2,coloumn_2).value().variantType()));
+        #}
+        #    return Return_Value;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class dev_ImportVendorAddress extends RunBase
+        #{
+        #   Filename            FileName;
+        #
+        #    DialogField         dlgFileName;
+        #DirPartyLocationRolesView objDirPartyLocationRolesView_1;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #CreateAddress
+        #public void CreateAddress(Accountnum _Accountnum,str 1000 _street,str 50 _city,str 50 _state,str 50 _country,str 50 _zipcode,int _IsPrimary,LogisticsLocationRoleType _intAddressType)
+        #{
+        #    DirPartyPostalAddressView addressView;
+        #    VendTable vendtable;
+        #    DirParty dirparty;
+        #    container roles;
+        #    dev_VendorAddressInsert objdev_VendorAddressInsert;
+        #    //DirPartyContactInfoView   contactView;
+        #
+        #    vendtable = VendTable::find(_Accountnum);
+        #
+        #    addressView.CountryRegionId = _country;
+        #    addressView.State   = _state;
+        #    addressView.City    = _city  ;
+        #    addressView.ZipCode = _zipcode;
+        #    addressView.Street  = _street;
+        #    addressView.Party   = vendtable.Party;
+        #    if(_IsPrimary==1)
+        #    {
+        #        addressView.IsPrimary = NoYes::Yes;
+        #    }
+        #    else
+        #    {
+        #        addressView.IsPrimary = NoYes::No;
+        #    }
+        #    addressView.locationRoles();
+        #    this.processAddress(addressView,vendtable);
+        #
+        #    DirParty = DirParty::constructFromPartyRecId(addressView.Party);
+        #    roles = [LogisticsLocationRole::findBytype(_intAddressType).RecId];
+        #        //Creating new address using dir party class
+        #    if(addressView.Street || addressView.ZipCode || addressView.City || addressView.State || addressView.CountryRegionId)
+        #    {
+        #        DirParty.createOrUpdatePostalAddress(addressView,roles);
+        #    }
+        #
+        #    objdev_VendorAddressInsert.clear();
+        #    objdev_VendorAddressInsert.AccountNum=_Accountnum;
+        #    objdev_VendorAddressInsert.Street=_street;
+        #    objdev_VendorAddressInsert.City=_city;
+        #    objdev_VendorAddressInsert.State=_state;
+        #    objdev_VendorAddressInsert.CountryRegionId=_country;
+        #    objdev_VendorAddressInsert.ZipCode=_zipcode;
+        #    objdev_VendorAddressInsert.insert();
+        #
+        #    /*if(_email!='')
+        #    {
+        #        contactView.LocationName = "Delivery email";
+        #        contactView.Locator      = _email;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Email;
+        #        contactView.Party        = vendtable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        DirParty = DirParty::constructFromPartyRecId(contactView.Party);
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_Phone!='')
+        #    {
+        #        contactView.LocationName = "Phone";
+        #        contactView.Locator      = _Phone;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Phone;
+        #        contactView.Party        = vendtable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_TeleFex!='')
+        #    {
+        #        contactView.LocationName = "Tele Fax";
+        #        contactView.Locator      = _TeleFex;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Telex;
+        #        contactView.Party        = vendtable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_URL!='')
+        #    {
+        #        contactView.LocationName = "URL";
+        #        contactView.Locator      = _URL;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::URL;
+        #        contactView.Party        = vendtable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }*/
+        #}
+      ENDSOURCE
+      SOURCE #dialog
+        #protected Object Dialog()
+        #{
+        #     #Excel
+        #    Dialog dialog;
+        #    ;
+        #
+        #    dialog = super();
+        #
+        #    // Set a title for dialog
+        #    dialog.caption( 'Simple Dialog');
+        #
+        #    // Add a new field to Dialog
+        #     dlgFileName = dialog.addFieldValue(extendedTypeStr(FileNameOpen),fileName,"@SYS69909");
+        #    dialog.filenameLookupFilter(["@SYS28576",#XLSX,"@SYS28576",#XLS]);
+        #
+        #    return dialog;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #getFromDialog
+        #public boolean getFromDialog()
+        #{
+        #    // Retrieve values from Dialog
+        #     fileName            = dlgFilename.value();
+        #
+        #    return super();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #GetLocationRole
+        #private int64 GetLocationRole(int64 _PartyID,int64 _Location1)
+        #{
+        #    DirPartyLocationRolesView objDirPartyLocationRolesView;
+        #    int64 intRole;
+        #    Query                           query;
+        #    QueryRun                        queryRun;
+        #    QueryBuildDataSource            qbds;
+        #    QueryBuildRange                 qbr;
+        #
+        #
+        #    query = new query();
+        #    qbds = query.addDataSource(tableNum(DirPartyLocationRolesView));
+        #    qbds.addRange(fieldNum(DirPartyLocationRolesView,Party)).value(int642str(_PartyID));
+        #    qbds.addRange(fieldNum(DirPartyLocationRolesView,Location)).value(int642str(_Location1));
+        #    queryRun = new QueryRun(query);
+        #
+        #    while (queryRun.next())
+        #    {
+        #        objDirPartyLocationRolesView= queryRun.get(tableNum(DirPartyLocationRolesView));
+        #
+        #        info (strFmt("%1 - %2 Role-%3", objDirPartyLocationRolesView.party, objDirPartyLocationRolesView.Location,objDirPartyLocationRolesView.LocationRole));
+        #    }
+        #    /*
+        #    while select crossCompany objDirPartyLocationRolesView where objDirPartyLocationRolesView.Party==5637145083
+        #                    && objDirPartyLocationRolesView.Location==5637367447
+        #    {
+        #        intRole=objDirPartyLocationRolesView.LocationRole;
+        #    }
+        #
+        #    /*select crossCompany * from objDirPartyLocationRolesView where objDirPartyLocationRolesView.Party==5637145083
+        #                    && objDirPartyLocationRolesView.Location==5637367447;*/
+        #
+        #
+        #           */
+        #    return objDirPartyLocationRolesView.LocationRole;
+        #}
+      ENDSOURCE
+      SOURCE #LogiscticLocationRole
+        #public LogisticsLocationRoleType LogiscticLocationRole(str 50 _strType)
+        #{
+        #    LogisticsLocationRoleType _LogisticsLocationRoleType;
+        #
+        #    if(_strType == '0')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::None;
+        #    }
+        #    if(_strType == '1')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Invoice;
+        #    }
+        #    else  if(_strType == '2')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Delivery;
+        #    }
+        #        else  if(_strType == '4')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::SWIFT;
+        #    }
+        #        else  if(_strType == '5')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Payment;
+        #    }
+        #        else  if(_strType == '6')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Service;
+        #    }
+        #        else  if(_strType == '7')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Home;
+        #    }
+        #        else  if(_strType == '8')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Other;
+        #    }
+        #        else  if(_strType == '9')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::Business;
+        #    }
+        #        else  if(_strType == '10')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::RemitTo;
+        #    }
+        #        else  if(_strType == '11')
+        #    {
+        #        _LogisticsLocationRoleType =  LogisticsLocationRoleType::ShipCarrierThirdPartyShipping;
+        #    }
+        #
+        #    return _LogisticsLocationRoleType;
+        #}
+      ENDSOURCE
+      SOURCE #processAddress
+        #private void processAddress(DirPartyPostalAddressView addressView,VendTable vendtable )
+        #{
+        #    AxLogisticsAddressCountryRegion axCountryRegion;
+        #    AxLogisticsAddressCounty        axCounty;
+        #    AxLogisticsAddressState         axState;
+        #    AxLogisticsAddressZipCode       axZipcode;
+        #    AxLogisticsAddresssCity         axCity;
+        #    LogisticsAddresssCity            addressCity;
+        #    ;
+        #    if(addressView.CountryRegionId  &&  !LogisticsAddressCountryRegion::exist(addressView.CountryRegionId))
+        #    {
+        #        axCountryRegion =   new AxLogisticsAddressCountryRegion();
+        #        axCountryRegion.parmCountryRegionId(addressView.CountryRegionId);
+        #        axCountryRegion.parmCurrencyCode(vendtable.Currency);
+        #        axCountryRegion.parmAddrFormat("0014");
+        #        axCountryRegion.save();
+        #    }
+        #    if (addressView.State && !LogisticsAddressState::exist(addressView.CountryRegionId, addressView.State))
+        #    {
+        #        axState =   new AxLogisticsAddressState();
+        #        axState.parmCountryRegionId(addressview.CountryRegionId);
+        #        axState.parmStateId(addressView.State);
+        #        axState.parmName(addressView.State);
+        #        axstate.save();
+        #    }
+        #    if (addressView.County && !LogisticsAddressCounty::exist(addressView.CountryRegionId, addressView.State, addressView.County))
+        #    {
+        #        axCounty    =   new AxLogisticsAddressCounty();
+        #        axCounty.parmCountryRegionId(addressview.CountryRegionId);
+        #        axCounty.parmStateId(addressview.State);
+        #        axCounty.parmCountyId(addressView.County);
+        #        axCounty.parmName(addressview.County);
+        #        axCounty.save();
+        #    }
+        #    if(AddressView.City &&  !Logisticsaddressscity::exist(Logisticsaddressscity::find(addressView.city).RecId))
+        #    {
+        #        /*axcity  =   new AxLogisticsAddresssCity();
+        #        axCity.parmCountryRegionId(addressview.CountryRegionId);
+        #        axCity.parmCountyId(addressview.County);
+        #        axCity.parmName(addressView.City);
+        #        axCity.parmStateId(addressview.State);
+        #        axCity.save();*/
+        #        addressCity.CountryRegionId =   addressView.CountryRegionId;
+        #        addressCity.Name    =   addressView.City;
+        #        addressCity.StateId =   addressView.State;
+        #        addressCity.doInsert();
+        #    }
+        #    if (addressView.ZipCode &&  !LogisticsAddressZipCode::exist(addressView.ZipCode))
+        #    {
+        #        axZipcode   =   new AxLogisticsAddressZipCode();
+        #        axZipcode.parmCity(addressview.City);
+        #        axZipcode.parmCityRecId(Logisticsaddressscity::find(addressView.city).RecId);
+        #        axZipcode.parmCountryRegionId(addressview.CountryRegionId);
+        #        axZipcode.parmCounty(addressView.County);
+        #        axZipcode.parmState(addressView.State);
+        #        axZipcode.parmStreetName(addressView.Street);
+        #        axZipcode.parmZipCode(addressView.ZipCode);
+        #        axZipcode.save();
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #run
+        #public void run()
+        #{
+        #    int                    records;
+        #     //added for length of excel
+        #    SysExcelApplication     application;
+        #    SysExcelWorkbooks       workbooks;
+        #    SysExcelWorkbook        workbook;
+        #    SysExcelWorksheets      worksheets;
+        #    SysExcelWorksheet       worksheet;
+        #    SysExcelCells           cells;
+        #    COMVariantType          type, type1, type2, type3;
+        #    int                     row, success;
+        #
+        #    str 50 strAccountNum,strOldAccountNum,strPartyId,strDataAreaId,strPhone,strPhone1,strTeleFex,strTeleFex1,strTelex,strPhonelocal,strCellular;
+        #    str 50 strCity,strCity1,strstate,strstate1,strCountry,strCountry1,strZipcode,strZipcode1,strcounty;
+        #    str 1000 strVendAddress,strAddress,strURL,strURL1,strStreet,strStreet1,strEmail,strEmail1,strTaxGroup,strPager,strSMS;
+        #    int IsPrimary,IsPrimary1,intType,intRecordExist,IntRecordNew;//,intAddressType;
+        #    boolean IsExist,IsVendInserted;
+        #
+        #    str 50 strType,strType1;
+        #    int64 intLocationRole;
+        #
+        #    DataArea objDataArea;
+        #    DirPartyPostalAddressView addressView_check,addressView_check1;
+        #
+        #    VendTable vendtable,vendtable_check,vendtable_check1;
+        #
+        #    LogisticsLocationRoleType lrt;
+        #    LogisticsLocationRoleType intAddressType,intAddressType1;
+        #    dev_VendorAddressDelete dev_VendorAddressDelete_chk,dev_VendorAddressDelete_Insert,dev_VendorAddressDelete_chk1,dev_VendorAddressDelete_chk2;
+        #    LogisticsLocation objLogisticsLocation;
+        #    DirPartyLocation dirpartylocation_Update;
+        #    Recid _Party;
+        #    dev_VendorAddressInsert objdev_VendorAddressInsertChk;
+        #    //DirPartyLocationRole objDirPartyLocationRole1;
+        #    #AviFiles
+        #    SysOperationProgress progressbar;
+        #    int i;
+        #
+        #    ExecutePermission permission = new ExecutePermission();
+        #    ;
+        #    progressbar = new SysOperationProgress();
+        #    progressbar.setCaption("Progress bar example…");
+        #    progressbar.setAnimation(#AviUpdate);
+        #    progressbar.setTotal(15000);
+        #
+        #
+        #    permission.assert();
+        #  //  super();
+        #
+        #    application = SysExcelApplication::construct();
+        #    workbooks   = application.workbooks();
+        #    try
+        #    {
+        #        workbooks.open(filename);
+        #    }
+        #    catch (Exception::Error)
+        #    {
+        #       throw error("File cannot be opened.");
+        #    }
+        #
+        #    try
+        #    {
+        #        workbook    = workbooks.item(1);
+        #        worksheets  = workbook.worksheets();
+        #        worksheet   = worksheets.itemFromNum(1);
+        #        cells       = worksheet.cells();
+        #        row = 1;
+        #        strOldAccountNum="";
+        #        intRecordExist=0;
+        #        IntRecordNew=0;
+        #        ttsBegin;
+        #        do
+        #        {
+        #            strAccountNum = "";
+        #            strPartyId = "";
+        #            strDataAreaId= "";
+        #            strVendAddress = "";
+        #            IsPrimary = 0;
+        #            strAddress = "";
+        #            strPhone = "";
+        #            strTeleFex      = "";
+        #            strTelex        = "";
+        #            strURL         = "";
+        #            strPhonelocal   = "";
+        #            strCellular    = "";
+        #            strEmail        = "";
+        #            strTaxGroup     = "";
+        #            strPager       = "";
+        #            strSMS         = "";
+        #            strStreet      = "";
+        #            strCity         = "";
+        #            strstate        = "";
+        #            strCountry     = "";
+        #            strZipcode      = "";
+        #            strcounty     = "";
+        #            strType= "";
+        #            intType=0;
+        #
+        #
+        #            row++;
+        #            progressbar.setText(strfmt("The number of row is %1",row));
+        #            progressbar.setCount(row,1);
+        #
+        #
+        #           /* strAccountNum   = cells.item(row, 1).value().bStr();
+        #            strPartyId      = cells.item(row, 2).value().bStr();
+        #            strDataAreaId   = cells.item(row, 3).value().bStr();
+        #            strVendAddress  = cells.item(row, 4).value().bStr();
+        #            intAddressType  = str2enum(logisticsLocationRoleType,num2str(cells.item(row, 7).value().double(),2,4,0,0));
+        #            IsPrimary       = cells.item(row, 9).value().double();
+        #            strAddress      = cells.item(row, 10).value().bStr();
+        #            strPhone        = cells.item(row, 11).value().bStr();
+        #            strTeleFex      = cells.item(row, 12).value().bStr();
+        #            strTelex        = cells.item(row, 13).value().bStr();
+        #            strURL          = cells.item(row, 14).value().bStr();
+        #            strPhonelocal   = cells.item(row, 15).value().bStr();
+        #            strCellular     = cells.item(row, 16).value().bStr();
+        #            strEmail        = cells.item(row, 17).value().bStr();
+        #            strTaxGroup     = cells.item(row, 18).value().bStr();
+        #            strPager        = cells.item(row, 19).value().bStr();
+        #            strSMS          = cells.item(row, 20).value().bStr();
+        #            strStreet       = cells.item(row, 21).value().bStr();
+        #            strCity         = cells.item(row, 22).value().bStr();
+        #            strstate        = cells.item(row, 23).value().bStr();
+        #            strCountry      = cells.item(row, 24).value().bStr();
+        #            strZipcode      = cells.item(row, 25).value().bStr();
+        #            strcounty       = cells.item(row, 26).value().bStr();*/
+        #
+        #            strAccountNum   = this.AnyType_to_str(row,1,cells);
+        #            strPartyId      = this.AnyType_to_str(row,2,cells);
+        #            strDataAreaId   = this.AnyType_to_str(row,3,cells);
+        #            strVendAddress  = this.AnyType_to_str(row,4,cells);
+        #            strType = this.AnyType_to_str(row,7,cells);
+        #            if(strType=='0')
+        #            {
+        #                strType='9';
+        #            }
+        #            intAddressType  = this.LogiscticLocationRole(strType);            //str2enum(lrt,strType);
+        #
+        #            //info(strfmt("%1, Value %2",strType ,intAddressType));
+        #
+        #            IsPrimary       = str2int(this.AnyType_to_str(row,9,cells));
+        #            strAddress      = this.AnyType_to_str(row,10,cells);
+        #            strPhone        = this.AnyType_to_str(row,11,cells);
+        #            strTeleFex      = this.AnyType_to_str(row,12,cells);
+        #            strTelex        = this.AnyType_to_str(row,13,cells);
+        #            strURL          = this.AnyType_to_str(row,14,cells);
+        #            strPhonelocal   = this.AnyType_to_str(row,15,cells);
+        #            strCellular     = this.AnyType_to_str(row,16,cells);
+        #            strEmail        = this.AnyType_to_str(row,17,cells);
+        #            strTaxGroup     = this.AnyType_to_str(row,18,cells);
+        #            strPager        = this.AnyType_to_str(row,19,cells);
+        #            strSMS          = this.AnyType_to_str(row,20,cells);
+        #            strStreet       = this.AnyType_to_str(row,21,cells);
+        #            strCity         = this.AnyType_to_str(row,22,cells);
+        #            strstate        = this.AnyType_to_str(row,23,cells);
+        #            strCountry      = this.AnyType_to_str(row,24,cells);
+        #            strZipcode      = this.AnyType_to_str(row,25,cells);
+        #            strcounty       = this.AnyType_to_str(row,26,cells);
+        #
+        #            _Party=0;
+        #            _Party=vendtable::find(strAccountNum).Party;
+        #            if(strOldAccountNum!=strAccountNum)
+        #            {
+        #                select count(RecId) from objdev_VendorAddressInsertChk where objdev_VendorAddressInsertChk.AccountNum==strAccountNum;
+        #                if(objdev_VendorAddressInsertChk.RecId==0)
+        #                {
+        #                    IsVendInserted = false;
+        #                }
+        #                else
+        #                {
+        #                    IsVendInserted = true;
+        #                }
+        #                select count(RecId) from addressView_check1 join vendtable_check1 where vendtable_check1.Party == addressView_check1.Party
+        #                && vendtable_check1.AccountNum == strAccountNum && vendtable_check1.Party==_Party;
+        #                if(addressView_check1.RecId==0)
+        #                {
+        #                    IsExist=false;
+        #                }
+        #                else
+        #                {
+        #                    IsExist=true;
+        #                }
+        #            }
+        #
+        #            if(IsExist==true && IsVendInserted==false)
+        #            {
+        #                while select * from addressView_check join vendtable_check where vendtable_check.Party == addressView_check.Party
+        #                && vendtable_check.AccountNum == strAccountNum && vendtable_check.Party==_Party  && addressView_check.Address!=''
+        #                {
+        #                    dev_VendorAddressDelete_Insert.clear();
+        #                    dev_VendorAddressDelete_Insert.AccountNum = vendtable_check.AccountNum;
+        #                    dev_VendorAddressDelete_Insert.Party = addressView_check.Party;
+        #                    dev_VendorAddressDelete_Insert.Address = addressView_check.Address;
+        #                    dev_VendorAddressDelete_Insert.BuildingCompliment = addressView_check.BuildingCompliment;
+        #                    dev_VendorAddressDelete_Insert.City = addressView_check.City;
+        #                    dev_VendorAddressDelete_Insert.CityRecId = addressView_check.CityRecId;
+        #                    dev_VendorAddressDelete_Insert.CountryCurrencyCode = addressView_check.CountryCurrencyCode;
+        #                    dev_VendorAddressDelete_Insert.CountryRegionId = addressView_check.CountryRegionId;
+        #                    dev_VendorAddressDelete_Insert.County = addressView_check.County;
+        #                    dev_VendorAddressDelete_Insert.District = addressView_check.District;
+        #                    dev_VendorAddressDelete_Insert.DistrictName = addressView_check.DistrictName;
+        #                    dev_VendorAddressDelete_Insert.IsLocationOwner = addressView_check.IsLocationOwner;
+        #                    dev_VendorAddressDelete_Insert.ISOcode = addressView_check.ISOcode;
+        #                    dev_VendorAddressDelete_Insert.IsPrimary = addressView_check.IsPrimary;
+        #                    dev_VendorAddressDelete_Insert.IsPrimaryTaxRegistration = addressView_check.IsPrimaryTaxRegistration;
+        #                    dev_VendorAddressDelete_Insert.IsPrivate = addressView_check.IsPrivate;
+        #                    dev_VendorAddressDelete_Insert.Latitude = addressView_check.Latitude;
+        #                    dev_VendorAddressDelete_Insert.Location = addressView_check.Location;
+        #                    dev_VendorAddressDelete_Insert.LocationName = addressView_check.LocationName;
+        #                    dev_VendorAddressDelete_Insert.Longitude = addressView_check.Longitude;
+        #                    dev_VendorAddressDelete_Insert.PartyLocation = addressView_check.PartyLocation;
+        #                    dev_VendorAddressDelete_Insert.PostalAddress = addressView_check.PostalAddress;
+        #                    dev_VendorAddressDelete_Insert.PostBox = addressView_check.PostBox;
+        #                    dev_VendorAddressDelete_Insert.PrivateForParty = addressView_check.PrivateForParty;
+        #                    dev_VendorAddressDelete_Insert.State = addressView_check.State;
+        #                    dev_VendorAddressDelete_Insert.Street = addressView_check.Street;
+        #                    dev_VendorAddressDelete_Insert.StreetNumber = addressView_check.StreetNumber;
+        #                    dev_VendorAddressDelete_Insert.TimeZone = addressView_check.TimeZone;
+        #                    dev_VendorAddressDelete_Insert.ValidFrom = addressView_check.ValidFrom;
+        #                    dev_VendorAddressDelete_Insert.ValidTo = addressView_check.ValidTo;
+        #                    dev_VendorAddressDelete_Insert.ZipCode = addressView_check.ZipCode;
+        #                    dev_VendorAddressDelete_Insert.Apartment_RU = addressView_check.Apartment_RU;
+        #                    dev_VendorAddressDelete_Insert.Building_RU = addressView_check.Building_RU;
+        #                    dev_VendorAddressDelete_Insert.FlatId_RU = addressView_check.FlatId_RU;
+        #                    dev_VendorAddressDelete_Insert.StreetId_RU = addressView_check.StreetId_RU;
+        #                    dev_VendorAddressDelete_Insert.HouseId_RU = addressView_check.HouseId_RU;
+        #                    dev_VendorAddressDelete_Insert._RecId_LogisticsPostalAddress = addressView_check._RecId_LogisticsPostalAddress;
+        #                    dev_VendorAddressDelete_Insert._recVersion_LogisticsPostalAddress = addressView_check._recVersion_LogisticsPostalAddress;
+        #                    dev_VendorAddressDelete_Insert.insert();
+        #
+        #                    //Update IsPrimary field
+        #                    select forUpdate * from dirpartylocation_Update where dirpartylocation_Update.Party==addressView_check.Party
+        #                    && dirpartylocation_Update.Location ==addressView_check.Location;
+        #                    ttsBegin;
+        #                    dirpartylocation_Update.IsPrimary=NoYes::No;
+        #                    dirpartylocation_Update.update();
+        #                    ttsCommit;
+        #
+        #                    //Delete address from DirpartyPostalAddressview
+        #                    ttsbegin;
+        #                    objLogisticsLocation = LogisticsLocation::find(addressView_check.Location,true);
+        #                    if(objLogisticsLocation.validateDelete())
+        #                    {
+        #                        objLogisticsLocation.delete();
+        #                    }
+        #                    ttsCommit;
+        #                    intRecordExist++;
+        #                }
+        #            }
+        #
+        #            if(IsExist==true && IsVendInserted==false)
+        #            {
+        #                //Create new address from tmptable
+        #                while select CountryRegionId,State,City,ZipCode,Street from dev_VendorAddressDelete_chk
+        #                    order by Street,City,State,ZipCode,CountryRegionId
+        #                    group by Street,City,State,ZipCode,CountryRegionId
+        #                    where dev_VendorAddressDelete_chk.Party==_Party
+        #                    && dev_VendorAddressDelete_chk.AccountNum==strAccountNum
+        #                {
+        #                    strStreet1="";
+        #                    strCity1="";
+        #                    strstate1="";
+        #                    strCountry1="";
+        #                    strZipcode1="";
+        #                    IsPrimary1=0;
+        #                    strType1="";
+        #                    intType=0;
+        #
+        #                    strStreet1 = dev_VendorAddressDelete_chk.Street;
+        #                    strCity1=dev_VendorAddressDelete_chk.City;
+        #                    strstate1=dev_VendorAddressDelete_chk.State;
+        #                    strCountry1=dev_VendorAddressDelete_chk.CountryRegionId;
+        #                    strZipcode1=dev_VendorAddressDelete_chk.ZipCode;
+        #
+        #                    select * from dev_VendorAddressDelete_chk2 where dev_VendorAddressDelete_chk2.Street==dev_VendorAddressDelete_chk.Street
+        #                    && dev_VendorAddressDelete_chk2.City==dev_VendorAddressDelete_chk.City
+        #                    && dev_VendorAddressDelete_chk2.State==dev_VendorAddressDelete_chk.State
+        #                    && dev_VendorAddressDelete_chk2.ZipCode==dev_VendorAddressDelete_chk.ZipCode
+        #                    && dev_VendorAddressDelete_chk2.CountryRegionId==dev_VendorAddressDelete_chk.CountryRegionId;
+        #
+        #                    if(dev_VendorAddressDelete_chk2.location!=0)
+        #                    {
+        #                        intLocationRole=0;
+        #                        intLocationRole=this.GetLocationRole(dev_VendorAddressDelete_chk2.Party,dev_VendorAddressDelete_chk2.location);
+        #                        intType=LogisticsLocationRole::findRec(intLocationRole).Type;
+        #                        strType1=int2str(intType);
+        #                        if(strType1=='0')
+        #                        {
+        #                            strType1='9';
+        #                        }
+        #                        intAddressType1 = this.LogiscticLocationRole(strType1);
+        #
+        #                    }
+        #                    IsPrimary1=dev_VendorAddressDelete_chk2.IsPrimary;
+        #
+        #                    this.CreateAddress(strAccountNum,strStreet1,strCity1,strstate1,strCountry1,strZipcode1,IsPrimary1,intAddressType1);
+        #
+        #                    IsExist=false;
+        #                }
+        #            }
+        #            if(IsVendInserted==false)
+        #            {
+        #                select count(RecId) from dev_VendorAddressDelete_chk1 where dev_VendorAddressDelete_chk1.Party==_Party
+        #                && dev_VendorAddressDelete_chk1.AccountNum==strAccountNum;
+        #                if(dev_VendorAddressDelete_chk1.RecId==0)
+        #                {
+        #                    this.CreateAddress(strAccountNum,strStreet,strCity,strstate,strCountry,strZipcode,IsPrimary,intAddressType);
+        #                    intRecordNew++;
+        #                }
+        #            }
+        #
+        #            strOldAccountNum = strAccountNum;
+        #            type1 = cells.item(row+1, 1).value().variantType(); //5
+        #        }
+        #        while (type1 != COMVariantType::VT_EMPTY);
+        #        //while (type1 != COMVariantType::VT_EMPTY || type2 != COMVariantType::VT_EMPTY || type3 != COMVariantType::VT_EMPTY);
+        #        ttsCommit;
+        #
+        #        info(strfmt("%1 row(s) succesfully imported", row));
+        #        info(strfmt("%1 records exist", intRecordExist));
+        #        info(strfmt("%1 records new created", intRecordNew));
+        #    }
+        #    catch (Exception::Error)
+        #    {
+        #
+        #        ttsabort;
+        #        error("Import failed");
+        #
+        #    }
+        #        application.quit();
+        #}
+      ENDSOURCE
+      SOURCE #main
+        #public static void main(Args _args)
+        #{
+        #    dev_ImportVendorAddress objdev_ImportVendorAddress = new dev_ImportVendorAddress();
+        #
+        #    // Prompt the dialog, if user clicks in OK it returns true
+        #    if (objdev_ImportVendorAddress.prompt())
+        #    {
+        #        objdev_ImportVendorAddress.run();
+        #    }
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

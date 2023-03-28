@@ -1,0 +1,1158 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_RollStockReportUI unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_RollStockReportUI
+    PROPERTIES
+      Name                #dev_RollStockReportUI
+      Extends             #SysOperationAutomaticUIBuilder
+      Origin              #{C22E5308-17CA-4D8F-B7A1-CF9277538935}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #ItemChanged
+        #public void ItemChanged(FormStringControl _control)
+        #{
+        #    dev_ItemTableTemp   objdev_ItemTableTemp;
+        #
+        #    delete_from objdev_ItemTableTemp;
+        #
+        #    DialogItemId.value(_control.valueStr());
+        #    objdev_ItemTableTemp.ItemId=_control.valueStr();
+        #    objdev_ItemTableTemp.insert();
+        #
+        #}
+      ENDSOURCE
+      SOURCE #build
+        #public void build()
+        #{
+        #    int i;
+        #    dev_RollStockReportContract   contract;
+        #
+        #    contract = this.dataContractObject() as dev_RollStockReportContract;
+        #
+        #    DialogAsOnDate = this.addDialogField(methodStr(dev_RollStockReportContract, ParmAsonDate),contract);
+        #    DialogItemId = this.addDialogField(methodStr(dev_RollStockReportContract, ParmItemId),contract);
+        #    DialogEcoResItemConfigurationName= this.addDialogField(methodStr(dev_RollStockReportContract, ParmEcoResItemConfigurationName),contract);
+        #    DialogEcoResItemSizeName= this.addDialogField(methodStr(dev_RollStockReportContract, ParmEcoResItemSizeName),contract);
+        #    DialogEcoResItemColorName= this.addDialogField(methodStr(dev_RollStockReportContract, ParmEcoResColorname),contract);
+        #    DialogEcoResItemStyleName= this.addDialogField(methodStr(dev_RollStockReportContract, ParmEcoResItemStyleName),contract);
+        #    DialogIncludeZero= this.addDialogField(methodStr(dev_RollStockReportContract, ParmInclZero),contract);
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class dev_RollStockReportUI extends SysOperationAutomaticUIBuilder
+        #{
+        #    DialogField  DialogAsOnDate,DialogItemId,DialogEcoResItemConfigurationName,DialogEcoResItemSizeName,DialogEcoResItemColorName,DialogEcoResItemStyleName,DialogIncludeZero;
+        #    dev_RollStockReportContract dev_RollStockReportContract;
+        #}
+      ENDSOURCE
+      SOURCE #postBuild
+        #public void postBuild()
+        #{
+        #    dev_RollStockReportContract   contract;
+        #
+        #    super();
+        #    contract = this.dataContractObject() as dev_RollStockReportContract;
+        #
+        #    DialogItemId  = this.bindInfo().getDialogField(contract, methodstr(dev_RollStockReportContract, ParmItemId));
+        #    DialogItemId.registerOverrideMethod(methodstr(FormStringControl, modified),methodstr(dev_RollStockReportUI, ItemChanged), this);
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_RollStockReportProvider unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_RollStockReportProvider
+    PROPERTIES
+      Name                #dev_RollStockReportProvider
+      Extends             #SRSReportDataProviderBase
+      RunOn               #Server
+      Origin              #{A2FD952F-89A5-4229-80ED-5BA5C04101A3}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #[SRSReportParameterAttribute(classstr(dev_RollStockReportContract))]
+        #class dev_RollStockReportProvider extends  SRSReportDataProviderBase
+        #{
+        #    dev_RollStockReportTmp          objdev_RollStockReportTmp;
+        #    InventTrans                     objInventTrans;
+        #    InventTransOrigin               objInventTransOrigin;
+        #    InventDim                       objInventDim;
+        #    dev_PurchSecDetails             objdev_PurchSecDetails;
+        #    SalesLine                       objSalesLine;
+        #    dev_SalesLine                   objdev_SalesLine;
+        #    InventJournalTrans              objInventJournalTrans;
+        #    ProdJournalBOM                  objProdJournalBOM;
+        #    dev_ProdJournalTable            objdev_ProdJournalTable;
+        #    ProdJournalProd                 objProdJournalProd;
+        #    dev_ProdJournalTransProd        objdev_ProdJournalTransProd;
+        #    BaseDate                        _AsOnDate;
+        #    str 100                         _ItemID,_Config,_Size,_Color,_Style;
+        #    boolean                         _InclZeroValue;
+        #}
+      ENDSOURCE
+      SOURCE #Getdev_RollStockReportTmp
+        #[SRSReportDataSetAttribute("dev_RollStockReportTmp")]
+        #public dev_RollStockReportTmp  Getdev_RollStockReportTmp()
+        #{
+        #    select * from objdev_RollStockReportTmp;
+        #    return objdev_RollStockReportTmp;
+        #}
+      ENDSOURCE
+      SOURCE #processReport
+        #public void processReport()
+        #{
+        #    dev_RollStockReportContract contract = this.parmDataContract() as dev_RollStockReportContract;
+        #    objdev_RollStockReportTmp.clear();
+        #    delete_from objdev_RollStockReportTmp;
+        #
+        #    _AsOnDate       = Contract.ParmAsonDate();
+        #    _ItemID         = Contract.ParmItemId();
+        #    _Config         = Contract.ParmEcoResItemConfigurationName();
+        #    _Size           = Contract.ParmEcoResItemSizeName();
+        #    _Color          = Contract.ParmEcoResColorname();
+        #    _Style          = Contract.ParmEcoResItemStyleName();
+        #    _InclZeroValue  = Contract.ParmInclZero();
+        #
+        #    while select * from objInventTrans where objInventTrans.DatePhysical!=dateNull()
+        #        &&  objInventTrans.DatePhysical<=_AsOnDate
+        #        &&  (!_ItemID || objInventTrans.ItemId==_ItemID)
+        #    Join * from objInventTransOrigin where objInventTransOrigin.RecId==objInventTrans.InventTransOrigin
+        #    &&     (objInventTransOrigin.ReferenceCategory==InventTransType::Purch                 //Purchase Order
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::Sales                  //Sales Order
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::InventTransfer         //Transfer order
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::InventLossProfit       //Inventory Adjustment
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::InventCounting         //Counting
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::ProdLine               //Picking List
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::Production             //Report as finished
+        #        || objInventTransOrigin.ReferenceCategory==InventTransType::InventTransaction)     //Movement
+        #    join * from objInventDim where objInventDim.inventDimId==objInventTrans.inventDimId
+        #        &&  (objInventDim.inventSerialId!="")
+        #        &&  (!_Config || objInventDim.configId==_Config)
+        #        &&  (!_Size   || objInventDim.InventSizeId==_Size)
+        #        &&  (!_Color  || objInventDim.InventColorId==_Color)
+        #        &&  (!_Style  || objInventDim.InventStyleId==_Style)
+        #    {
+        #        objdev_RollStockReportTmp.clear();
+        #        objdev_RollStockReportTmp.ItemId=objInventTrans.ItemId;
+        #        objdev_RollStockReportTmp.ItemName=objInventTrans.itemName();
+        #        objdev_RollStockReportTmp.InventConfig=objInventDim.configId;
+        #        objdev_RollStockReportTmp.InventSize=objInventDim.InventSizeId;
+        #        objdev_RollStockReportTmp.InventColor=objInventDim.InventColorId;
+        #        objdev_RollStockReportTmp.InventStyle=objInventDim.InventStyleId;
+        #        objdev_RollStockReportTmp.InventSerialId=objInventDim.inventSerialId;
+        #        objdev_RollStockReportTmp.MTR=objInventTrans.Qty;
+        #
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::Purch)//Purchase Order
+        #        {
+        #            objdev_PurchSecDetails.clear();
+        #            select * from objdev_PurchSecDetails where
+        #            objdev_PurchSecDetails.PurchId==objInventTransOrigin.ReferenceId
+        #            && objdev_PurchSecDetails.ItemID==objInventTrans.ItemId
+        #            && objdev_PurchSecDetails.SourceRecId==objInventTrans.RecId
+        #            && objdev_PurchSecDetails.SourceTableId==objInventTrans.TableId;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objdev_PurchSecDetails.dev_GrossWt;
+        #            objdev_RollStockReportTmp.TareWT=objdev_PurchSecDetails.dev_TareWt;
+        #            objdev_RollStockReportTmp.NetWT=objdev_PurchSecDetails.dev_PurchSecQty;
+        #        }
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::Sales)//Sales Order
+        #        {
+        #            objSalesLine.clear();
+        #            objdev_SalesLine.clear();
+        #
+        #            Select * from objSalesLine where  objSalesLine.SalesId==objInventTransOrigin.ReferenceId && objSalesLine.ItemId==objInventTrans.ItemId && objSalesLine.InventDimId==objInventTrans.inventDimId
+        #            && objSalesLine.InventTransId==objInventTransOrigin.InventTransId
+        #            Join * from objdev_SalesLine where objdev_SalesLine.SalesId==objSalesLine.SalesId &&
+        #            objdev_SalesLine.LineNum==objSalesLine.LineNum &&
+        #            objdev_SalesLine.RefRecId==objSalesLine.RecId;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objdev_SalesLine.dev_GrossWeight;
+        #            objdev_RollStockReportTmp.TareWT=objdev_SalesLine.dev_TareWeight;
+        #            objdev_RollStockReportTmp.NetWT=objdev_SalesLine.dev_SecSalesQty;
+        #        }
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::InventTransfer)//Transfer order
+        #        {
+        #            objInventJournalTrans.clear();
+        #            select * from objInventJournalTrans where objInventJournalTrans.JournalId==objInventTransOrigin.ReferenceId
+        #            && objInventJournalTrans.ItemId==objInventTrans.ItemId
+        #            && objInventJournalTrans.InventDimId==objInventTrans.inventDimId
+        #            && objInventJournalTrans.JournalType==InventJournalType::Transfer
+        #            && objInventJournalTrans.Voucher==ObjInventTrans.VoucherPhysical;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objInventJournalTrans.dev_GrossWeigth;
+        #            objdev_RollStockReportTmp.TareWT=objInventJournalTrans.dev_TareWeigth;
+        #            objdev_RollStockReportTmp.NetWT=objInventJournalTrans.dev_SecUnitQty;
+        #        }
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::InventLossProfit)//Inventory Adjustment
+        #        {
+        #            objInventJournalTrans.clear();
+        #            select * from objInventJournalTrans where objInventJournalTrans.JournalId==objInventTransOrigin.ReferenceId
+        #            && objInventJournalTrans.ItemId==objInventTrans.ItemId
+        #            && objInventJournalTrans.InventDimId==objInventTrans.inventDimId
+        #            && objInventJournalTrans.JournalType==InventJournalType::LossProfit
+        #            && objInventJournalTrans.Voucher==ObjInventTrans.VoucherPhysical;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objInventJournalTrans.dev_GrossWeigth;
+        #            objdev_RollStockReportTmp.TareWT=objInventJournalTrans.dev_TareWeigth;
+        #            objdev_RollStockReportTmp.NetWT=objInventJournalTrans.dev_SecUnitQty;
+        #        }
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::ProdLine)//Picking List
+        #        {
+        #            objProdJournalBOM.clear();
+        #            objdev_ProdJournalTable.clear();
+        #            select * from objProdJournalBOM where objProdJournalBOM.JournalId==objInventTransOrigin.ReferenceId
+        #            && objProdJournalBOM.Voucher==objInventTrans.VoucherPhysical
+        #            && objProdJournalBOM.ItemId==objInventTrans.ItemId
+        #            && objProdJournalBOM.InventDimId==objInventTrans.inventDimId
+        #            Join * from objdev_ProdJournalTable where objdev_ProdJournalTable.ProdId==objProdJournalBOM.ProdId
+        #            && objdev_ProdJournalTable.JournalId==objProdJournalBOM.JournalId
+        #            && objdev_ProdJournalTable.ProdJournalBOMRecid==objProdJournalBOM.RecId;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objdev_ProdJournalTable.dev_GrossWeigth;
+        #            objdev_RollStockReportTmp.TareWT=objdev_ProdJournalTable.dev_TareWeigth;
+        #            objdev_RollStockReportTmp.NetWT=objdev_ProdJournalTable.dev_QtySecUnit;
+        #        }
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::Production)//Report as finished
+        #        {
+        #            objProdJournalProd.clear();
+        #            objdev_ProdJournalTransProd.clear();
+        #
+        #            select * from objProdJournalProd where objProdJournalProd.ProdId==objInventTransOrigin.ReferenceId
+        #            && objProdJournalProd.Voucher==objInventTrans.VoucherPhysical
+        #            && objProdJournalProd.ItemId==objInventTrans.ItemId
+        #            && objProdJournalProd.InventDimId==objInventTrans.inventDimId
+        #
+        #            Join * from objdev_ProdJournalTransProd where objdev_ProdJournalTransProd.ProdId==objProdJournalProd.ProdId
+        #            && objdev_ProdJournalTransProd.LineNum==objProdJournalProd.LineNum
+        #            && objdev_ProdJournalTransProd.JournalId==objProdJournalProd.JournalId
+        #            && objdev_ProdJournalTransProd.ProdJournalProdLineRecid==objProdJournalProd.RecId;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objdev_ProdJournalTransProd.dev_GrossWeigth;
+        #            objdev_RollStockReportTmp.TareWT=objdev_ProdJournalTransProd.dev_TareWeigth;
+        #            objdev_RollStockReportTmp.NetWT=objdev_ProdJournalTransProd.dev_QtySecUnit;
+        #        }
+        #        if(objInventTransOrigin.ReferenceCategory==InventTransType::InventTransaction)//Movement
+        #        {
+        #            objInventJournalTrans.clear();
+        #            select * from objInventJournalTrans where objInventJournalTrans.JournalId==objInventTransOrigin.ReferenceId
+        #            && objInventJournalTrans.ItemId==objInventTrans.ItemId
+        #            && objInventJournalTrans.InventDimId==objInventTrans.inventDimId
+        #            && objInventJournalTrans.JournalType==InventJournalType::Movement
+        #            && objInventJournalTrans.Voucher==ObjInventTrans.VoucherPhysical;
+        #
+        #            objdev_RollStockReportTmp.GrossWT=objInventJournalTrans.dev_GrossWeigth;
+        #            objdev_RollStockReportTmp.TareWT=objInventJournalTrans.dev_TareWeigth;
+        #            objdev_RollStockReportTmp.NetWT=objInventJournalTrans.dev_SecUnitQty;
+        #        }
+        #        if(objdev_RollStockReportTmp.validateWrite())
+        #        {
+        #            objdev_RollStockReportTmp.Insert();
+        #        }
+        #
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_RollStockReportController unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_RollStockReportController
+    PROPERTIES
+      Name                #dev_RollStockReportController
+      Extends             #SrsReportRunController
+      Origin              #{08563B2A-CA5E-4315-AFAF-75AD3ACFCCB6}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #Public class dev_RollStockReportController extends SrsReportRunController
+        #{
+        #    dev_RollStockReportContract contract;
+        #}
+      ENDSOURCE
+      SOURCE #prePromptModifyContract
+        #protected void prePromptModifyContract()
+        #{
+        #    dev_ItemTableTemp       objdev_ItemTableTemp;
+        #    super();
+        #    Contract = this.parmReportContract().parmRdpContract() as dev_RollStockReportContract;
+        #    Contract.ParmAsonDate(today());
+        #    Contract.ParmInclZero(NoYes::Yes);
+        #
+        #
+        #    delete_from objdev_ItemTableTemp;
+        #    if(Contract.ParmItemId()!="")
+        #    {
+        #        objdev_ItemTableTemp.ItemId=Contract.ParmItemId();
+        #        objdev_ItemTableTemp.insert();
+        #    }
+        #
+        #}
+        #
+      ENDSOURCE
+      SOURCE #main
+        #public static void main(Args _args)
+        #{
+        #    dev_RollStockReportController controller = new dev_RollStockReportController();
+        #    controller.parmArgs(_args);
+        #    controller.parmReportName(ssrsReportStr(dev_RollStockReport, PrecisionDesign1));
+        #    controller.parmShowDialog(true);
+        #    controller.parmLoadFromSysLastValue(true);
+        #    controller.startOperation();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_RollStockReportContract unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_RollStockReportContract
+    PROPERTIES
+      Name                #dev_RollStockReportContract
+      Origin              #{7B944340-7390-4CAB-81D4-5B32C982AA5E}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #//[DataContractAttribute]
+        #[
+        #    DataContractAttribute,
+        #    SysOperationContractProcessingAttribute(classstr(dev_RollStockReportUI))
+        #]
+        #class dev_RollStockReportContract   implements SysOperationValidatable
+        #{
+        #    BaseDate                        AsOnDate;
+        #    ItemId                          ItemId;
+        #    EcoResItemConfigurationName     EcoResItemConfigurationName;
+        #    EcoResItemSizeName              EcoResItemSizeName;
+        #    EcoResItemColorName             EcoResItemColorName;
+        #    EcoResItemStyleName             EcoResItemStyleName;
+        #    NoYesId                         IncludeZero;
+        #}
+      ENDSOURCE
+      SOURCE #ParmAsonDate
+        #[DataMemberAttribute("As on Date"),
+        #SysOperationLabelAttribute("As on Date"),
+        #SysOperationDisplayOrderAttribute('1')]
+        #public BaseDate ParmAsonDate(BaseDate _AsOnDate = AsOnDate)
+        #{
+        #    AsOnDate = _AsOnDate;
+        #    return AsOnDate;
+        #}
+      ENDSOURCE
+      SOURCE #ParmEcoResColorname
+        #[DataMemberAttribute("Color"),
+        #SysOperationDisplayOrderAttribute('5')]
+        #public EcoResItemColorName ParmEcoResColorname(EcoResItemColorName _EcoResItemColorName = EcoResItemColorName)
+        #{
+        #    EcoResItemColorName = _EcoResItemColorName;
+        #    return EcoResItemColorName;
+        #}
+      ENDSOURCE
+      SOURCE #ParmEcoResItemConfigurationName
+        #[DataMemberAttribute("Configuration"),
+        #SysOperationDisplayOrderAttribute('3')]
+        #public EcoResItemConfigurationName ParmEcoResItemConfigurationName(EcoResItemConfigurationName _EcoResItemConfigurationName = EcoResItemConfigurationName)
+        #{
+        #    EcoResItemConfigurationName = _EcoResItemConfigurationName;
+        #    return EcoResItemConfigurationName;
+        #}
+      ENDSOURCE
+      SOURCE #ParmEcoResItemSizeName
+        #[DataMemberAttribute("Size"),
+        #SysOperationDisplayOrderAttribute('4')]
+        #public EcoResItemSizeName ParmEcoResItemSizeName(EcoResItemSizeName _EcoResItemSizeName = EcoResItemSizeName)
+        #{
+        #    EcoResItemSizeName = _EcoResItemSizeName;
+        #    return EcoResItemSizeName;
+        #}
+      ENDSOURCE
+      SOURCE #ParmEcoResItemStyleName
+        #[DataMemberAttribute("Style"),
+        #SysOperationDisplayOrderAttribute('6')]
+        #public EcoResItemStyleName ParmEcoResItemStyleName(EcoResItemStyleName _EcoResItemStyleName = EcoResItemStyleName)
+        #{
+        #    EcoResItemStyleName = _EcoResItemStyleName;
+        #    return EcoResItemStyleName;
+        #}
+      ENDSOURCE
+      SOURCE #ParmInclZero
+        #[DataMemberAttribute("Incl. Zero"),
+        #SysOperationLabelAttribute("Incl. Zero"),
+        #SysOperationDisplayOrderAttribute('7')]
+        #public NoYesId ParmInclZero(Noyesid _Noyesid = IncludeZero)
+        #{
+        #    IncludeZero= _Noyesid;
+        #    return IncludeZero;
+        #}
+      ENDSOURCE
+      SOURCE #ParmItemId
+        #[DataMemberAttribute("Item Number"),
+        #SysOperationDisplayOrderAttribute('2')]
+        #public ItemId ParmItemId(ItemId _ItemId = ItemId)
+        #{
+        #    ItemId = _ItemId;
+        #    return ItemId;
+        #}
+      ENDSOURCE
+      SOURCE #validate
+        #public boolean validate()
+        #{
+        #    boolean             isValid = true;
+        #    if(ItemId=="")
+        #    {
+        #        isValid = checkFailed("Item No. required.");
+        #        isValid=false;
+        #    }
+        #    return  isValid;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_ItemTableTemp unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_ItemTableTemp
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_ItemTableTemp
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      Origin              #{506A2FB3-7966-4266-A78B-8E06E6DF1350}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ItemId
+        STRING
+        PROPERTIES
+          Name                #ItemId
+          Table               #dev_ItemTableTemp
+          Origin              #{71AB68E1-3C16-4840-B92E-1BF1EECDDA44}
+          StringSize          #100
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 12
+
+FORM #SysOperationTemplateForm
+  PROPERTIES
+    Name                #SysOperationTemplateForm
+    Origin              #{93768880-585B-4D62-8643-3D60D2803AE3}
+  ENDPROPERTIES
+  
+  METHODS
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    #AOT
+      #    #Properties
+      #    #SRSFramework
+      #
+      #    SRSReportRunBuilder srsReportRunBuilder;
+      #
+      #    SRSPrintDestinationSettings srsPrintDestinationSettings;
+      #
+      #    // members necessary to have a file name lookup control on the form
+      #    FilenameFilter      filenameLookupFilter;
+      #    str                 filenameLookupInitialPath;
+      #    str                 filenameLookupTitle;
+      #    str                 filenameLookupFilename;
+      #    str                 folderLookupTitle;
+      #
+      #    Object dialogObj;
+      #
+      #    SysOperationController controller;
+      #}
+    ENDSOURCE
+    SOURCE #closeOk
+      #/// <summary>
+      #/// Command control message called when the form's OK button is clicked.
+      #/// </summary>
+      #public void closeOk()
+      #{
+      #    if (this.controller().checkCloseDialog())
+      #    {
+      #        super();
+      #    }
+      #}
+    ENDSOURCE
+    SOURCE #controller
+      #public SysOperationController controller()
+      #{
+      #    return this.dialog().controller();
+      #}
+    ENDSOURCE
+    SOURCE #dialog
+      #public SysOperationDialog dialog()
+      #{
+      #    if (dialogObj == null)
+      #    {
+      #        dialogObj = Dialog::getDialogFromCaller(this);
+      #    }
+      #
+      #    return dialogObj;
+      #}
+    ENDSOURCE
+    SOURCE #filenameLookupFileName
+      #str filenameLookupFileName(str filter = filenameLookupFilename)
+      #{
+      #    filenameLookupFilename = filter;
+      #
+      #    return filenameLookupFilename;
+      #}
+    ENDSOURCE
+    SOURCE #filenameLookupFilter
+      #FilenameFilter filenameLookupFilter(container filter = filenameLookupFilter)
+      #{
+      #    filenameLookupFilter = filter;
+      #
+      #    return filenameLookupFilter;
+      #}
+    ENDSOURCE
+    SOURCE #filenameLookupInitialPath
+      #str filenameLookupInitialPath(str path = filenameLookupInitialPath)
+      #{
+      #    filenameLookupInitialPath   = path;
+      #
+      #    return filenameLookupInitialPath;
+      #}
+    ENDSOURCE
+    SOURCE #filenameLookupTitle
+      #str filenameLookupTitle(str filter = filenameLookupTitle)
+      #{
+      #    filenameLookupTitle = filter;
+      #
+      #    return filenameLookupTitle;
+      #}
+    ENDSOURCE
+    SOURCE #filePathLookupTitle
+      #str filePathLookupTitle(str title = folderLookupTitle)
+      #{
+      #    return this.folderLookupTitle(title);
+      #}
+    ENDSOURCE
+    SOURCE #folderLookupTitle
+      #str folderLookupTitle(str title = folderLookupTitle)
+      #{
+      #    folderLookupTitle = title;
+      #
+      #    return folderLookupTitle;
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #    this.setFormCaption();
+      #
+      #    super();
+      #
+      #    this.dialog().mainFormGroup(dialogStartGrp);
+      #    this.dialog().curFormGroup(dialogStartGrp);
+      #
+      #    if(this.controller().parmArgs().menuItemName()=="dev_RollStockReport")
+      #    {
+      #        devBtn.visible(true);
+      #    }
+      #    else
+      #    {
+      #        devBtn.visible(false);
+      #    }
+      #}
+    ENDSOURCE
+    SOURCE #selectControl
+      #/// <summary>
+      #/// Called when a control is selected on the form.
+      #/// </summary>
+      #/// <param name="_control">
+      #/// The control that gets selected.
+      #/// </param>
+      #/// <returns>
+      #/// Boolean value indicating if the selection is valid.
+      #/// </returns>
+      #public boolean selectControl(FormControl _control)
+      #{
+      #    boolean ret;
+      #
+      #    ret = super(_control);
+      #
+      #    // check to see if selectCtrl messages need to be dispatched
+      #    if (this.dialog().allowUpdateOnSelectCtrl())
+      #    {
+      #        this.controller().dialogSelectCtrl();
+      #    }
+      #
+      #    return ret;
+      #}
+    ENDSOURCE
+    SOURCE #selectPrintDestination
+      #void selectPrintDestination()
+      #{
+      #    container printerNameDestination;
+      #    SRSPrintDestinationSettings printSettings = this.controller().getDataContractObject(classStr(SRSPrintDestinationSettings));
+      #    SrsReportRunController srsReportRunController;
+      #    SrsPrintDestinationTokenType tokenType;
+      #    str tokenParams;
+      #
+      #    if(printSettings)
+      #    {
+      #        srsReportRunController = this.controller() as SrsReportRunController;
+      #        if(srsReportRunController)
+      #        {
+      #            tokenType = srsReportRunController.parmPrintDestinationTokens().parmTokenType();
+      #            tokenParams = srsReportRunController.parmPrintDestinationTokens().parmParameters();
+      #        }
+      #        if (SrsReportRunUtil::showSettingsDialog(printSettings, tokenType, tokenParams))
+      #        {
+      #            printerNameDestination = SrsReportRunUtil::getPrinterNameDestination(printSettings);
+      #            if(printerNameDestination != conNull())
+      #            {
+      #                printerName.text(conPeek(printerNameDestination, 1));
+      #                printDestination.text(conPeek(printerNameDestination, 2));
+      #            }
+      #        }
+      #    }
+      #}
+    ENDSOURCE
+    SOURCE #setFormCaption
+      #private void setFormCaption()
+      #{
+      #    this.design().caption(this.controller().parmDialogCaption());
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+  ENDOBJECTBANK
+  
+  REFERENCEDATASOURCES
+  ENDREFERENCEDATASOURCES
+  
+  JOINS
+  ENDJOINS
+  
+  PARTREFERENCES
+  ENDPARTREFERENCES
+  
+  DESIGN
+    PROPERTIES
+      Caption             #@SYS15111
+      Frame               #Dialog
+      SaveSize            #No
+      HideToolbar         #Yes
+      BackgroundColor     #Window background
+      TopMargin           #0
+      BottomMargin        #0
+      LeftMargin          #0
+      RightMargin         #0
+      HideIfEmpty         #No
+      AlignChildren       #No
+      AlignChild          #No
+      AllowUserSetup      #No
+      StatusBarStyle      #SimpleWithoutClose
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL BUTTONGROUP
+        PROPERTIES
+          Name                #BottomButtonGrp
+          ElementPosition     #1431655764
+          HierarchyParent     #BottomGrp
+          Style               #DialogCommitContainer
+          AlignChildren       #No
+          AlignChild          #No
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #BottomGrp
+          AutoDeclaration     #Yes
+          ElementPosition     #1431655764
+          Style               #DialogCommit
+          HideIfEmpty         #No
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #CurrentPrintDestination
+          AutoDeclaration     #Yes
+          Visible             #No
+          Width               #Column width
+          ElementPosition     #1717986916
+          HierarchyParent     #General
+          Caption             #@SYS131518
+          HideIfEmpty         #No
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #DialogContent
+          ElementPosition     #715827882
+          Style               #DialogContent
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #DialogStartGrp
+          AutoDeclaration     #Yes
+          ElementPosition     #1431655764
+          HierarchyParent     #ParametersGroup
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #ParametersGroup
+          AutoDeclaration     #Yes
+          Width               #Column width
+          ElementPosition     #858993458
+          HierarchyParent     #General
+          Caption             #@SYS28007
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #QueriesGroup
+          AutoDeclaration     #Yes
+          Width               #Column width
+          ElementPosition     #1288490187
+          HierarchyParent     #General
+          FrameType           #None
+          HideIfEmpty         #No
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #ValidTimeRangesParentGroup
+          AutoDeclaration     #Yes
+          ElementPosition     #1073741823
+          HierarchyParent     #ValidTimeRangesTab
+          HideIfEmpty         #No
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          ElementPosition     #1431655764
+          HierarchyParent     #DialogContent
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL TABPAGE
+        PROPERTIES
+          Name                #General
+          ElementPosition     #1073741822
+          HierarchyParent     #Tab
+          Caption             #@SYS19924
+          Columns             #2
+          ArrangeGuide        
+            ARRAY INDEX Columns 
+              #0
+              #0
+            ENDARRAY
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL TABPAGE
+        PROPERTIES
+          Name                #ValidTimeRangesTab
+          AutoDeclaration     #Yes
+          Visible             #No
+          ElementPosition     #1610612734
+          HierarchyParent     #Tab
+          Caption             #@SYS132836
+          HideIfEmpty         #No
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL BUTTON
+        PROPERTIES
+          Name                #Destinations
+          Left                #Auto (right)
+          Top                 #Bottom edge
+          HelpText            #@SYS131523
+          ElementPosition     #1717986916
+          HierarchyParent     #CurrentPrintDestination
+          Text                #@SYS131520
+        ENDPROPERTIES
+        
+        METHODS
+          SOURCE #clicked
+            #void clicked()
+            #{
+            #    element.selectPrintDestination();
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL COMMANDBUTTON
+        PROPERTIES
+          Name                #CommandButton
+          AutoDeclaration     #Yes
+          ElementPosition     #1073741822
+          HierarchyParent     #BottomButtonGrp
+          DefaultButton       #Yes
+          Command             #263
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL COMMANDBUTTON
+        PROPERTIES
+          Name                #CommandButtonCancel
+          AutoDeclaration     #Yes
+          ElementPosition     #1610612733
+          HierarchyParent     #BottomButtonGrp
+          Command             #264
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL COMMANDBUTTON
+        PROPERTIES
+          Name                #devBtn
+          AutoDeclaration     #Yes
+          ElementPosition     #715827880
+          HierarchyParent     #BottomButtonGrp
+          Text                #Open Item Master
+        ENDPROPERTIES
+        
+        METHODS
+          SOURCE #clicked
+            #public void clicked()
+            #{
+            #
+            #    dev_ItemTableTemp    objdev_ItemTableTemp;
+            #    FormRun              formRun;
+            #    Args            args = new Args();
+            #    super();
+            #    Select Firstonly * from objdev_ItemTableTemp Order by objdev_ItemTableTemp.RecId desc;
+            #    if(objdev_ItemTableTemp.RecId!=0)
+            #    {
+            #        args.name(formstr(EcoResProductDetailsExtended));
+            #        args.caller(this);
+            #        args.record(InventTable::find(objdev_ItemTableTemp.ItemId));
+            #        formRun = classfactory.formRunClass(args);
+            #        formRun.init();
+            #        formRun.run();
+            #        formRun.detach();
+            #    }
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL STRINGEDIT
+        PROPERTIES
+          Name                #PrintDestination
+          AutoDeclaration     #Yes
+          AllowEdit           #No
+          Width               #Column width
+          HelpText            #@SYS131522
+          ElementPosition     #1288490187
+          HierarchyParent     #CurrentPrintDestination
+          Label               #@SYS131519
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL STRINGEDIT
+        PROPERTIES
+          Name                #PrinterName
+          AutoDeclaration     #Yes
+          AllowEdit           #No
+          Width               #Column width
+          HelpText            #@SYS131521
+          ElementPosition     #858993458
+          HierarchyParent     #CurrentPrintDestination
+          Label               #@SYS3723
+        ENDPROPERTIES
+        
+        METHODS
+        ENDMETHODS
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+  PERMISSIONS #Permissions
+    PROPERTIES
+    ENDPROPERTIES
+    
+    PERMISSIONSET #Read
+      PROPERTIES
+      ENDPROPERTIES
+      
+      FORM #Controls
+      ENDFORM
+      
+    TABLES #Tables
+    ENDTABLES
+    
+  SERVERMETHODS #Server Methods
+  ENDSERVERMETHODS
+  
+ASSOCIATEDFORMS #Associated Forms
+  ASSOCIATEDFORM #SRSPrintDestinationSettingsForm
+    PROPERTIES
+      Form                #SRSPrintDestinationSettingsForm
+      AccessLevel         #Delete
+      SystemManaged       #No
+      ManagedBy           #CodeAnalysis
+    ENDPROPERTIES
+    
+  ENDASSOCIATEDFORM
+  
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+PERMISSIONSET #Update
+  PROPERTIES
+  ENDPROPERTIES
+  
+  FORM #Controls
+  ENDFORM
+  
+TABLES #Tables
+ENDTABLES
+
+SERVERMETHODS #Server Methods
+ENDSERVERMETHODS
+
+ASSOCIATEDFORMS #Associated Forms
+  ASSOCIATEDFORM #SRSPrintDestinationSettingsForm
+    PROPERTIES
+      Form                #SRSPrintDestinationSettingsForm
+      AccessLevel         #Delete
+      SystemManaged       #No
+      ManagedBy           #CodeAnalysis
+    ENDPROPERTIES
+    
+  ENDASSOCIATEDFORM
+  
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+PERMISSIONSET #Create
+  PROPERTIES
+  ENDPROPERTIES
+  
+  FORM #Controls
+  ENDFORM
+  
+TABLES #Tables
+ENDTABLES
+
+SERVERMETHODS #Server Methods
+ENDSERVERMETHODS
+
+ASSOCIATEDFORMS #Associated Forms
+  ASSOCIATEDFORM #SRSPrintDestinationSettingsForm
+    PROPERTIES
+      Form                #SRSPrintDestinationSettingsForm
+      AccessLevel         #Delete
+      SystemManaged       #No
+      ManagedBy           #CodeAnalysis
+    ENDPROPERTIES
+    
+  ENDASSOCIATEDFORM
+  
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+PERMISSIONSET #Delete
+  PROPERTIES
+  ENDPROPERTIES
+  
+  FORM #Controls
+  ENDFORM
+  
+TABLES #Tables
+ENDTABLES
+
+SERVERMETHODS #Server Methods
+ENDSERVERMETHODS
+
+ASSOCIATEDFORMS #Associated Forms
+  ASSOCIATEDFORM #SRSPrintDestinationSettingsForm
+    PROPERTIES
+      Form                #SRSPrintDestinationSettingsForm
+      AccessLevel         #Delete
+      SystemManaged       #No
+      ManagedBy           #CodeAnalysis
+    ENDPROPERTIES
+    
+  ENDASSOCIATEDFORM
+  
+ENDASSOCIATEDFORMS
+
+ENDPERMISSIONSET
+
+ENDPERMISSIONS
+
+ENDFORM
+
+
+***Element: PRN
+
+; Microsoft Dynamics AX Project : Dhruv_dev_CommandButtonInDialog unloaded
+; --------------------------------------------------------------------------------
+  PROJECTVERSION 2
+  
+  PROJECT #Dhruv_dev_CommandButtonInDialog
+  SHARED
+  PROPERTIES
+    Name                #Dhruv_dev_CommandButtonInDialog
+    Origin              #{C225F92D-CFDE-4FD9-AC3E-A0374C811B96}
+  ENDPROPERTIES
+  
+    PROJECTCLASS ProjectNode
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 45
+      UTILOBJECTID 1029182
+      NODETYPE 329
+      NAME #dev_RollStockReportUI
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 45
+      UTILOBJECTID 1027768
+      NODETYPE 329
+      NAME #dev_RollStockReportProvider
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 45
+      UTILOBJECTID 1027767
+      NODETYPE 329
+      NAME #dev_RollStockReportController
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 45
+      UTILOBJECTID 1027766
+      NODETYPE 329
+      NAME #dev_RollStockReportContract
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 44
+      UTILOBJECTID 106477
+      NODETYPE 204
+      NAME #dev_ItemTableTemp
+    ENDNODE
+    BEGINNODE
+      FILETYPE 0
+      UTILTYPE 11
+      UTILOBJECTID 0
+      NODETYPE 201
+      NAME #SysOperationTemplateForm
+    ENDNODE
+  ENDPROJECT
+  
+
+***Element: END

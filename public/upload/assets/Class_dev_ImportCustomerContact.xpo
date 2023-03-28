@@ -1,0 +1,421 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_ImportCustomerContact unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_ImportCustomerContact
+    PROPERTIES
+      Name                #dev_ImportCustomerContact
+      Extends             #RunBase
+      Origin              #{8CE6B966-0F71-4943-B8C0-9A431553EAD4}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #AnyType_to_str
+        #public str AnyType_to_str(int row_1, int coloumn_1,SysExcelCells cells_1)
+        #{
+        #    str Return_Value;
+        #    SysExcelCells cells_2;
+        #    int row_2;
+        #    int coloumn_2;
+        #    row_2=row_1;
+        #    coloumn_2=coloumn_1;
+        #    cells_2=cells_1;
+        #    switch(cells_2.item(row_2,coloumn_2).value().variantType())
+        #{
+        #    case COMVariantType::VT_BSTR:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().bStr());
+        #        break;
+        #    case COMVariantType::VT_DECIMAL, COMVariantType::VT_R4, COMVariantType::VT_R8:
+        #        Return_Value = strFmt("%1", any2int(cells_2.item(row_2,coloumn_2).value().double()));
+        #        break;
+        #    case COMVariantType::VT_I1, COMVariantType::VT_I2, COMVariantType::VT_I4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().int());
+        #        break;
+        #    case COMVariantType::VT_UI1, COMVariantType::VT_UI2, COMVariantType::VT_UI4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().uLong());
+        #        break;
+        #    case COMVariantType::VT_DATE: //, COMVariantType::VT_UI2, COMVariantType::VT_UI4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().date());
+        #        break;
+        #
+        #        case COMVariantType::VT_EMPTY:
+        #        Return_Value = '';
+        #        break;
+        #    default:
+        #        throw error(strfmt('Unhandled variant type (%1).', cells_2.item(row_2,coloumn_2).value().variantType()));
+        #}
+        #    return Return_Value;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class dev_ImportCustomerContact extends RunBase
+        #{
+        #   Filename            FileName;
+        #
+        #    DialogField         dlgFileName;
+        #DirPartyLocationRolesView objDirPartyLocationRolesView_1;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #CreateContact
+        #public void CreateContact(Accountnum _Accountnum,str 50 _Phone,str 50 _TeleFex,str 50 _Telex,str 100 _Email,str 100 _URL)
+        #{
+        #    DirPartyContactInfoView contactView;
+        #    CustTable custTable;
+        #    DirParty dirparty;
+        #    dev_CustomerContactDetails_Insert objdev_CustomerContactDetails_Insert;
+        #
+        #    custTable = Custtable::find(_Accountnum);
+        #    DirParty = DirParty::constructFromPartyRecId(custTable.Party);
+        #
+        #    objdev_CustomerContactDetails_Insert.clear();
+        #    objdev_CustomerContactDetails_Insert.AccountNum=_Accountnum;
+        #    objdev_CustomerContactDetails_Insert.Phone=_Phone;
+        #    objdev_CustomerContactDetails_Insert.TeleFex=_TeleFex;
+        #    objdev_CustomerContactDetails_Insert.Telex=_Telex;
+        #    objdev_CustomerContactDetails_Insert.Email=_Email;
+        #    objdev_CustomerContactDetails_Insert.URL=_URL;
+        #    objdev_CustomerContactDetails_Insert.insert();
+        #
+        #    if(_Email!='')
+        #    {
+        #        contactView.LocationName = "Delivery email";
+        #        contactView.Locator      = _Email;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Email;
+        #        contactView.Party        = custTable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        DirParty = DirParty::constructFromPartyRecId(contactView.Party);
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_Phone!='')
+        #    {
+        #        contactView.LocationName = "Phone";
+        #        contactView.Locator      = _Phone;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Phone;
+        #        contactView.Party        = custTable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_TeleFex!='')
+        #    {
+        #        contactView.LocationName = "Tele Fax";
+        #        contactView.Locator      = _TeleFex;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Fax;
+        #        contactView.Party        = custTable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_URL!='')
+        #    {
+        #        contactView.LocationName = "URL";
+        #        contactView.Locator      = _URL;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::URL;
+        #        contactView.Party        = custTable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #    if(_Telex!='')
+        #    {
+        #        contactView.LocationName = "Telex";
+        #        contactView.Locator      = _Telex;
+        #        contactView.Type         = LogisticsElectronicAddressMethodType::Telex;
+        #        contactView.Party        = custTable.Party;
+        #        contactView.IsPrimary    = NoYes::Yes;
+        #        dirParty.createOrUpdateContactInfo(contactView);
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #dialog
+        #protected Object Dialog()
+        #{
+        #     #Excel
+        #    Dialog dialog;
+        #    ;
+        #
+        #    dialog = super();
+        #
+        #    // Set a title for dialog
+        #    dialog.caption( 'Simple Dialog');
+        #
+        #    // Add a new field to Dialog
+        #     dlgFileName = dialog.addFieldValue(extendedTypeStr(FileNameOpen),fileName,"@SYS69909");
+        #    dialog.filenameLookupFilter(["@SYS28576",#XLSX,"@SYS28576",#XLS]);
+        #
+        #    return dialog;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #getFromDialog
+        #public boolean getFromDialog()
+        #{
+        #    // Retrieve values from Dialog
+        #     fileName            = dlgFilename.value();
+        #
+        #    return super();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #run
+        #public void run()
+        #{
+        #    int                    records;
+        #     //added for length of excel
+        #    SysExcelApplication     application;
+        #    SysExcelWorkbooks       workbooks;
+        #    SysExcelWorkbook        workbook;
+        #    SysExcelWorksheets      worksheets;
+        #    SysExcelWorksheet       worksheet;
+        #    SysExcelCells           cells;
+        #    COMVariantType          type, type1, type2, type3;
+        #    int                     row, success;
+        #
+        #    str 50 strAccountNum,strOldAccountNum,strPartyId,strPhone,strPhone1,strTeleFex,strTeleFex1,strTelex,strTelex1,strPhonelocal,strCellular;
+        #    str 100 strURL,strURL1,strEmail,strEmail1,strPager,strSMS;
+        #    int IsPrimary,IsPrimary1,intRecordExist,IntRecordNew;//,intAddressType;
+        #    boolean IsExist,IsCustInserted;
+        #
+        #    str 50 strType,strType1;
+        #    int64 intLocationRole;
+        #
+        #    DataArea objDataArea;
+        #    DirPartyContactInfoView contactView_check,contactView_check1;
+        #
+        #    CustTable custtable,custtable_check,custtable_check1;
+        #
+        #    dev_CustomerContactDetails_Delete dev_CustomerContactDetails_Delete_chk,dev_CustomerContactDetails_Delete_Insert,dev_CustomerContactDetails_Delete_chk1,dev_CustomerContactDetails_Delete_chk2;
+        #    LogisticsLocation objLogisticsLocation;
+        #    DirPartyLocation dirpartylocation_Update;
+        #    Recid _Party;
+        #    dev_CustomerContactDetails_Insert objdev_CustomerContactDetails_InsertChk;
+        #    //DirPartyLocationRole objDirPartyLocationRole1;
+        #    #AviFiles
+        #    SysOperationProgress progressbar;
+        #    int i,count1;
+        #
+        #    ExecutePermission permission = new ExecutePermission();
+        #    ;
+        #    progressbar = new SysOperationProgress();
+        #    progressbar.setCaption("Progress bar example…");
+        #    progressbar.setAnimation(#AviUpdate);
+        #    progressbar.setTotal(15000);
+        #
+        #
+        #    permission.assert();
+        #  //  super();
+        #
+        #    application = SysExcelApplication::construct();
+        #    workbooks   = application.workbooks();
+        #    try
+        #    {
+        #        workbooks.open(filename);
+        #    }
+        #    catch (Exception::Error)
+        #    {
+        #       throw error("File cannot be opened.");
+        #    }
+        #
+        #    try
+        #    {
+        #        workbook    = workbooks.item(1);
+        #        worksheets  = workbook.worksheets();
+        #        worksheet   = worksheets.itemFromNum(1);
+        #        cells       = worksheet.cells();
+        #        row = 1;
+        #        strOldAccountNum="";
+        #        intRecordExist=0;
+        #        IntRecordNew=0;
+        #        ttsBegin;
+        #        do
+        #        {
+        #            strAccountNum = "";
+        #            strPhone = "";
+        #            strTeleFex      = "";
+        #            strTelex        = "";
+        #            strURL         = "";
+        #            strPhonelocal   = "";
+        #            strCellular    = "";
+        #            strEmail        = "";
+        #            strPager       = "";
+        #            strSMS         = "";
+        #
+        #            row++;
+        #            progressbar.setText(strfmt("The number of row is %1",row));
+        #            progressbar.setCount(row,1);
+        #
+        #            strAccountNum   = this.AnyType_to_str(row,1,cells);
+        #            IsPrimary       = 1;
+        #            strPhone        = this.AnyType_to_str(row,2,cells);
+        #            strPhonelocal   = this.AnyType_to_str(row,3,cells);
+        #            strCellular     = this.AnyType_to_str(row,4,cells);
+        #            strPager        = this.AnyType_to_str(row,5,cells);
+        #            strTeleFex      = this.AnyType_to_str(row,6,cells);
+        #            strEmail        = this.AnyType_to_str(row,7,cells);
+        #            strSMS          = this.AnyType_to_str(row,8,cells);
+        #            strURL          = this.AnyType_to_str(row,9,cells);
+        #            strTelex        = this.AnyType_to_str(row,10,cells);
+        #
+        #            _Party=0;
+        #            _Party=CustTable::find(strAccountNum).Party;
+        #
+        #            if(strOldAccountNum!=strAccountNum)
+        #            {
+        #                select count(RecId) from objdev_CustomerContactDetails_InsertChk where objdev_CustomerContactDetails_InsertChk.AccountNum==strAccountNum;
+        #                if(objdev_CustomerContactDetails_InsertChk.RecId==0)
+        #                {
+        #                    IsCustInserted = false;
+        #                }
+        #                else
+        #                {
+        #                    IsCustInserted = true;
+        #                }
+        #
+        #                select count(RecId) from contactView_check1 join custtable_check1 where custtable_check1.Party == contactView_check1.Party
+        #                && custtable_check1.AccountNum == strAccountNum && custtable_check1.Party==_Party;
+        #                if(contactView_check1.RecId==0)
+        #                {
+        #                    IsExist=false;
+        #                }
+        #                else
+        #                {
+        #                    IsExist=true;
+        #                }
+        #            }
+        #
+        #            if(IsExist==true && IsCustInserted==false)
+        #            {
+        #                count1=1;
+        #                intRecordExist++;
+        #                while select * from contactView_check join custtable_check where custtable_check.Party == contactView_check.Party
+        #                && custtable_check.AccountNum == strAccountNum && custtable_check.Party==_Party
+        #                {
+        #                    dev_CustomerContactDetails_Delete_Insert.clear();
+        #                    dev_CustomerContactDetails_Delete_Insert.AccountNum = strAccountNum;
+        #                    dev_CustomerContactDetails_Delete_Insert.Party = contactView_check.Party;
+        #                    dev_CustomerContactDetails_Delete_Insert.LocationName = contactView_check.LocationName;
+        #                    dev_CustomerContactDetails_Delete_Insert.Locator = contactView_check.Locator;
+        #                    dev_CustomerContactDetails_Delete_Insert.Type = contactView_check.Type;
+        #                    dev_CustomerContactDetails_Delete_Insert.insert();
+        #
+        #                    //Update IsPrimary field
+        #                    if(count1==1)
+        #                    {
+        #                        select forUpdate * from dirpartylocation_Update where dirpartylocation_Update.Party==contactView_check.Party
+        #                        && dirpartylocation_Update.Location ==contactView_check.Location;
+        #                        ttsBegin;
+        #                        dirpartylocation_Update.IsPrimary=NoYes::No;
+        #                        dirpartylocation_Update.update();
+        #                        ttsCommit;
+        #
+        #                        //Delete address from DirpartyPostalcontactView
+        #                        ttsbegin;
+        #                        objLogisticsLocation = LogisticsLocation::find(contactView_check.Location,true);
+        #                        if(objLogisticsLocation.validateDelete())
+        #                        {
+        #                            objLogisticsLocation.delete();
+        #                            //info(strfmt("Vendor Ac %1, Location %2", strAccountNum,contactView_check.Location));
+        #                        }
+        #                        ttsCommit;
+        #                    }
+        #                    count1++;
+        #                }
+        #            }
+        #
+        #            if(IsExist==true && IsCustInserted==false)
+        #            {
+        #                //Create new address from tmptable
+        #                while select type,locator from dev_CustomerContactDetails_Delete_chk
+        #                    order by type,locator
+        #                    group by type,locator
+        #                    where dev_CustomerContactDetails_Delete_chk.Party==_Party
+        #                    && dev_CustomerContactDetails_Delete_chk.AccountNum==strAccountNum
+        #                {
+        #                    strPhone1="";
+        #                    strEmail1="";
+        #                    strURL1="";
+        #                    strTeleFex1="";
+        #                    strTelex1="";
+        #
+        #                    if(dev_CustomerContactDetails_Delete_chk.Type == LogisticsElectronicAddressMethodType::Phone)
+        #                    {
+        #                        strPhone1 = dev_CustomerContactDetails_Delete_chk.Locator;
+        #                    }
+        #                    else if(dev_CustomerContactDetails_Delete_chk.Type == LogisticsElectronicAddressMethodType::Email)
+        #                    {
+        #                        strEmail1 = dev_CustomerContactDetails_Delete_chk.Locator;
+        #                    }
+        #                    else if(dev_CustomerContactDetails_Delete_chk.Type == LogisticsElectronicAddressMethodType::Fax)
+        #                    {
+        #                        strTeleFex1 = dev_CustomerContactDetails_Delete_chk.Locator;
+        #                    }
+        #                    else if(dev_CustomerContactDetails_Delete_chk.Type == LogisticsElectronicAddressMethodType::Telex)
+        #                    {
+        #                        strTelex1 = dev_CustomerContactDetails_Delete_chk.Locator;
+        #                    }
+        #                    else if(dev_CustomerContactDetails_Delete_chk.Type == LogisticsElectronicAddressMethodType::URL)
+        #                    {
+        #                        strURL1 = dev_CustomerContactDetails_Delete_chk.Locator;
+        #                    }
+        #
+        #                    IsPrimary1=1;
+        #
+        #                    this.CreateContact(strAccountNum,strPhone1,strTeleFex1,strTelex1,strEmail1,strURL1);
+        #
+        #                    IsExist=false;
+        #                }
+        #            }
+        #            if(IsCustInserted==false)
+        #            {
+        #                select count(RecId) from dev_CustomerContactDetails_Delete_chk1 where dev_CustomerContactDetails_Delete_chk1.Party==_Party
+        #                && dev_CustomerContactDetails_Delete_chk1.AccountNum==strAccountNum;
+        #                if(dev_CustomerContactDetails_Delete_chk1.RecId==0)
+        #                {
+        #                    this.CreateContact(strAccountNum,strPhone,strTeleFex,strTelex,strEmail,strURL);
+        #                    intRecordNew++;
+        #                }
+        #            }
+        #
+        #            strOldAccountNum = strAccountNum;
+        #            type1 = cells.item(row+1, 1).value().variantType(); //5
+        #        }
+        #        while (type1 != COMVariantType::VT_EMPTY);
+        #        //while (type1 != COMVariantType::VT_EMPTY || type2 != COMVariantType::VT_EMPTY || type3 != COMVariantType::VT_EMPTY);
+        #        ttsCommit;
+        #
+        #        info(strfmt("%1 row(s) succesfully imported", row));
+        #        info(strfmt("%1 records exist", intRecordExist));
+        #        info(strfmt("%1 records new created", intRecordNew));
+        #    }
+        #    catch (Exception::Error)
+        #    {
+        #
+        #        ttsabort;
+        #        error("Import failed");
+        #
+        #    }
+        #        application.quit();
+        #}
+      ENDSOURCE
+      SOURCE #main
+        #public static void main(Args _args)
+        #{
+        #    dev_ImportCustomerContact objdev_ImportCustomerContact = new dev_ImportCustomerContact();
+        #
+        #    // Prompt the dialog, if user clicks in OK it returns true
+        #    if (objdev_ImportCustomerContact.prompt())
+        #    {
+        #        objdev_ImportCustomerContact.run();
+        #    }
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

@@ -1,0 +1,65 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBE
+
+; Microsoft Dynamics AX Enumtype : dev_Entity unloaded
+; --------------------------------------------------------------------------------
+  ENUMTYPEVERSION 1
+  
+  ENUMTYPE #dev_Entity
+    PROPERTIES
+      Name                #dev_Entity
+      Label               #Entity Name
+      UseEnumValue        #Yes
+      Origin              #{D034B77B-339D-421D-B37D-90F0ACB08D5A}
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #Clients
+      PROPERTIES
+        Name                #Clients
+        Label               #Clients
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #Suppliers
+      PROPERTIES
+        Name                #Suppliers
+        Label               #Suppliers
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #Jobs
+      PROPERTIES
+        Name                #Jobs
+        Label               #Jobs
+        EnumValue           #2
+      ENDPROPERTIES
+      
+      #ProjectContract
+      PROPERTIES
+        Name                #ProjectContract
+        Label               #Project Contract
+        EnumValue           #3
+      ENDPROPERTIES
+      
+      #SalesExport
+      PROPERTIES
+        Name                #SalesExport
+        Label               #Sales import
+        EnumValue           #4
+      ENDPROPERTIES
+      
+      #PurchaseExport
+      PROPERTIES
+        Name                #PurchaseExport
+        Label               #Purchase import
+        EnumValue           #5
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE
+  
+
+***Element: END

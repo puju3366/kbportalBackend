@@ -1,0 +1,668 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: dev_BudgetImport unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #dev_BudgetImport
+    PROPERTIES
+      Name                #dev_BudgetImport
+      Extends             #RunBaseBatch
+      Origin              #{ADCDB9E0-38D2-4653-894A-911BF20DF4EB}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #AnyType_to_str
+        #public str AnyType_to_str(int row_1, int coloumn_1,SysExcelCells cells_1)
+        #{
+        #    str Return_Value;
+        #    SysExcelCells cells_2;
+        #    int row_2;
+        #    int coloumn_2;
+        #    row_2=row_1;
+        #    coloumn_2=coloumn_1;
+        #    cells_2=cells_1;
+        #    switch(cells_2.item(row_2,coloumn_2).value().variantType())
+        #{
+        #    case COMVariantType::VT_BSTR:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().bStr());
+        #        break;
+        #    case COMVariantType::VT_DECIMAL, COMVariantType::VT_R4, COMVariantType::VT_R8:
+        #        Return_Value = strFmt("%1", any2int(cells_2.item(row_2,coloumn_2).value().double()));
+        #        break;
+        #    case COMVariantType::VT_I1, COMVariantType::VT_I2, COMVariantType::VT_I4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().int());
+        #        break;
+        #    case COMVariantType::VT_UI1, COMVariantType::VT_UI2, COMVariantType::VT_UI4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().uLong());
+        #        break;
+        #    case COMVariantType::VT_DATE: //, COMVariantType::VT_UI2, COMVariantType::VT_UI4:
+        #        Return_Value = strFmt("%1", cells_2.item(row_2,coloumn_2).value().date());
+        #        break;
+        #
+        #        case COMVariantType::VT_EMPTY:
+        #        Return_Value = '';
+        #        break;
+        #    default:
+        #        throw error(strfmt('Unhandled variant type (%1).', cells_2.item(row_2,coloumn_2).value().variantType()));
+        #}
+        #    return Return_Value;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #CheckDimensions
+        #public boolean CheckDimensions(Name _nameDimensionAttribute,Sysdim _dim,boolean _Update,boolean _IfNecessary  )
+        #{
+        #    boolean isValid;
+        #    isValid = true;
+        #    if(!DimensionAttributeValue::findByDimensionAttributeAndValueNoError(DimensionAttribute::findByName(_nameDimensionAttribute), _dim,_Update,_IfNecessary) && _dim != '')
+        #    {
+        #        warning(strFmt("%1 : %2 does not exist.",_nameDimensionAttribute, _dim));
+        #        isValid=false;
+        #    }
+        #    return isValid;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class dev_BudgetImport extends RunbaseBatch
+        #{
+        #    Filename            FileName;
+        #    NoYes               IncludeFirstRow, DeleteExistingLines;
+        #    DialogField         dlgFileName, dlgIncludeFirstRow, dlgDeleteExistingLines;
+        #    SysQueryRun     queryrun;
+        #    #define.CurrentVersion(2)
+        #    #define.Version1(1)
+        #    #localmacro.CurrentList
+        #        FileName,
+        #        IncludeFirstRow,
+        #        DeleteExistingLines
+        #    #endmacro
+        #
+        #    Name                accountStructureName;
+        #    SelectableDataArea  strLedgerName;
+        #    BudgetTransactionId transactionNumber;
+        #    BudgetModelId       budgetmodel;
+        #    str                 strBudgetcode;
+        #    TransDate           defaultdate,linedate;
+        #    LineNum             linenumber;
+        #    CurrencyCode        currencycode;
+        #    real                amount;
+        #    SysDim              departement, costCenter1;
+        #    BudgetType          budgettype;
+        #    AccountNum          accountNum;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #ClearVariables
+        #public void ClearVariables()
+        #{
+        #    accountStructureName="";
+        #    strLedgerName="";
+        #    //transactionNumber="";
+        #    budgetmodel="";
+        #    strBudgetcode="";
+        #    defaultdate=Global::dateNull();
+        #    linedate=Global::dateNull();
+        #    linenumber=0;
+        #    currencycode="";
+        #    amount=0;
+        #    departement="";
+        #    costCenter1="";
+        #    accountNum="";
+        #}
+      ENDSOURCE
+      SOURCE #Delete_UsageData
+        #public void Delete_UsageData()
+        #{
+        #    SysLastValue objSysLastValue;
+        #    delete_from objSysLastValue where objSysLastValue.userId == curUserId() && objSysLastValue.company == curext()
+        #    && objSysLastValue.elementName=='dev_BudgetImport' && objSysLastValue.recordType==UtilElementType::Class;
+        #}
+      ENDSOURCE
+      SOURCE #dialog
+        #public Object dialog()
+        #{
+        #    #Excel
+        #    DialogRunBase   dialog  =   super();
+        #    ;
+        #
+        #    dialog.caption("Import Budget Entries");
+        #
+        #   // dialog.addText('');//"Import Budget entries from the following path. Do you want to continue?");
+        #
+        #
+        #//    dlgFileName = dialog.addFieldValue(typeid(FileNameOpen),fileName,"@SYS69909"); -- Original code
+        #    dlgFileName = dialog.addFieldValue(extendedTypeStr(FileNameOpen),fileName,"@SYS69909");
+        #    dialog.filenameLookupFilter(["@SYS28576",#XLSX,"@SYS28576",#XLS]);
+        #   // dlgIncludeFirstRow = dialog.addFieldValue(typeId(NoYes), IncludeFirstRow, "Include first row"); -- Original code
+        #   // dlgIncludeFirstRow = dialog.addFieldValue(extendedTypeStr(NoYesId), IncludeFirstRow, "Include first row");
+        #   // dlgDeleteExistingLines = dialog.addFieldValue(extendedTypeStr(NoYesId), DeleteExistingLines, "Delete existing lines");
+        #
+        #    return dialog;
+        #}
+      ENDSOURCE
+      SOURCE #GenerateTransactionNumber
+        #public BudgetTransactionId GenerateTransactionNumber()
+        #{
+        #    NumberSeq num;
+        #    BudgetTransactionId transnum;
+        #
+        #
+        #    num = NumberSeq::newGetNum(budgetParameters::numRefBudgetTransactionId()); // Parameters Table
+        #    transnum="";
+        #    transnum=num.num();
+        #    num.used(); // Mark the Number as Used
+        #   // info(transnum);
+        #    return transnum;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #getFromDialog
+        #public boolean getFromDialog()
+        #{
+        #    boolean ret;
+        #
+        #    ret = super();
+        #    fileName            = dlgFilename.value();
+        #   // IncludeFirstRow     = dlgIncludeFirstRow.value();
+        #   // DeleteExistingLines = dlgDeleteExistingLines.value();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #initParmDefault
+        #public void initParmDefault()
+        #{
+        #    this.initQuery();
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #initQuery
+        #void initQuery()
+        #{
+        #    Query   query = new Query();
+        #;
+        #    query.addDataSource(tablenum(InventTable));
+        #    queryrun = new SysQueryRun(query);
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #protected void new()
+        #{
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #pack
+        #public container pack()
+        #{
+        #    return [#CurrentVersion,#CurrentList,queryrun.pack()];
+        #}
+      ENDSOURCE
+      SOURCE #queryRun
+        #QueryRun queryrun()
+        #{
+        #    return queryrun;
+        #}
+      ENDSOURCE
+      SOURCE #run
+        #public void run()
+        #{
+        #    int                     records;
+        #    SysExcelApplication     application;
+        #    SysExcelWorkbooks       workbooks;
+        #    SysExcelWorkbook        workbook;
+        #    SysExcelWorksheets      worksheets;
+        #    SysExcelWorksheet       worksheet;
+        #    SysExcelCells           cells;
+        #    COMVariantType          type, type1, type2, type3;
+        #    int                     row, success,intloop;
+        #    BudgetTransactionHeader budgetTransactionHeader;
+        #    BudgetTransactionLine budgetTransactionLine;
+        #
+        #    int                     cnt;
+        #    DimensionDynamicAccount ledgerDim;
+        #
+        #    boolean                 DimError,TransNumGenerated,headerinserted;
+        #    container acctPattern;
+        #    container    cont1,cont2;
+        #    container ledgerDimension;
+        #    DimensionAttributeValueSetStorage dimensionAttributeValueSetStorage,offsetdimensionAttributeValueSetStorage;
+        #
+        #    Name                              nameDimensionAttribute1;
+        #    Name                              nameDimensionAttribute2;
+        #    Name                              nameDimensionAttribute3;
+        #    BankChequeTable                   objBankChequeTable_del,objBankChequeTable_Chk;
+        #    LedgerJournalTrans                objledgerJournalTrans;
+        #    int intRefresh;
+        #    dev_BudgetImportTable objdev_BudgetImportTable_Insert,objdev_BudgetImportTable,objdev_BudgetImportTable_del;
+        #    Ledger ledger,ledger1;
+        #    DimensionHierarchy          accountStructure;
+        #    str strLedgerDim;
+        #    str oldBudgetTId;
+        #    int worksheetcount;
+        #
+        #    ExecutePermission permission = new ExecutePermission();
+        #
+        #    ;
+        #
+        #    permission.assert();
+        #
+        #    super();
+        #
+        #    nameDimensionAttribute1 = "Department";
+        #    nameDimensionAttribute2 = "Center";
+        #
+        #    DimError = false;
+        #    application = SysExcelApplication::construct();
+        #    workbooks   = application.workbooks();
+        #    try
+        #    {
+        #        workbooks.open(filename);
+        #    }
+        #    catch (Exception::Error)
+        #    {
+        #       throw error("File cannot be opened.");
+        #    }
+        #
+        #
+        #    try
+        #    {
+        #        ttsbegin;
+        #        workbook    = workbooks.item(1);
+        #        worksheets  = workbook.worksheets();
+        #        worksheetcount=worksheets.count();
+        #
+        #        for(intloop=1;intloop<=worksheetcount;intloop++)
+        #        {
+        #            row = 0 ;
+        #
+        #            if (includeFirstRow == NoYes::No)
+        #                row++;
+        #
+        #            worksheet   = worksheets.itemFromNum(intloop);
+        #            cells       = worksheet.cells();
+        #            intRefresh = 0;
+        #          // ttsBegin;
+        #            try
+        #            {
+        #                TransNumGenerated=false;
+        #
+        #                 do
+        #                 {
+        #                    this.ClearVariables();
+        #
+        #                    row++;
+        #
+        #
+        #
+        #                    accountStructureName    = 'Account Structure - VLA';//this.AnyType_to_str(row,1,cells);
+        #                    strLedgerName           = this.AnyType_to_str(row,2,cells);
+        #                    if(strLedgerName!="")
+        #                    {
+        #                        if(TransNumGenerated==false)
+        #                        {
+        #                            transactionNumber="";
+        #                            transactionNumber = this.GenerateTransactionNumber();
+        #                            TransNumGenerated=true;
+        #                        }
+        #                        //transactionNumber       = this.AnyType_to_str(row,3,cells);
+        #                        strBudgetcode           = this.AnyType_to_str(row,4,cells);
+        #                        if(strBudgetcode!="")
+        #                        {
+        #                             if(!BudgetTransactionCode::findByBudgetTransactionCode(strBudgetcode))
+        #                             {
+        #                                 warning(strfmt("Budget transaction code %1 not exists in company %2", strBudgetcode,strLedgerName));
+        #                                 DimError=true;
+        #                                 break;
+        #                             }
+        #                        }
+        #                        budgetmodel             = this.AnyType_to_str(row,5,cells);
+        #                        if(budgetmodel!="")
+        #                        {
+        #                            if(!BudgetModel::find(HeadingSub::Heading,budgetmodel))
+        #                            {
+        #                                 warning(strfmt("Budget model %1 not exists in company %2", budgetmodel,strLedgerName));
+        #                                 DimError=true;
+        #                                 break;
+        #                             }
+        #                        }
+        #                        defaultdate             = cells.item(row, 6).value().date();
+        #                        linedate                = cells.item(row, 12).value().date();
+        #                        linenumber              = cells.item(row, 13).value().double();
+        #
+        #                        currencyCode           = this.AnyType_to_str(row,14,cells);
+        #                        if(!currencyCode)
+        #                        {
+        #                            currencyCode = CompanyInfo::standardCurrency();
+        #                        }
+        #                        else
+        #                        if(!Currency::exist(currencyCode))
+        #                        {
+        #                            throw error(strfmt("Currency %1 does not exist (line number %1)", currencyCode, row));
+        #                        }
+        #
+        #                        AccountNum          = this.AnyType_to_str(row,15,cells);
+        #                        if(AccountNum!='')
+        #                        {
+        #                            changecompany(strLedgerName)
+        #                            {
+        #                                if(!MainAccount::findByMainAccountId(AccountNum))
+        #                                {
+        #                                    warning(strfmt("Ledger account %1 not exists in company %2", accountnum,strLedgerName));
+        #                                    DimError=true;
+        #                                    break;
+        #                                }
+        #                            }
+        #                         }
+        #                         Departement          = this.AnyType_to_str(row,16,cells);
+        #                         if(Departement!='')
+        #                         {
+        #                             if(this.CheckDimensions(nameDimensionAttribute1,Departement,false,true)==false)
+        #                             {
+        #                                 DimError=true;
+        #                                 break;
+        #                             }
+        #
+        #                         }
+        #
+        #                        CostCenter1          = this.AnyType_to_str(row,17,cells);
+        #                         if(CostCenter1!='')
+        #                         {
+        #                             if(this.CheckDimensions(nameDimensionAttribute2,CostCenter1,false,true)==false)
+        #                             {
+        #                                 DimError=true;
+        #                                 break;
+        #                             }
+        #
+        #                         }
+        #
+        #                        amount              = cells.item(row, 18).value().double();
+        #                        budgettype          = str2enum(budgettype,this.AnyType_to_str(row,19,cells));
+        #
+        #                        //Insert in dev_BudgetImportTable_Insert table from excel
+        #                        objdev_BudgetImportTable_Insert.clear();
+        #                        objdev_BudgetImportTable_Insert.BudgetACName=accountStructureName;
+        #                        objdev_BudgetImportTable_Insert.TransactionNumber1 = transactionNumber;
+        #                        objdev_BudgetImportTable_Insert.BudgetModelDataAreaId1 = strLedgerName;
+        #                        objdev_BudgetImportTable_Insert.BudgetModelID1 = budgetmodel;
+        #                        objdev_BudgetImportTable_Insert.BudgetModelType1 = HeadingSub::Heading;
+        #                        objdev_BudgetImportTable_Insert.BudgetTransactionCode1 = BudgetTransactionCode::findByBudgetTransactionCode(strBudgetcode).RecId;
+        #                        objdev_BudgetImportTable_Insert.BudgetTransactionType1 = BudgetTransactionCode::findByBudgetTransactionCode(strBudgetcode).BudgetTransactionType;
+        #                        objdev_BudgetImportTable_Insert.DefaultDate = defaultdate;
+        #                        objdev_BudgetImportTable_Insert.LineDate = linedate;
+        #                        objdev_BudgetImportTable_Insert.LineNumber1 = linenumber;
+        #                        objdev_BudgetImportTable_Insert.BudgetMainAccount = accountNum;
+        #                        objdev_BudgetImportTable_Insert.BudgetDepartment = departement;
+        #                        objdev_BudgetImportTable_Insert.BudgetCenter = costCenter1;
+        #                        objdev_BudgetImportTable_Insert.TransactionCurrencyAmount1 = amount;
+        #                        objdev_BudgetImportTable_Insert.BudgetType1 = budgettype;
+        #                        objdev_BudgetImportTable_Insert.TransactionCurrency1 = currencyCode;
+        #                        objdev_BudgetImportTable_Insert.UserID =curUserId();
+        #
+        #                        objdev_BudgetImportTable_Insert.insert();
+        #                     }//end if strLedgerName
+        #
+        #                    type2 = cells.item(row+1, 1).value().variantType(); //9
+        #
+        #                }
+        #                while (type2 != COMVariantType::VT_EMPTY);
+        #
+        #
+        #            } //end Try
+        #            catch (Exception::Error)
+        #            {
+        #                info("Unexpected error");
+        #                workbook.close(false);
+        #                application.quit();
+        #                application.finalize();
+        #                application = null;
+        #            }
+        #        }//end of excel sheet for loop
+        #
+        #         workbook.close(false);
+        #        application.quit();
+        #        application.finalize();
+        #        application = null;
+        #        ttscommit;
+        #
+        #
+        #        ttsBegin;
+        #        row= 0;
+        #
+        #        if(DimError==false)
+        #        {
+        #           // headerinserted=false;
+        #            budgetTransactionHeader.clear();
+        #            oldBudgetTId = "";
+        #
+        #            while select * from objdev_BudgetImportTable order by TransactionNumber1 where objdev_BudgetImportTable.UserID == curUserId()
+        #            {
+        #                this.ClearVariables();
+        #
+        #                accountStructureName = objdev_BudgetImportTable.BudgetACName;
+        #                strLedgerName=objdev_BudgetImportTable.BudgetModelDataAreaId1;
+        #                budgetmodel=objdev_BudgetImportTable.BudgetModelId1;
+        #                strBudgetcode=BudgetTransactionCode::find(objdev_BudgetImportTable.BudgetTransactionCode1).Name;
+        #                defaultdate=objdev_BudgetImportTable.DefaultDate;
+        #                linedate=objdev_BudgetImportTable.LineDate;
+        #                linenumber=objdev_BudgetImportTable.LineNumber1;
+        #                currencycode=objdev_BudgetImportTable.TransactionCurrency1;
+        #                amount=objdev_BudgetImportTable.TransactionCurrencyAmount1;
+        #                departement=objdev_BudgetImportTable.BudgetDepartment;
+        #                costCenter1=objdev_BudgetImportTable.BudgetCenter;
+        #                accountNum=objdev_BudgetImportTable.BudgetMainAccount;
+        #
+        #                strLedgerDim="";
+        #                    strLedgerDim= accountNum;
+        #
+        #                    if(departement!="")
+        #                    {
+        #                        strLedgerDim = strLedgerDim + "-" +departement;
+        #                    }
+        #                    if(costCenter1!="")
+        #                    {
+        #                        strLedgerDim = strLedgerDim + "-" +costCenter1;
+        #                    }
+        #                    accountStructure = DimensionHierarchy::find(DimensionAttributeValueCombination::find(DMFDimensionHelper::generateDynamicDimension(strLedgerDim)).AccountStructure);
+        #                   // info(objdev_BudgetImportTable.TransactionNumber1);
+        #                    if(objdev_BudgetImportTable.TransactionNumber1  != oldBudgetTId)
+        #                    {
+        #                        headerinserted = false;
+        #                    }
+        #
+        #                    if(accountStructure.Name == accountStructureName)
+        #                    {
+        #                        //Insert in BudgetHeader
+        #                            if(headerinserted==false)
+        #                            {
+        #
+        #                                select * from ledger1 where ledger1.Name==strLedgerName;
+        #                                if(ledger1.recid!=0)
+        #                                {
+        #                                    budgetTransactionHeader.PrimaryLedger = ledger1.RecId;
+        #                                }
+        #                                budgetTransactionHeader.TransactionNumber = objdev_BudgetImportTable.TransactionNumber1;
+        #                                budgetTransactionHeader.BudgetModelDataAreaId = objdev_BudgetImportTable.BudgetModelDataAreaId1;
+        #                                budgetTransactionHeader.BudgetModelId = objdev_BudgetImportTable.BudgetModelID1;
+        #                                budgetTransactionHeader.BudgetModelType = objdev_BudgetImportTable.BudgetModelType1;
+        #                                budgetTransactionHeader.BudgetTransactionCode = objdev_BudgetImportTable.BudgetTransactionCode1;
+        #                                budgetTransactionHeader.BudgetTransactionType = objdev_BudgetImportTable.BudgetTransactionType1;
+        #                                budgetTransactionHeader.Date = objdev_BudgetImportTable.DefaultDate;
+        #                                budgetTransactionHeader.TransactionStatus = BudgetTransactionStatus::Draft;
+        #                                budgetTransactionHeader.InUseBy = '';
+        #                                budgetTransactionHeader.WorkflowStatus = BudgetTransactionWorkflowStatus::None;
+        #                                budgetTransactionHeader.insert();
+        #                                oldBudgetTId = objdev_BudgetImportTable.TransactionNumber1;
+        #                                headerinserted=true;
+        #                            }
+        #
+        #                            //Insert in BudgetLines
+        #                            budgetTransactionLine.clear();
+        #
+        #                            budgetTransactionLine.BudgetTransactionHeader = budgetTransactionHeader.RecId;
+        #                            budgetTransactionLine.Date = objdev_BudgetImportTable.LineDate;
+        #                            budgetTransactionLine.BudgetType = objdev_BudgetImportTable.BudgetType1;
+        #                            budgetTransactionLine.TransactionCurrency = objdev_BudgetImportTable.TransactionCurrency1;
+        #
+        #                        if(BudgetTransactionCode::find(objdev_BudgetImportTable.BudgetTransactionCode1).BudgetTransactionType  == BudgetTransactionType::Amendment)
+        #                        {
+        #                             budgetTransactionLine.TransactionCurrencyAmount = objdev_BudgetImportTable.TransactionCurrencyAmount1;
+        #
+        #                        }
+        #                        else if(BudgetTransactionCode::find(objdev_BudgetImportTable.BudgetTransactionCode1).BudgetTransactionType  == BudgetTransactionType::OriginalBudget)
+        #                        {
+        #
+        #                           if(objdev_BudgetImportTable.BudgetType1 == BudgetType::Revenue)
+        #                            {
+        #                                if(objdev_BudgetImportTable.TransactionCurrencyAmount1>0)
+        #                                {
+        #                                    budgetTransactionLine.TransactionCurrencyAmount = objdev_BudgetImportTable.TransactionCurrencyAmount1 * -1;
+        #                                }
+        #                                else
+        #                                {
+        #                                    budgetTransactionLine.TransactionCurrencyAmount = objdev_BudgetImportTable.TransactionCurrencyAmount1;
+        #                                }
+        #                            }
+        #                            else
+        #                            {
+        #                                budgetTransactionLine.TransactionCurrencyAmount = objdev_BudgetImportTable.TransactionCurrencyAmount1;
+        #                            }
+        #                        }
+        #
+        #                            budgetTransactionLine.AccountingCurrencyAmount = budgetTransactionLine.calculateTransAmountToAccountingAmount();
+        #                            budgetTransactionLine.LineNumber = objdev_BudgetImportTable.LineNumber1;
+        #
+        #                            dimensionAttributeValueSetStorage = new DimensionAttributeValueSetStorage();
+        #                            ledgerDim = 0;
+        #                           if(AccountNum != "")
+        #                            {
+        #                                cont1=conNull();
+        #                                cont2=conNull();
+        #                                cnt=0;
+        #
+        #                                if(Departement != '')
+        #                                {
+        #                                    cnt++;
+        #                                    cont2+=['Department',Departement];
+        #                                        dimensionAttributeValueSetStorage.addItem(DimensionAttributeValue::
+        #                                        findByDimensionAttributeAndValue(DimensionAttribute::findByName(nameDimensionAttribute1), Departement));
+        #                                }
+        #
+        #                                if(CostCenter1 != '')
+        #                                {
+        #                                    cnt++;
+        #                                    cont2+=['Center',CostCenter1];
+        #
+        #                                        dimensionAttributeValueSetStorage.addItem(DimensionAttributeValue::
+        #                                        findByDimensionAttributeAndValue(DimensionAttribute::findByName(nameDimensionAttribute2), CostCenter1));
+        #                                }
+        #                                cont1+=['MainAccount',AccountNum,cnt];
+        #                                cont1+=cont2;
+        #                                ledgerDim = AxdDimensionUtil::getLedgerAccountId(cont1);
+        #
+        #                                if(ledgerDim==0)
+        #                                    {
+        #                                            acctPattern = [AccountNum,AccountNum];
+        #                                            ledgerDim = AxdDimensionUtil::getLedgerAccountId( acctPattern);
+        #                                    }
+        #
+        #                                budgetTransactionLine.LedgerDimension =ledgerDim;
+        #
+        #                            } //end if(objdev_JournalsTrans_Import.AccountNum != "")
+        #                            else
+        #                            {
+        #                                budgetTransactionLine.LedgerDimension =0;
+        #                            }
+        #
+        #
+        #                            budgetTransactionLine.WorkflowStatus = BudgetTransactionWorkflowStatus::None;
+        #                            budgetTransactionLine.insert();
+        #
+        #
+        #                    }// if(accountStructure.Name == accountStructureName)
+        #                else
+        #                {
+        #                   warning(strfmt("Ledger account structure %1 not exists in company %2", accountStructureName,strLedgerName));
+        #                   break;
+        #                }
+        #
+        #                row++;
+        #
+        #
+        #        }//end of objdev_BudgetImportTable table
+        #    }
+        #    ttsCommit;
+        #        info(strfmt("%1 row(s) succesfully imported", row));
+        #    } //end Main Try
+        #    catch (Exception::Error)
+        #    {
+        #        ttsabort;
+        #        error("Import failed");
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #showBatchTab
+        #boolean showBatchTab(boolean _showBatchTab = _showBatchTab)
+        #{
+        #    boolean ret;
+        #
+        #    ret = false;//super(_showBatchTab);
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #unpack
+        #public boolean unpack(container packedClass)
+        #{
+        #    Version     version = RunBase::getVersion(packedClass);
+        #    container   queryCon;
+        #
+        #    switch (version)
+        #    {
+        #        case #CurrentVersion:
+        #            [version,#CurrentList,queryCon] = packedClass;
+        #            if (SysQuery::isPackedOk(queryCon))
+        #                queryrun = new QueryRun(queryCon);
+        #            else
+        #                this.initQuery();
+        #            break;
+        #        default:
+        #            return false;
+        #    }
+        #
+        #    return true;
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #server static dev_BudgetImport construct()
+        #{
+        #    return new dev_BudgetImport();
+        #}
+      ENDSOURCE
+      SOURCE #main
+        # static void main(Args args)
+        #{
+        #    dev_BudgetImportTable objdev_BudgetImportTable_delAll;
+        #    dev_BudgetImport   dev_BudgetImport = dev_BudgetImport::construct();
+        #
+        #     dev_BudgetImport.Delete_UsageData();
+        #
+        #    delete_from objdev_BudgetImportTable_delAll where objdev_BudgetImportTable_delAll.UserID == curUserId();
+        #
+        #     /*if (args.record())
+        #    if (args.record().TableId == tablenum(LedgerJournalTable))
+        #        ABMAPJournalImport.parmLedgerJournalTable(args.record());*/
+        #
+        #    if (dev_BudgetImport.prompt())
+        #        dev_BudgetImport.run();
+        #
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

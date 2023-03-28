@@ -1,0 +1,1687 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : DMFDataSourceProperties unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #DMFDataSourceProperties
+    EnforceFKRelation 0
+    PROPERTIES
+      Name                #DMFDataSourceProperties
+      Label               #@DMF15
+      TitleField1         #DimensionAttribute
+      TitleField2         #CodePage
+      ConfigurationKey    #DMF
+      CacheLookup         #EntireTable
+      CreateRecIdIndex    #Yes
+      SaveDataPerCompany  #No
+      TableGroup          #Group
+      PrimaryIndex        #RecId
+      ClusterIndex        #RecId
+      DeveloperDocumentation  #@DMF14
+      Origin              #{C2678511-3A65-4ED4-82FE-C7497EC9FD1F}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ChartOfAccountsDelimiter
+        ENUM
+        PROPERTIES
+          Name                #ChartOfAccountsDelimiter
+          Table               #DMFDataSourceProperties
+          Origin              #{86138A6C-E6BE-4C83-AD9C-84EB3E5140AC}
+          EnumType            #DimensionLedgerAccountDelimiter
+        ENDPROPERTIES
+        
+      FIELD #CodePage
+        STRING
+        PROPERTIES
+          Name                #CodePage
+          Mandatory           #Yes
+          Table               #DMFDataSourceProperties
+          Origin              #{15AEC69E-D04C-459D-B2C2-DF6DD6EB95CE}
+          ExtendedDataType    #DMFCodePage
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DimensionAttribute
+        STRING
+        PROPERTIES
+          Name                #DimensionAttribute
+          Label               #@DMF88
+          HelpText            #@DMF16
+          Table               #DMFDataSourceProperties
+          Origin              #{7C765C7F-2E5B-496F-A5FA-34DE1D6D8F87}
+          ExtendedDataType    #DimensionDisplayValue
+          StringSize          #500
+        ENDPROPERTIES
+        
+      FIELD #DNSPromptPassword
+        ENUM
+        PROPERTIES
+          Name                #DNSPromptPassword
+          Label               #@DMF875
+          HelpText            #@DMF876
+          Table               #DMFDataSourceProperties
+          Origin              #{99D48AD4-900A-4C48-991F-7B0A95849B72}
+          EnumType            #boolean
+        ENDPROPERTIES
+        
+      FIELD #DNSUserName
+        STRING
+        PROPERTIES
+          Name                #DNSUserName
+          Table               #DMFDataSourceProperties
+          Origin              #{D87019E3-17CD-4706-A91F-76758046C924}
+          ExtendedDataType    #UserName
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DSNConnectionString
+        STRING
+        PROPERTIES
+          Name                #DSNConnectionString
+          Table               #DMFDataSourceProperties
+          Origin              #{DD01F7C2-C8DE-48B7-AAE5-FBC16FF43FFE}
+          ExtendedDataType    #DMFConnectionString
+          StringSize          #3000
+        ENDPROPERTIES
+        
+      FIELD #DSNMachine
+        ENUM
+        PROPERTIES
+          Name                #DSNMachine
+          Table               #DMFDataSourceProperties
+          Origin              #{DB37FC76-E20F-4BA0-9A91-F568A1083A28}
+          EnumType            #DMFDSNLocations
+        ENDPROPERTIES
+        
+      FIELD #DSNName
+        STRING
+        PROPERTIES
+          Name                #DSNName
+          Label               #@DMF773
+          Table               #DMFDataSourceProperties
+          Origin              #{440280E5-80E0-49CE-A932-31433000EDF4}
+          ExtendedDataType    #Filename
+          StringSize          #259
+        ENDPROPERTIES
+        
+      FIELD #DSNNameFilePath
+        STRING
+        PROPERTIES
+          Name                #DSNNameFilePath
+          Label               #@DMF773
+          Table               #DMFDataSourceProperties
+          Origin              #{DD8583E5-FE1B-47D6-93CD-A09E1E4872DD}
+          ExtendedDataType    #FilenameOpen
+          StringSize          #259
+        ENDPROPERTIES
+        
+      FIELD #DSNType
+        ENUM
+        PROPERTIES
+          Name                #DSNType
+          Label               #@DMF770
+          Table               #DMFDataSourceProperties
+          Origin              #{37252A12-418F-450A-9968-5E84AC1CB8A9}
+          EnumType            #DMFDsnTypes
+        ENDPROPERTIES
+        
+      FIELD #FileColumnDelimiter
+        ENUM
+        PROPERTIES
+          Name                #FileColumnDelimiter
+          Label               #@DMF135
+          HelpText            #@DMF135
+          Table               #DMFDataSourceProperties
+          Origin              #{47302B18-A2A1-45F8-A6AC-34087201C460}
+          EnumType            #DMFDelimiter
+        ENDPROPERTIES
+        
+      FIELD #FileFirstRowHeader
+        ENUM
+        PROPERTIES
+          Name                #FileFirstRowHeader
+          Label               #@DMF18
+          HelpText            #@DMF18
+          Table               #DMFDataSourceProperties
+          Origin              #{5E5FFA53-6C66-4579-A2EB-8645A97BC559}
+          ExtendedDataType    #NoYesId
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #FileFormat
+        ENUM
+        PROPERTIES
+          Name                #FileFormat
+          Table               #DMFDataSourceProperties
+          Origin              #{2E6970AA-CEA4-44EB-86CE-EC93C297CC4E}
+          EnumType            #DMFFileFormat
+        ENDPROPERTIES
+        
+      FIELD #FileRowDelimiter
+        ENUM
+        PROPERTIES
+          Name                #FileRowDelimiter
+          Label               #@DMF138
+          Table               #DMFDataSourceProperties
+          Origin              #{EBC60C86-95A5-444A-BDB2-728F27E12545}
+          EnumType            #DMFDelimiter
+        ENDPROPERTIES
+        
+      FIELD #Locale
+        STRING
+        PROPERTIES
+          Name                #Locale
+          Label               #@DMF19
+          HelpText            #@DMF517
+          Mandatory           #Yes
+          Table               #DMFDataSourceProperties
+          Origin              #{84C2D6C9-73AC-4B27-9FC1-34C8A0534B87}
+          ExtendedDataType    #LanguageIdAll
+          StringSize          #7
+        ENDPROPERTIES
+        
+      FIELD #NameSequence
+        STRING
+        PROPERTIES
+          Name                #NameSequence
+          Table               #DMFDataSourceProperties
+          Origin              #{6342596D-AB43-4B86-A9B3-F9E9444C2762}
+          ExtendedDataType    #DMFNameSequence
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Password
+        QUEUE
+        PROPERTIES
+          Name                #Password
+          Label               #@SYS30019
+          HelpText            #@DMF874
+          Table               #DMFDataSourceProperties
+          Origin              #{80FE24CA-A95A-42FE-AC79-493E4777FB9D}
+          ExtendedDataType    #CryptoBlob
+        ENDPROPERTIES
+        
+      FIELD #RoleSeparator
+        ENUM
+        PROPERTIES
+          Name                #RoleSeparator
+          Table               #DMFDataSourceProperties
+          Origin              #{985E7B1F-6BA3-4276-BF69-D644CCFDAAFD}
+          EnumType            #DMFRoleSeparator
+        ENDPROPERTIES
+        
+      FIELD #RootElement
+        STRING
+        PROPERTIES
+          Name                #RootElement
+          Label               #@DMF1670
+          HelpText            #@SYS104686
+          Table               #DMFDataSourceProperties
+          Origin              #{EBB19E7E-B034-49D0-B4FE-3FE5D0C87216}
+          ExtendedDataType    #Name
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #SkipRow
+        INT
+        PROPERTIES
+          Name                #SkipRow
+          Label               #@DMF1401
+          HelpText            #@DMF1402
+          Table               #DMFDataSourceProperties
+          Origin              #{3658DDE6-9F6B-4BCD-B332-909BCACF02E5}
+          ExtendedDataType    #Integer
+        ENDPROPERTIES
+        
+      FIELD #Source
+        STRING
+        PROPERTIES
+          Name                #Source
+          Mandatory           #Yes
+          AllowEditOnCreate   #No
+          AllowEdit           #No
+          Table               #DMFDataSourceProperties
+          Origin              #{4385E780-4C21-4862-9BAF-843B3D964C52}
+          ExtendedDataType    #DMFSourceName
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #TextQualifier
+        STRING
+        PROPERTIES
+          Name                #TextQualifier
+          Table               #DMFDataSourceProperties
+          Origin              #{20FF0AAD-C045-4482-B617-F136D9DD28A6}
+          ExtendedDataType    #DMFTextQualifier
+        ENDPROPERTIES
+        
+      FIELD #Unicode
+        ENUM
+        PROPERTIES
+          Name                #Unicode
+          Table               #DMFDataSourceProperties
+          Origin              #{D4BEC480-BC5B-4437-BA59-89E8FDCAF91B}
+          ExtendedDataType    #DMFUnicode
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #ValidationStatus
+        ENUM
+        PROPERTIES
+          Name                #ValidationStatus
+          HelpText            #@DMF826
+          Table               #DMFDataSourceProperties
+          Origin              #{99CB7B63-EE44-4737-B58A-8FBE334373D1}
+          EnumType            #NoYesError
+        ENDPROPERTIES
+        
+      FIELD #XmlStyle
+        ENUM
+        PROPERTIES
+          Name                #XmlStyle
+          Label               #@DMF1672
+          HelpText            #@SYS98689
+          Table               #DMFDataSourceProperties
+          Origin              #{D179B309-0999-40D1-9800-74F439F8DCED}
+          EnumType            #DMFXMLStyle
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoReport
+        PROPERTIES
+          Name                #AutoReport
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #ChartOfAccountsDelimiter
+          #CodePage
+          #DimensionAttribute
+          #RoleSeparator
+          #FileColumnDelimiter
+          #FileFirstRowHeader
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #DMF
+        PROPERTIES
+          Name                #DMF
+          Label               #@DMF262
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #DSNMachine
+          #ChartOfAccountsDelimiter
+          #CodePage
+          #DimensionAttribute
+          #RoleSeparator
+          #FileColumnDelimiter
+          #FileFirstRowHeader
+          #FileFormat
+          #FileRowDelimiter
+          #Locale
+          #NameSequence
+          #Source
+          #TextQualifier
+          #Unicode
+          #DSNConnectionString
+          #DSNNameFilePath
+          #ValidationStatus
+          #DNSPromptPassword
+          #DNSUserName
+          #Password
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #File
+        PROPERTIES
+          Name                #File
+          Label               #@SYS4047
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #FileFormat
+          #FileFirstRowHeader
+          #FileRowDelimiter
+          #FileColumnDelimiter
+          #TextQualifier
+          #SkipRow
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #ODBC
+        PROPERTIES
+          Name                #ODBC
+          Label               #@SYS58177
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #DSNType
+          #DSNName
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #RoleSeparator
+        PROPERTIES
+          Name                #RoleSeparator
+          Label               #@DMF17
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #RoleSeparator
+          #NameSequence
+        ENDGROUPFIELDS
+      ENDGROUP
+      GROUP #XML
+        PROPERTIES
+          Name                #XML
+          Label               #@SYS98689
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #XmlStyle
+          #RootElement
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #DMFDataSourceIdx
+      PROPERTIES
+        Name                #DMFDataSourceIdx
+        Origin              #{04745C90-38BD-45DB-B981-FA74B4E118CF}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #Source
+      ENDINDEXFIELDS
+      
+      #DirNameSequenceIdx
+      PROPERTIES
+        Name                #DirNameSequenceIdx
+        Origin              #{7E588C3E-87A7-4B9B-80DD-B5BB01163EB3}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #NameSequence
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+      REFERENCE #DMFCodePageValue
+        PROPERTIES
+          Name                #DMFCodePageValue
+          Table               #DMFCodePageValue
+          Validate            #No
+          RelatedTableCardinality   #ExactlyOne
+          Cardinality         #ZeroMore
+          RelationshipType    #Association
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #CodePage
+            RelatedField        #CodePage
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+      REFERENCE #DMFDataSource_FK
+        PROPERTIES
+          Name                #DMFDataSource_FK
+          Table               #DMFDataSource
+          RelatedTableCardinality   #ExactlyOne
+          Cardinality         #ZeroMore
+          RelationshipType    #Association
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #Source
+            RelatedField        #SourceName
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+      REFERENCE #LanguageTable
+        PROPERTIES
+          Name                #LanguageTable
+          Table               #LanguageTable
+          RelatedTableCardinality   #ExactlyOne
+          Cardinality         #ZeroMore
+          RelationshipType    #Association
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #Locale
+            RelatedField        #LanguageId
+            SourceEDT           #LanguageIdAll
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+      REFERENCE #NameSequence_AK
+        PROPERTIES
+          Name                #NameSequence_AK
+          Table               #DirNameSequence
+          RelatedTableCardinality   #ZeroOne
+          Cardinality         #OneMore
+          RelationshipType    #Association
+          UseDefaultRoleNames #Yes
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE PKFK
+          PROPERTIES
+            Field               #NameSequence
+            RelatedField        #DisplayAs
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      SOURCE #displayCodePageValue
+        #/// <summary>
+        #/// The display method is written to display the code page diaplay name
+        #/// in the DMFDataSource form based on code page selected.
+        #/// </summary>
+        #/// <param name="_dataSourceProp">
+        #/// Data source DMFDataSourceProperties of DMFDataSource form with current record buffer.
+        #/// </param>
+        #/// <returns>
+        #/// Returns CodePageDisplayName value of the found record of DMFCodePageValue.
+        #/// </returns>
+        #public display Name displayCodePageValue(DMFDataSourceProperties _dataSourceProp)
+        #{
+        #    DMFCodePageValue dmfCodePageValue;
+        #
+        #    select firstonly CodePageDisplayName from dmfCodePageValue
+        #        where dmfCodePageValue.CodePage == _dataSourceProp.CodePage;
+        #
+        #    return dmfCodePageValue.CodePageDisplayName;
+        #}
+      ENDSOURCE
+      SOURCE #displayIcon
+        #/// <summary>
+        #/// Gets the validation status.
+        #/// </summary>
+        #/// <returns>
+        #/// Validation status
+        #/// </returns>
+        #display Integer displayIcon()
+        #{
+        #    #DMF
+        #    int  ret = -1;
+        #
+        #    if (this.ValidationStatus == NoYesError::No)
+        #    {
+        #        ret = #notValidated;
+        #    }
+        #    else if (this.ValidationStatus == NoYesError::Error)
+        #    {
+        #        ret = #error;
+        #    }
+        #    else
+        #    {
+        #        ret = #success;
+        #    }
+        #    return ret;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #displayMachineNameUserUSN
+        #/// <summary>
+        #/// The display method is written to display the machine name
+        #/// in the DMFDataSource form based on DSN selection.
+        #/// </summary>
+        #/// <returns>
+        #/// machine name.
+        #/// </returns>
+        #public display Name displayMachineNameUserUSN()
+        #{
+        #    #DMF
+        #    Name                    machineName;
+        #    SysSQLSystemInfo        systemInfo;
+        #    int                     pos;
+        #    xSession                xSession;
+        #    Name                    currentUser;
+        #
+        #    switch(this.dsnMachine)
+        #    {
+        #        // Client
+        #        case 0:
+        #            xSession = new xSession();
+        #            machineName = xSession.clientComputerName();
+        #
+        #            currentUser = xSession.AOSName();
+        #
+        #            pos = strFind(machineName, #ATSYMBOL, 1, strLen(machineName));
+        #            if (pos)
+        #            {
+        #                machineName = subStr(machineName, 1, pos-1);
+        #            }
+        #        break;
+        #
+        #        // Server
+        #        case 1:
+        #            xSession = new xSession();
+        #            machineName = xSession.AOSName();
+        #        break;
+        #
+        #        // SQL
+        #        case 2:
+        #            systemInfo = SysSQLSystemInfo::construct();
+        #            machineName = systemInfo.getLoginServer();
+        #            pos = strFind(machineName, @'\', 1, strLen(machineName));
+        #            if (pos)
+        #            {
+        #                machineName = subStr(machineName, 1, pos-1);
+        #            }
+        #        break;
+        #    }
+        #    return machineName;
+        #}
+      ENDSOURCE
+      SOURCE #displaySystemDSNSystemName
+        #/// <summary>
+        #/// The display method is written to display the server name
+        #/// in the DMFDataSource form based on DSN selection.
+        #/// </summary>
+        #/// <returns>
+        #/// Server name
+        #/// </returns>
+        #public display Name displaySystemDSNSystemName()
+        #{
+        #    #DMF
+        #    Name                  serverName;
+        #    SysSQLSystemInfo      systemInfo;
+        #    int                   pos;
+        #    xSession              xSession;
+        #
+        #    switch(this.dsnMachine)
+        #    {
+        #        // Client
+        #        case 0:
+        #            xSession = new xSession();
+        #            serverName = xSession.clientComputerName();
+        #
+        #            pos = strFind(serverName, #ATSYMBOL, 1, strLen(serverName));
+        #            if (pos)
+        #            {
+        #                serverName = subStr(serverName, 1, pos-1);
+        #            }
+        #
+        #        break;
+        #
+        #        // Server
+        #        case 1:
+        #            xSession = new xSession();
+        #            serverName = xSession.AOSName();
+        #        break;
+        #
+        #        // SQL
+        #        case 2:
+        #            systemInfo = SysSQLSystemInfo::construct();
+        #            serverName = systemInfo.getLoginServer();
+        #            pos = strFind(serverName, @'\', 1, strLen(serverName));
+        #            if (pos)
+        #            {
+        #                serverName = subStr(serverName, 1, pos-1);
+        #            }
+        #        break;
+        #    }
+        #    return serverName;
+        #}
+      ENDSOURCE
+      SOURCE #displayUserNameUserUSN
+        #/// <summary>
+        #/// The display method is written to display the current user
+        #/// </summary>
+        #/// <returns>
+        #/// current user id.
+        #/// </returns>
+        #public display Name displayUserNameUserUSN()
+        #{
+        #    return curUserId();
+        #}
+      ENDSOURCE
+      SOURCE #dsnNameEdit
+        #/// <summary>
+        #/// Allows user to edit/display the data type of the lookup table
+        #/// </summary>
+        #/// <param name="_set">
+        #/// It is the true or false value
+        #/// </param>
+        #/// <param name="_value">
+        #/// It is the name of class
+        #/// </param>
+        #/// <returns>
+        #/// DSN name
+        #/// </returns>
+        #edit Name dsnNameEdit(boolean _set, ClassName _value)
+        #{
+        #    Name  dsnName;
+        #
+        #    if (_set)
+        #    {
+        #        dsnName = _value;
+        #        if(dsnName)
+        #        {
+        #            this.dsnName = dsnName;
+        #        }
+        #    }
+        #    else
+        #    {
+        #        _value = this.dsnName;
+        #    }
+        #
+        #    return _value;
+        #}
+      ENDSOURCE
+      SOURCE #initValue
+        #// <summary>
+        #/// Initialize field values.
+        #/// </summary>
+        #public void initValue()
+        #{
+        #    #define.CodePage('1252')
+        #    super();
+        #    this.FileFirstRowHeader = true;
+        #    this.CodePage = #CodePage;
+        #    this.Locale = currentUserLanguage();
+        #}
+        #
+        #
+      ENDSOURCE
+      SOURCE #validateField
+        #/// <summary>
+        #/// Validates <c>DMFDataSourceProperties</c> table fields.
+        #/// </summary>
+        #/// <param name="_fieldId">
+        #/// The field ID to be validated.
+        #/// </param>
+        #/// <returns>
+        #/// True if the field is valid; false, otherwise.
+        #/// </returns>
+        #public boolean validateField(FieldId _fieldId)
+        #{
+        #    boolean ret;
+        #
+        #    ret = super(_fieldId);
+        #
+        #    if (ret)
+        #    {
+        #        switch (_fieldId)
+        #        {
+        #            case fieldNum(DMFDataSourceProperties, FileColumnDelimiter):
+        #                if(DMFDataSourceProperties::delimiter(this.FileColumnDelimiter) == DMFDataSourceProperties::getRoleSeparator(this.RoleSeparator))
+        #                {
+        #                    ret = checkFailed(strFmt("@DMF1602",this.FileColumnDelimiter));
+        #                }
+        #                break;
+        #
+        #            case fieldNum(DMFDataSourceProperties, FileRowDelimiter):
+        #                if(DMFDataSourceProperties::delimiter(this.FileRowDelimiter) == DMFDataSourceProperties::getRoleSeparator(this.RoleSeparator))
+        #                {
+        #                    ret = checkFailed(strFmt("@DMF1603",this.FileRowDelimiter));
+        #                }
+        #                break;
+        #
+        #            case fieldNum(DMFDataSourceProperties, RoleSeparator):
+        #                if(DMFDataSourceProperties::delimiter(this.FileRowDelimiter) == DMFDataSourceProperties::getRoleSeparator(this.RoleSeparator))
+        #                {
+        #                    ret = checkFailed(strFmt("@DMF1604",this.FileRowDelimiter));
+        #                }
+        #
+        #                if(DMFDataSourceProperties::delimiter(this.FileColumnDelimiter) == DMFDataSourceProperties::getRoleSeparator(this.RoleSeparator))
+        #                {
+        #                    ret = checkFailed(strFmt("@DMF1703",this.FileColumnDelimiter));
+        #                }
+        #                break;
+        #
+        #        }
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #delimiter
+        #/// <summary>
+        #/// The method maps the string values corresponding to the enum element values passed to this method.
+        #/// </summary>
+        #/// <param name="_delimiter">
+        #/// Enum element value passed to the method.
+        #/// </param>
+        #/// <returns>
+        #/// Returns string value corresponding to each to enum value.
+        #/// </returns>
+        #public static str delimiter(DMFDelimiter _delimiter)
+        #{
+        #    str s;
+        #
+        #    switch (_delimiter)
+        #    {
+        #        case DMFDelimiter::Comma :
+        #            s = ',';
+        #            break;
+        #
+        #        case DMFDelimiter::Semicolon :
+        #            s = ';';
+        #            break;
+        #
+        #        case DMFDelimiter::CR :
+        #            s = '\r';
+        #            break;
+        #
+        #        case DMFDelimiter::CRLF :
+        #            s = '\r\n';
+        #            break;
+        #
+        #        case DMFDelimiter::LF :
+        #            s = '\n';
+        #            break;
+        #
+        #        case DMFDelimiter::Colon :
+        #            s = ':';
+        #            break;
+        #
+        #        case DMFDelimiter::VerticalBar :
+        #            s = '|';
+        #            break;
+        #
+        #        case DMFDelimiter::Tab :
+        #            s = '\t';
+        #            break;
+        #    }
+        #    return s;
+        #}
+      ENDSOURCE
+      SOURCE #findByExecIdAndDefGroup
+        #/// <summary>
+        #/// The method finds the DMFDataSourceProperties table buffer based on DMFExecutionId and DMFdefinationGroupName
+        #/// </summary>
+        #/// <param name="_execId">
+        #/// Job id passed to the method to find the DMFDataSourceProperties record.
+        #/// </param>
+        #/// <param name="_defGroup">
+        #/// Processing group passed to the method to find the DMFDataSourceProperties record.
+        #/// </param>
+        #/// <returns>
+        #/// Returns table buffer of DMFDataSourceProperties.
+        #/// </returns>
+        #public static DMFDataSourceProperties findByExecIdAndDefGroup(DMFExecutionId          _execId,
+        #                                                              DMFDefinationGroupName  _defGroup)
+        #{
+        #    DMFDataSource               dmfDataSource;
+        #    DMFDataSourceProperties     dmfDataSourceProperties;
+        #    DMFDefinitionGroupExecution dfDefinitionGroupExecution;
+        #
+        #    if (_execId && _defGroup)
+        #    {
+        #        select firstOnly1 ExecutionId, DefinitionGroup from dfDefinitionGroupExecution
+        #            where dfDefinitionGroupExecution.ExecutionId == _execId
+        #               && dfDefinitionGroupExecution.DefinitionGroup == _defGroup
+        #        join SourceName from dmfDataSource
+        #            where dmfDataSource.SourceName == dfDefinitionGroupExecution.Source
+        #        join dmfDataSourceProperties
+        #            where dmfDataSourceProperties.Source == dmfDataSource.SourceName;
+        #    }
+        #    return dmfDataSourceProperties;
+        #}
+      ENDSOURCE
+      SOURCE #generateDSNNameLookup
+        #/// <summary>
+        #/// The  method is written to populate the DSN value
+        #/// </summary>
+        #/// <param name="_dsnNameLookup">
+        #/// It will contain the DSN value as per selection
+        #/// </param>
+        #/// <param name="_dsnType">
+        #/// There is two DSN type. One is user DSN and another is system DSN
+        #/// </param>
+        #/// <returns>
+        #/// Returns the DSN value as per selection
+        #/// </returns>
+        #public static client DMFDSNLookup generateDSNNameLookup(DMFDSNLookup _dsnNameLookup,
+        #                                                        DMFDsnTypes  _dsnType)
+        #{
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.DriverHelper.DMFOdbcDriver*/    dmfOdbcDriver;
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.DriverHelper.DMFDsn*/           userDSN;
+        #    System.Collections.IEnumerable                          enumerator;
+        #    System.Exception                                        ex;
+        #    CLRObject                                               currentObject;
+        #    int                                                     versionNo;
+        #    Name                                                    dsnDescption;
+        #    Name                                                    serverName;
+        #    int                                                     pos;
+        #    xSession                                                xSession;
+        #    InteropPermission                                       permission;
+        #    boolean                                                 promptPwd;
+        #    #Define.ATSYMBOL('@')
+        #    #Define.Bit('Bit')
+        #
+        #    permission = new InteropPermission(InteropKind::ClrInterop);
+        #    permission.assert();
+        #
+        #    xSession = new xSession();
+        #    serverName = xSession.clientComputerName();
+        #
+        #    pos = strFind(serverName, #ATSYMBOL, 1, strLen(serverName));
+        #
+        #    if (pos)
+        #    {
+        #        serverName = subStr(serverName, 1, pos-1);
+        #    }
+        #
+        #    try
+        #    {
+        #        dmfOdbcDriver = new CLRObject('Microsoft.Dynamics.AX.Framework.Tools.DMF.DriverHelper.DMFOdbcDriver');
+        #
+        #        if (_dsnType == DMFDsnTypes::UserDSN)
+        #        {
+        #            enumerator = dmfOdbcDriver.GetUserDsn(serverName);
+        #        }
+        #        if (_dsnType == DMFDsnTypes::SystemDSN)
+        #        {
+        #            enumerator = dmfOdbcDriver.GetSystemDsn(serverName);
+        #        }
+        #
+        #        if(enumerator)
+        #        {
+        #            currentObject = enumerator.GetEnumerator();
+        #
+        #            while(currentObject.MoveNext())
+        #            {
+        #                userDSN = currentObject.get_Current();
+        #                _dsnNameLookup.clear();
+        #                versionNo = userDSN.get_DsnVersion();
+        #                dsnDescption = userDSN.get_DsnName();
+        #                dsnDescption = strFmt("%1 (%2 %3)",dsnDescption ,versionNo, #Bit) ;
+        #                _dsnNameLookup.dsnName = dsnDescption;
+        #
+        #                _dsnNameLookup.dsnConnectionString   = userDSN.get_ConnectionString();
+        #                _dsnNameLookup.dsnUserName = userDSN.get_UserName();
+        #                promptPwd = userDSN.get_PromptPassword();
+        #                _dsnNameLookup.dsnPromptPwd = promptPwd;
+        #                _dsnNameLookup.insert();
+        #            }
+        #        }
+        #    }
+        #    catch (Exception::CLRError)
+        #    {
+        #        ex = CLRInterop::getLastException();
+        #
+        #        if (ex != null)
+        #        {
+        #            ex = ex.get_InnerException();
+        #            if (ex != null)
+        #            {
+        #                throw error(ex.ToString());
+        #            }
+        #        }
+        #    }
+        #
+        #    CodeAccessPermission::revertAssert();
+        #
+        #    return _dsnNameLookup;
+        #}
+      ENDSOURCE
+      SOURCE #generateDSNNameLookupServer
+        #/// <summary>
+        #/// The  method is written to populate the DSN value
+        #/// </summary>
+        #/// <param name="_dsnNameLookup">
+        #/// It will contain the DSN value as per selection
+        #/// </param>
+        #/// <param name="_selection">
+        #/// Selection values are two type AOS,SQL.
+        #/// </param>
+        #/// <param name="_dsnType">
+        #/// There is two DSN type. One is user DSN and another is system DSN
+        #/// </param>
+        #/// <returns>
+        #/// Returns the DSN value as per selection
+        #/// </returns>
+        #public static server DMFDSNLookup generateDSNNameLookupServer(DMFDSNLookup _dsnNameLookup,
+        #                                                           DMFDSNLocations _selection,
+        #                                                           DMFDsnTypes     _dsnType)
+        #{
+        #    #define.serviceHelper('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ServiceContractClient')
+        #    System.Type                                             serviceClientType;
+        #    str                                                     vsAssembliesPath,
+        #                                                            configFilePath,
+        #                                                            errorDescription,
+        #                                                            errorWarning,
+        #                                                            getMessage;
+        #
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DmfEntityProxy*/   dmfEntityProxy;
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.DriverHelper.DMFDsn*/           userDSN;
+        #    System.Collections.IEnumerable                          enumerator;
+        #    System.Exception                                        ex;
+        #    CLRObject                                               currentObject;
+        #    int                                                     versionNo;
+        #    Name                                                    dsnDescption;
+        #    Name                                                    serverName;
+        #    SysSQLSystemInfo                                        systemInfo;
+        #    int                                                     pos;
+        #    xSession                                                xSession;
+        #    InteropPermission                                       permission;
+        #    boolean                                                 promptPwd,
+        #                                                            runOnService;
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ExceptionData*/          dmfExceptionData;
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ServiceContractClient*/  helperClient;
+        #
+        #    #Define.ATSYMBOL('@')
+        #    #Define.Bit('Bit')
+        #
+        #    try
+        #    {
+        #        dmfEntityProxy = new CLRObject('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DmfEntityProxy');
+        #        serviceClientType = CLRInterop::getType(#serviceHelper);
+        #        vsAssembliesPath = xInfo::directory(DirectoryType::Bin);
+        #        configFilePath = Microsoft.Dynamics.IntegrationFramework.ServiceReference::GetConfigFilePath(serviceClientType, vsAssembliesPath);
+        #        helperClient = Microsoft.Dynamics.IntegrationFramework.ServiceReference::CreateServiceClient(serviceClientType, configFilePath);
+        #        dmfEntityProxy.set_ClientProxy(helperClient);
+        #
+        #        permission = new InteropPermission(InteropKind::ClrInterop);
+        #        permission.assert();
+        #
+        #        switch(_selection)
+        #        {
+        #            // AOS
+        #            case 1:
+        #                xSession = new xSession();
+        #                serverName = xSession.AOSName();
+        #            break;
+        #
+        #            // SQL
+        #            case 2:
+        #                systemInfo = SysSQLSystemInfo::construct();
+        #                serverName = systemInfo.getLoginServer();
+        #                runOnService = true;
+        #                pos = strFind(serverName, @'\', 1, strLen(serverName));
+        #                if (pos)
+        #                {
+        #                    serverName = subStr(serverName, 1, pos-1);
+        #                }
+        #            break;
+        #        }
+        #
+        #        if(_dsnType == DMFDsnTypes::UserDSN)
+        #        {
+        #            enumerator = dmfEntityProxy.GetUserDsn(serverName,runOnService);
+        #        }
+        #        else
+        #        {
+        #            enumerator = dmfEntityProxy.GetSystemDsn(serverName,runOnService);
+        #        }
+        #
+        #        if(enumerator)
+        #        {
+        #            currentObject = enumerator.GetEnumerator();
+        #
+        #            while(currentObject.MoveNext())
+        #            {
+        #                userDSN = currentObject.get_Current();
+        #                _dsnNameLookup.clear();
+        #                versionNo = userDSN.get_DsnVersion();
+        #                dsnDescption = userDSN.get_DsnName();
+        #                dsnDescption = strFmt("%1 (%2 %3)",dsnDescption ,versionNo, #Bit) ;
+        #                _dsnNameLookup.dsnName = dsnDescption;
+        #
+        #                _dsnNameLookup.dsnConnectionString   = userDSN.get_ConnectionString();
+        #                _dsnNameLookup.dsnUserName = userDSN.get_UserName();
+        #                promptPwd = userDSN.get_PromptPassword();
+        #                _dsnNameLookup.dsnPromptPwd = promptPwd;
+        #                _dsnNameLookup.insert();
+        #            }
+        #        }
+        #    }
+        #
+        #    catch (Exception::CLRError)
+        #    {
+        #        ex = CLRInterop::getLastException();
+        #        if (ex != null)
+        #        {
+        #            ex = ex.get_InnerException();
+        #            if(dmfEntityProxy.get_ErrorCode())
+        #            {
+        #                errorDescription = SysLabel::labelId2String(DMFStagingErrorCode::find(dmfEntityProxy.get_ErrorCode()).LabelId);
+        #                errorWarning = errorDescription;
+        #                if(dmfEntityProxy.get_IsFault())
+        #                {
+        #                    dmfExceptionData = dmfEntityProxy.get_ExceptionDetails();
+        #                    getMessage    = dmfExceptionData.get_Message();
+        #
+        #                    if(errorDescription)
+        #                    {
+        #                        errorDescription = (errorDescription + '-' +  getMessage);
+        #                    }
+        #                    else
+        #                    {
+        #                        errorDescription = getMessage ;
+        #                    }
+        #                }
+        #
+        #                if(errorDescription)
+        #                {
+        #                    if(errorWarning)
+        #                    {
+        #                        warning(errorWarning);
+        #                    }
+        #                }
+        #                else
+        #                {
+        #                    error(ex.ToString());
+        #                }
+        #            }
+        #            else
+        #            {
+        #                if (ex != null)
+        #                {
+        #                    error(ex.ToString());
+        #                }
+        #            }
+        #        }
+        #        else
+        #        {
+        #            error("@DMF1440");
+        #        }
+        #    }
+        #
+        #    CodeAccessPermission::revertAssert();
+        #
+        #    return _dsnNameLookup;
+        #}
+      ENDSOURCE
+      SOURCE #generateExcelSheetLookup
+        #/// <summary>
+        #/// Generate DSN Name Lookup Server.
+        #/// </summary>
+        #/// <param name="_definationGroupName">
+        #/// defination group name.
+        #/// </param>
+        #/// <param name="_entity">
+        #/// Name of the entity.
+        #/// </param>
+        #/// <param name="_filePath">
+        #/// Denotes the path of the file.
+        #/// </param>
+        #public static server void generateExcelSheetLookup(DMFDefinationGroupName  _definationGroupName,
+        #    DMFEntityName       _entity,
+        #    FilePath            _filePath)
+        #{
+        #    #define.serviceHelper('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ServiceContractClient')
+        #    CLRObject/*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ExceptionData*/           dmfExceptionData;
+        #    CLRObject/*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DmfEntityProxy*/                              dmfEntityProxy;
+        #    CLRObject/*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ServiceContractClient*/   helperClient;
+        #
+        #    System.Collections.IEnumerable                          enumerator;
+        #    System.Exception                                        ex;
+        #    CLRObject                                               currentObject;
+        #    InteropPermission                                       permission;
+        #    System.Type                                             serviceClientType;
+        #    str                                                     vsAssembliesPath,
+        #                                                            configFilePath,
+        #                                                            getMessage;
+        #    FilePath                                                filePath;
+        #    Name                                                    sheet;
+        #    DMFExcelSheetLookup                                     excelSheetLookup;
+        #    DMFStagingExecutionErrorDescription                     errorDescription,
+        #                                                            errorWarning;
+        #
+        #    delete_from excelSheetLookup
+        #        where excelSheetLookup.DefinitionGroup == _definationGroupName
+        #           && excelSheetLookup.Entity == _entity;
+        #
+        #    permission = new InteropPermission(InteropKind::ClrInterop);
+        #    permission.assert();
+        #
+        #    serviceClientType = CLRInterop::getType(#serviceHelper);
+        #    vsAssembliesPath = xInfo::directory(DirectoryType::Bin);
+        #    configFilePath = Microsoft.Dynamics.IntegrationFramework.ServiceReference::GetConfigFilePath(serviceClientType, vsAssembliesPath);
+        #    helperClient = Microsoft.Dynamics.IntegrationFramework.ServiceReference::CreateServiceClient(serviceClientType, configFilePath);
+        #
+        #    try
+        #    {
+        #        dmfEntityProxy = new CLRObject('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DmfEntityProxy');
+        #        dmfEntityProxy.set_ClientProxy(helperClient);
+        #        filePath = DMFStagingWriter::getSharedFilePath(_filePath,false);
+        #        enumerator = dmfEntityProxy.GetSheetNamesFromExcel(filePath);
+        #
+        #        if(enumerator)
+        #        {
+        #            currentObject = enumerator.GetEnumerator();
+        #
+        #            while(currentObject.MoveNext())
+        #            {
+        #                sheet = currentObject.get_Current();
+        #                select forupdate excelSheetLookup
+        #                    where excelSheetLookup.Name == sheet
+        #                       && excelSheetLookup.DefinitionGroup == _definationGroupName
+        #                       && excelSheetLookup.Entity == _entity;
+        #
+        #                excelSheetLookup.Name = sheet;
+        #                excelSheetLookup.Entity = _entity;
+        #                excelSheetLookup.DefinitionGroup = _definationGroupName;
+        #                excelSheetLookup.write();
+        #            }
+        #        }
+        #    }
+        #    catch (Exception::CLRError)
+        #    {
+        #        ex = CLRInterop::getLastException();
+        #        if (ex != null)
+        #        {
+        #            ex = ex.get_InnerException();
+        #
+        #            if(dmfEntityProxy.get_ErrorCode())
+        #            {
+        #                errorDescription = SysLabel::labelId2String(DMFStagingErrorCode::find(dmfEntityProxy.get_ErrorCode()).LabelId);
+        #                errorWarning = errorDescription;
+        #                if(dmfEntityProxy.get_IsFault())
+        #                {
+        #                    dmfExceptionData = dmfEntityProxy.get_ExceptionDetails();
+        #                    getMessage    = dmfExceptionData.get_Message();
+        #
+        #                    if (errorDescription)
+        #                    {
+        #                        errorDescription = errorDescription + '-' +  getMessage;
+        #                    }
+        #                    else
+        #                    {
+        #                        errorDescription = getMessage;
+        #                    }
+        #                }
+        #
+        #                if(errorDescription)
+        #                {
+        #                    if(errorWarning)
+        #                    {
+        #                        warning(errorWarning);
+        #                    }
+        #                }
+        #                else
+        #                {
+        #                    error(ex.ToString());
+        #                }
+        #            }
+        #            else
+        #            {
+        #                if (ex != null)
+        #                {
+        #                    error(ex.ToString());
+        #                }
+        #            }
+        #        }
+        #        else
+        #        {
+        #            error("@DMF1440");
+        #        }
+        #    }
+        #    CodeAccessPermission::revertAssert();
+        #    if (filePath)
+        #    {
+        #        DMFStagingWriter::deleteFileOnServer(filePath);
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #getDynamicallyCodePage
+        #/// <summary>
+        #/// The method is written to dynamically get the code page value.
+        #/// </summary>
+        #public static void getDynamicallyCodePage()
+        #{
+        #    System.Text.EncodingInfo[]    encodingInfo;
+        #    System.Text.EncodingInfo      object;
+        #    int                           i;
+        #    int                           codePage;
+        #    str                           codePageDisplayName;
+        #    ;
+        #
+        #    new InteropPermission(InteropKind::ClrInterop).assert();
+        #    encodingInfo = System.Text.Encoding::GetEncodings();
+        #
+        #    for (i = 1; i <= CLRInterop::getAnyTypeForObject(encodingInfo.get_Length()); i++ )
+        #    {
+        #        object              = encodingInfo.GetValue(i);
+        #        codePage            = object.get_CodePage();
+        #        codePageDisplayName = object.get_DisplayName();
+        #
+        #        info(strFmt("@SYS53184", int2str(codePage), codePageDisplayName));
+        #
+        #    }
+        #
+        #    CodeAccessPermission::revertAssert();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #getRoleSeparator
+        #/// <summary>
+        #/// The method is written to get the role seperator value.
+        #/// </summary>
+        #/// <param name="_roleSeparator">
+        #/// Role seperator value in string format.
+        #/// </param>
+        #/// <returns>
+        #/// Returns role seperator value.
+        #/// </returns>
+        #public static str getRoleSeparator(DMFRoleSeparator _roleSeparator)
+        #{
+        #    str s;
+        #    switch (_roleSeparator)
+        #    {
+        #        case DMFRoleSeparator::Comma :
+        #            s = ',';
+        #            break;
+        #
+        #        case DMFRoleSeparator::Semicolon :
+        #            s = ';';
+        #            break;
+        #
+        #        case DMFRoleSeparator::Colon :
+        #            s = ':';
+        #            break;
+        #
+        #        case DMFRoleSeparator::Bar :
+        #            s = '|';
+        #            break;
+        #
+        #        case DMFRoleSeparator::Hyphen :
+        #            s = '-';
+        #            break;
+        #
+        #        case DMFRoleSeparator::Underscore :
+        #            s = '_';
+        #            break;
+        #    }
+        #    return s;
+        #}
+      ENDSOURCE
+      SOURCE #sourceFormat
+        #/// <summary>
+        #/// Gets the source and file format.
+        #/// </summary>
+        #/// <param name="_sourceName">
+        #/// It is the name of source of type string
+        #/// </param>
+        #/// <returns>
+        #/// File format
+        #/// </returns>
+        #public static server DMFFileFormat sourceFormat(Name _sourceName)
+        #{
+        #    DMFDataSourceProperties     sourceProperties;
+        #
+        #    select firstOnly1 FileFormat from sourceProperties
+        #        where sourceProperties.Source == _sourceName;
+        #
+        #    return sourceProperties.FileFormat;
+        #}
+      ENDSOURCE
+      SOURCE #validateConnectionString
+        #/// <summary>
+        #/// Validates ODBC connection string.
+        #/// </summary>
+        #/// <param name="_dmfDataSourceProperties">
+        #/// Varible which specify data source properties.
+        #/// </param>
+        #/// <param name="_objectSet">
+        #/// The name of the form object.
+        #/// </param>
+        #public static server void validateConnectionString(DMFDataSourceProperties _dmfDataSourceProperties,
+        #                                                   FormObjectSet           _objectSet = null)
+        #{
+        #    #define.serviceHelper('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ServiceContractClient')
+        #    str                   vsAssembliesPath,
+        #                          getMessage,
+        #                          getStackTrace,
+        #                          connectionStr;
+        #    FilePath              configFilePath;
+        #    System.Type           serviceClientType;
+        #    boolean               exception;
+        #    System.Exception      ex;
+        #
+        #    DMFStagingExecutionErrorDescription errorDescription;
+        #
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ServiceContractClient*/  serviceContract;
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DmfEntityProxy*/                             dmfEntityProxy;
+        #    CLRObject /*Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ExceptionData*/          dmfExceptionData;
+        #
+        #    try
+        #    {
+        #        ttsbegin;
+        #        dmfEntityProxy = new CLRObject('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DmfEntityProxy');
+        #        dmfExceptionData  = new CLRObject('Microsoft.Dynamics.AX.Framework.Tools.DMF.ServiceProxy.DMFServiceReference.ExceptionData');
+        #        serviceClientType = CLRInterop::getType(#serviceHelper);
+        #        vsAssembliesPath = xInfo::directory(DirectoryType::Bin);
+        #        configFilePath = Microsoft.Dynamics.IntegrationFramework.ServiceReference::GetConfigFilePath(serviceClientType, vsAssembliesPath);
+        #        serviceContract = Microsoft.Dynamics.IntegrationFramework.ServiceReference::CreateServiceClient(serviceClientType, configFilePath);
+        #        dmfEntityProxy.set_ClientProxy(serviceContract);
+        #
+        #        if (!_dmfDataSourceProperties.dsnConnectionString)
+        #        {
+        #            _dmfDataSourceProperties.selectForUpdate(true);
+        #            _dmfDataSourceProperties.ValidationStatus = NoYesError::No;
+        #            _dmfDataSourceProperties.doUpdate();
+        #            checkFailed("@DMF783");
+        #        }
+        #        else
+        #        {
+        #            connectionStr = _dmfDataSourceProperties.dsnConnectionString + 'uid=' + _dmfDataSourceProperties.dnsUserName + ';pwd=' + cryptoblob2str(WinAPIServer::cryptUnProtectData(_dmfDataSourceProperties.Password)) + ';';
+        #            if (dmfEntityProxy.TestConnection(connectionStr))
+        #            {
+        #                _dmfDataSourceProperties.selectForUpdate(true);
+        #                _dmfDataSourceProperties.ValidationStatus = NoYesError::Yes;
+        #                _dmfDataSourceProperties.doUpdate();
+        #                info("@DMF781");
+        #            }
+        #            else
+        #            {
+        #                _dmfDataSourceProperties.selectForUpdate(true);
+        #                _dmfDataSourceProperties.ValidationStatus = NoYesError::Error;
+        #                _dmfDataSourceProperties.doUpdate();
+        #                warning("@DMF782");
+        #            }
+        #        }
+        #        ttscommit;
+        #    }
+        #    catch(Exception::CLRError)
+        #    {
+        #        exception = true;
+        #        ex = CLRInterop::getLastException();
+        #
+        #        if (exception)
+        #        {
+        #            ttsbegin;
+        #            _dmfDataSourceProperties.selectForUpdate(true);
+        #            _dmfDataSourceProperties.ValidationStatus = NoYesError::Error;
+        #            _dmfDataSourceProperties.doUpdate();
+        #            ttscommit;
+        #            if(_objectSet != null)
+        #                _objectSet.refresh();
+        #        }
+        #        if(ex != null)
+        #        {
+        #            if(dmfEntityProxy.get_ErrorCode())
+        #            {
+        #                errorDescription = SysLabel::labelId2String(DMFStagingErrorCode::find(dmfEntityProxy.get_ErrorCode()).LabelId);
+        #
+        #                if(dmfEntityProxy.get_IsFault())
+        #                {
+        #                    dmfExceptionData = dmfEntityProxy.get_ExceptionDetails();
+        #                    getMessage = dmfExceptionData.get_Message();
+        #                    getStackTrace = dmfExceptionData.get_StackTrace();
+        #
+        #                    errorDescription += '-' + getMessage ;
+        #                    error(errorDescription);
+        #                }
+        #            }
+        #            else
+        #            {
+        #                throw error ( ex.ToString());
+        #            }
+        #        }
+        #        else
+        #        {
+        #            error("@DMF1438");
+        #        }
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #wordLanguageId
+        #/// <summary>
+        #/// The method is written to get the language id.
+        #/// </summary>
+        #/// <param name="_language">
+        #/// Language in string format.
+        #/// </param>
+        #/// <returns>
+        #/// Returns language id in integer format.
+        #/// </returns>
+        #public static int wordLanguageId(LanguageId _language)
+        #{
+        #    switch (_language)
+        #    {
+        #        case 'af':
+        #            return 1078;
+        #        case 'ar-ae':
+        #            return 5121;
+        #        case 'ar-bh':
+        #            return 15361;
+        #        case 'ar-eg':
+        #            return 3073;
+        #        case 'ar-iq':
+        #            return 2049;
+        #        case 'ar-jo':
+        #            return 11265;
+        #        case 'ar-kw':
+        #            return 13313;
+        #        case 'ar-lb':
+        #            return 12289;
+        #        case 'ar-ly':
+        #            return 4097;
+        #        case 'ar-ma':
+        #            return 6145;
+        #        case 'ar-om':
+        #            return 8193 ;
+        #        case 'ar-qa':
+        #            return 16385;
+        #        case 'ar-sa':
+        #            return 1078;
+        #        case 'ar-sy':
+        #            return 10241;
+        #        case 'ar-tn':
+        #            return  7169;
+        #        case 'ar-ye':
+        #            return 9217;
+        #        case 'be':
+        #            return 2060;
+        #        case 'bg':
+        #            return 1026;
+        #        case 'ca':
+        #            return 1027;
+        #        case 'cs':
+        #            return 4100;
+        #        case 'da':
+        #            return 1030;
+        #        case 'de':
+        #            return 1031;
+        #        case 'de-at':
+        #            return 3079;
+        #        case 'de-ch':
+        #            return 1031;
+        #        case 'de-li':
+        #            return 5127;
+        #        case 'de-lu':
+        #            return 4103;
+        #        case 'en':
+        #            return 2057;
+        #        case 'en-au':
+        #            return 3081;
+        #        case 'en-bz':
+        #            return 10249;
+        #        case 'en-ca':
+        #            return 4105;
+        #        case 'en-cr':
+        #            return 9225;
+        #        case 'en-gb':
+        #            return 2057;
+        #        case 'en-ie':
+        #            return 6153;
+        #        case 'en-jm':
+        #            return 8201;
+        #        case 'en-nz':
+        #            return 5129;
+        #        case 'en-tt':
+        #            return 11273;
+        #        case 'en-us':
+        #            return 1033;
+        #        case 'en-za':
+        #            return 12297;
+        #        case 'es':
+        #            return 1061;
+        #        case 'es-ar':
+        #            return 11274;
+        #        case 'es-bo':
+        #            return 16394;
+        #        case 'es-c':
+        #            return 13322;
+        #        case 'es-co':
+        #            return 9226;
+        #        case 'es-cr':
+        #            return 5130;
+        #        case 'es-do':
+        #            return 7178;
+        #        case 'es-ec':
+        #            return 12298;
+        #        case 'es-gt':
+        #            return 4106;
+        #        case 'es-hn':
+        #            return 18442;
+        #        case 'es-mx':
+        #            return 3082;
+        #        case 'es-ni':
+        #            return 19466;
+        #        case 'es-pa':
+        #            return 6154;
+        #        case 'es-pe':
+        #            return 10250;
+        #        case 'es-pr':
+        #            return 20490;
+        #        case 'es-py':
+        #            return 15370;
+        #        case 'es-uy':
+        #            return 14346;
+        #        case 'es-ve':
+        #            return 8202;
+        #        case 'fa':
+        #            return  1065;
+        #        case 'fi':
+        #            return 1035;
+        #        case 'fo':
+        #            return 1080;
+        #        case 'fr':
+        #            return 1036;
+        #        case 'fr-be':
+        #            return 1036;
+        #        case 'fr-ca':
+        #            return 1078;
+        #        case 'fr-ch':
+        #            return 3084;
+        #        case 'fr-lu':
+        #            return 5132;
+        #        case 'gd':
+        #            return 1084;
+        #        case 'gd-ie':
+        #            return 2108;
+        #        case 'he':
+        #            return 1037;
+        #        case 'hi':
+        #            return 1081;
+        #        case 'hu':
+        #            return 1038;
+        #        case 'in':
+        #            return 1057;
+        #        case 'is':
+        #            return 1039;
+        #        case 'it':
+        #            return 1040;
+        #        case 'it-ch':
+        #            return 1040;
+        #        case 'ja':
+        #            return 1041;
+        #        case 'ko':
+        #            return 1042;
+        #        case 'lt':
+        #            return 1063;
+        #        case 'lv':
+        #            return 1062;
+        #        case 'mk':
+        #            return 1071;
+        #        case 'ms':
+        #            return 1086;
+        #        case 'mt':
+        #            return 1082;
+        #        case 'nl':
+        #            return 1043;
+        #        case 'nl-be':
+        #            return 1043;
+        #        case 'no':
+        #            return 1044;
+        #        case 'no-ny':
+        #            return 2068;
+        #        case 'p':
+        #            return 1045;
+        #        case 'pt':
+        #            return 2070;
+        #        case 'rm':
+        #            return 1047;
+        #        case 'ro':
+        #            return 1048;
+        #        case 'ro-mo':
+        #            return 2072;
+        #        case 'ru':
+        #            return 1049;
+        #        case 'ru-mo':
+        #            return 1083;
+        #        case 'sk':
+        #            return 1051;
+        #        case 'sq':
+        #            return 1052;
+        #        case 'sr':
+        #            return 3098;
+        #        case 'sr-la':
+        #            return 2074;
+        #        case 'sv':
+        #            return 1053;
+        #        case 'sv-fi':
+        #            return 2077;
+        #        case 'th':
+        #            return 1105;
+        #        case 'tr':
+        #            return 1055;
+        #        case 'ts':
+        #            return 1073;
+        #        case 'uk':
+        #            return 1058;
+        #        case 'ur':
+        #            return 1056;
+        #        case 'vi':
+        #            return 1066;
+        #        case 'xh':
+        #            return 1076;
+        #        case 'zh-cn':
+        #            return 5124;
+        #        case 'zh-hk':
+        #            return 3076;
+        #        case 'zh-sg':
+        #            return 4100;
+        #        case 'zu':
+        #            return 1077;
+        #        default:
+        #            return 1033;
+        #    }
+        #
+        #    return 1033;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

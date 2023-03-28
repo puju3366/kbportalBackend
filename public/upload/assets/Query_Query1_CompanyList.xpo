@@ -1,0 +1,91 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: QUE
+
+; Microsoft Dynamics AX Query: Query1_CompanyList unloaded
+; --------------------------------------------------------------------------------
+VERSION 31
+
+QUERY #Query1_CompanyList
+  PROPERTIES
+    Name                #Query1_CompanyList
+    Version             #22
+    NextUniqueId        #1002
+    Origin              #{1273E22E-6F01-4CBF-9220-4DEEEF7B884F}
+  ENDPROPERTIES
+  
+  METHODS
+    SOURCE #classDeclaration
+      #public class QueryRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  BLOCKS
+    BLOCK #DataArea
+      PROPERTIES
+        Name                #DataArea
+        Table               #DataArea
+        UniqueId            #1000
+        FetchMode           #1:1
+      ENDPROPERTIES
+      
+      FIELDLIST
+        PROPERTIES
+          Dynamic             #No
+        ENDPROPERTIES
+        
+        FIELD #id
+        FIELD #name
+      ENDFIELDLIST
+      SORTING
+      ENDSORTING
+      LINES
+      ENDLINES
+      BLOCKS
+        BLOCK #VendTable
+          PROPERTIES
+            Name                #VendTable
+            Table               #VendTable
+            UniqueId            #1001
+            FetchMode           #1:1
+            JoinMode            #NoExistsJoin
+          ENDPROPERTIES
+          
+          FIELDLIST
+            PROPERTIES
+              Dynamic             #No
+            ENDPROPERTIES
+            
+          ENDFIELDLIST
+          SORTING
+          ENDSORTING
+          LINES
+          ENDLINES
+          BLOCKS
+          ENDBLOCKS
+          ASSOCIATIONS
+            ASSOCIATION
+              JOINDATASOURCE #DataArea
+              MASTERFIELD  #id
+              DETAILSFIELD #dataAreaId
+          ENDASSOCIATIONS
+        ENDBLOCK
+      ENDBLOCKS
+      GROUPBY
+      ENDGROUPBY
+      HAVING
+      ENDHAVING
+      ORDERBY
+      ENDORDERBY
+    ENDBLOCK
+  ENDBLOCKS
+  DEPENDENTS
+  ENDDEPENDENTS
+  COMPOSITEQUERIES
+  ENDCOMPOSITEQUERIES
+ENDQUERY
+
+
+***Element: END

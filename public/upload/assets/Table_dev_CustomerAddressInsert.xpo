@@ -1,0 +1,123 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_CustomerAddressInsert unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_CustomerAddressInsert
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_CustomerAddressInsert
+      CreateRecIdIndex    #Yes
+      SaveDataPerCompany  #No
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{68C1F34D-0539-4D4B-A823-3F302957DCE9}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountNum
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Table               #dev_CustomerAddressInsert
+          Origin              #{56C21614-5537-4275-AF80-8D39FEFFEAC9}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #City
+        STRING
+        PROPERTIES
+          Name                #City
+          Table               #dev_CustomerAddressInsert
+          Origin              #{6BFD43C5-2748-4A65-BB49-B4908BF79D1D}
+          ExtendedDataType    #LogisticsAddressCity
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #CountryRegionId
+        STRING
+        PROPERTIES
+          Name                #CountryRegionId
+          Mandatory           #Yes
+          Table               #dev_CustomerAddressInsert
+          Origin              #{6863AA1E-44B5-48CC-B048-C188DDEFFA58}
+          ExtendedDataType    #LogisticsAddressCountryRegionId
+        ENDPROPERTIES
+        
+      FIELD #IsPrimary
+        ENUM
+        PROPERTIES
+          Name                #IsPrimary
+          Table               #dev_CustomerAddressInsert
+          Origin              #{9CC81502-EA34-45E8-820A-FA88F0A8B35B}
+          ExtendedDataType    #LogisticsIsPrimaryAddress
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #State
+        STRING
+        PROPERTIES
+          Name                #State
+          Table               #dev_CustomerAddressInsert
+          Origin              #{2B35AC5B-953E-4581-A09A-46DBEC2CD174}
+          ExtendedDataType    #LogisticsAddressStateId
+        ENDPROPERTIES
+        
+      FIELD #Street
+        STRING
+        PROPERTIES
+          Name                #Street
+          Table               #dev_CustomerAddressInsert
+          Origin              #{C754E90C-7883-4B30-8A49-24235118A266}
+          ExtendedDataType    #LogisticsAddressStreet
+          StringSize          #250
+        ENDPROPERTIES
+        
+      FIELD #ZipCode
+        STRING
+        PROPERTIES
+          Name                #ZipCode
+          Table               #dev_CustomerAddressInsert
+          Origin              #{F20948A9-86AE-4A26-8584-4A23AA123B93}
+          ExtendedDataType    #LogisticsAddressZipCodeId
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #IdxAccountnum
+      PROPERTIES
+        Name                #IdxAccountnum
+        Origin              #{28E7F31E-E644-44C8-B11E-98CCBAE91D92}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

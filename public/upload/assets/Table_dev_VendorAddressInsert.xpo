@@ -1,0 +1,123 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_VendorAddressInsert unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_VendorAddressInsert
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_VendorAddressInsert
+      CreateRecIdIndex    #Yes
+      SaveDataPerCompany  #No
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{C6BE5F74-813D-47E8-96DD-4F3D9094380F}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountNum
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Table               #dev_VendorAddressInsert
+          Origin              #{0D617135-9167-4C05-B7F4-5FA5E52C6543}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #City
+        STRING
+        PROPERTIES
+          Name                #City
+          Table               #dev_VendorAddressInsert
+          Origin              #{86703164-7740-4F61-AF45-4C27E191893A}
+          ExtendedDataType    #LogisticsAddressCity
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #CountryRegionId
+        STRING
+        PROPERTIES
+          Name                #CountryRegionId
+          Mandatory           #Yes
+          Table               #dev_VendorAddressInsert
+          Origin              #{706AF048-DE86-4086-AF4D-B7C700C83A85}
+          ExtendedDataType    #LogisticsAddressCountryRegionId
+        ENDPROPERTIES
+        
+      FIELD #IsPrimary
+        ENUM
+        PROPERTIES
+          Name                #IsPrimary
+          Table               #dev_VendorAddressInsert
+          Origin              #{10AEE1D7-6783-471C-AEC9-336EC5A674E7}
+          ExtendedDataType    #LogisticsIsPrimaryAddress
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #State
+        STRING
+        PROPERTIES
+          Name                #State
+          Table               #dev_VendorAddressInsert
+          Origin              #{27940B1D-CC38-45A0-85B5-5D85DB4453D4}
+          ExtendedDataType    #LogisticsAddressStateId
+        ENDPROPERTIES
+        
+      FIELD #Street
+        STRING
+        PROPERTIES
+          Name                #Street
+          Table               #dev_VendorAddressInsert
+          Origin              #{25ECA549-CBEA-4601-A350-47B1556B8859}
+          ExtendedDataType    #LogisticsAddressStreet
+          StringSize          #250
+        ENDPROPERTIES
+        
+      FIELD #ZipCode
+        STRING
+        PROPERTIES
+          Name                #ZipCode
+          Table               #dev_VendorAddressInsert
+          Origin              #{3095DCB6-0028-44A2-A273-0DAA568CC610}
+          ExtendedDataType    #LogisticsAddressZipCodeId
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #IdxAccountNum
+      PROPERTIES
+        Name                #IdxAccountNum
+        Origin              #{D201437F-C211-4BC3-8365-5A20B31074CA}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

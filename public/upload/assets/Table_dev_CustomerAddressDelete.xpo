@@ -1,0 +1,424 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : dev_CustomerAddressDelete unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #dev_CustomerAddressDelete
+    EnforceFKRelation 1
+    PROPERTIES
+      Name                #dev_CustomerAddressDelete
+      CreateRecIdIndex    #Yes
+      SaveDataPerCompany  #No
+      PrimaryIndex        #SurrogateKey
+      ClusterIndex        #SurrogateKey
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+      Origin              #{D99FF2F2-F983-45C1-A114-D815C4B821F5}
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #_RecId_LogisticsPostalAddress
+        INT64
+        PROPERTIES
+          Name                #_RecId_LogisticsPostalAddress
+          Table               #dev_CustomerAddressDelete
+          Origin              #{F6BB0919-6755-48A7-BF40-9B68801FBF64}
+        ENDPROPERTIES
+        
+      FIELD #_recVersion_LogisticsPostalAddress
+        INT64
+        PROPERTIES
+          Name                #_recVersion_LogisticsPostalAddress
+          Table               #dev_CustomerAddressDelete
+          Origin              #{15C7C77F-CFD2-488B-8422-24B9EB743077}
+        ENDPROPERTIES
+        
+      FIELD #AccountNum
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Table               #dev_CustomerAddressDelete
+          Origin              #{CF5DBCF9-EC30-459C-8E45-BEABB12A84A4}
+          ExtendedDataType    #AccountNum
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Address
+        STRING
+        PROPERTIES
+          Name                #Address
+          AllowEditOnCreate   #No
+          AllowEdit           #No
+          Table               #dev_CustomerAddressDelete
+          Origin              #{122AED0B-05D2-4214-A5D8-85DFC939FAE1}
+          ExtendedDataType    #LogisticsAddressing
+          StringSize          #250
+        ENDPROPERTIES
+        
+      FIELD #Apartment_RU
+        STRING
+        PROPERTIES
+          Name                #Apartment_RU
+          Table               #dev_CustomerAddressDelete
+          Origin              #{AC7D051B-0F2A-434A-B4D3-CB4A0194DEF3}
+          ExtendedDataType    #LogisticsAddressApartment_RU
+        ENDPROPERTIES
+        
+      FIELD #Building_RU
+        STRING
+        PROPERTIES
+          Name                #Building_RU
+          Table               #dev_CustomerAddressDelete
+          Origin              #{CF25D186-3074-4A3E-86CA-6C0B3B22CBE1}
+          ExtendedDataType    #LogisticsAddressBuilding_RU
+        ENDPROPERTIES
+        
+      FIELD #BuildingCompliment
+        STRING
+        PROPERTIES
+          Name                #BuildingCompliment
+          Table               #dev_CustomerAddressDelete
+          Origin              #{4DAA6C5D-5E8F-441E-8F34-E8832032FA84}
+          ExtendedDataType    #LogisticsAddressBuildingCompliment
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #City
+        STRING
+        PROPERTIES
+          Name                #City
+          Table               #dev_CustomerAddressDelete
+          Origin              #{BD53B706-9A45-4D07-A07B-221BB9243279}
+          ExtendedDataType    #LogisticsAddressCity
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #CityRecId
+        INT64
+        PROPERTIES
+          Name                #CityRecId
+          Table               #dev_CustomerAddressDelete
+          Origin              #{AC9E7ACC-E497-4A17-9DFC-430B596E8853}
+          ExtendedDataType    #LogisticsAddressCityRecId
+        ENDPROPERTIES
+        
+      FIELD #CountryCurrencyCode
+        STRING
+        PROPERTIES
+          Name                #CountryCurrencyCode
+          HelpText            #@SYS73534
+          Table               #dev_CustomerAddressDelete
+          Origin              #{D4A2648A-B227-4151-A2C8-B3C1CAF55DFD}
+          ExtendedDataType    #CurrencyCode
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #CountryRegionId
+        STRING
+        PROPERTIES
+          Name                #CountryRegionId
+          Mandatory           #Yes
+          Table               #dev_CustomerAddressDelete
+          Origin              #{5DFE6D51-1AA4-4CD9-9347-05D94A61B2C9}
+          ExtendedDataType    #LogisticsAddressCountryRegionId
+        ENDPROPERTIES
+        
+      FIELD #County
+        STRING
+        PROPERTIES
+          Name                #County
+          Table               #dev_CustomerAddressDelete
+          Origin              #{0C808273-6B81-46E3-ABDF-3061616FD3E3}
+          ExtendedDataType    #LogisticsAddressCountyId
+        ENDPROPERTIES
+        
+      FIELD #District
+        INT64
+        PROPERTIES
+          Name                #District
+          Table               #dev_CustomerAddressDelete
+          Origin              #{E72DA347-1A54-4AE7-8021-77C6E5702A59}
+          ExtendedDataType    #LogisticsAddressDistrictRecId
+        ENDPROPERTIES
+        
+      FIELD #DistrictName
+        STRING
+        PROPERTIES
+          Name                #DistrictName
+          Table               #dev_CustomerAddressDelete
+          Origin              #{BA3E89C4-50D6-4605-BF70-123C5AB2C5CF}
+          ExtendedDataType    #LogisticsAddressDistrictName
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #FlatId_RU
+        INT64
+        PROPERTIES
+          Name                #FlatId_RU
+          Table               #dev_CustomerAddressDelete
+          Origin              #{C1090F5C-9222-452F-90C2-219DF08AA1C2}
+          ExtendedDataType    #LogisticsAddressFlatId_RU
+        ENDPROPERTIES
+        
+      FIELD #HouseId_RU
+        INT64
+        PROPERTIES
+          Name                #HouseId_RU
+          Table               #dev_CustomerAddressDelete
+          Origin              #{F0587A89-7248-451B-B33A-BFBD027599B9}
+          ExtendedDataType    #LogisticsAddressHouseId_RU
+        ENDPROPERTIES
+        
+      FIELD #IsLocationOwner
+        ENUM
+        PROPERTIES
+          Name                #IsLocationOwner
+          AllowEditOnCreate   #No
+          AllowEdit           #No
+          Table               #dev_CustomerAddressDelete
+          Origin              #{01BAA662-E9E5-4362-86EA-154570176358}
+          ExtendedDataType    #DirPartyIsLocationOwner
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #ISOcode
+        STRING
+        PROPERTIES
+          Name                #ISOcode
+          Table               #dev_CustomerAddressDelete
+          Origin              #{FC4B0705-EE90-4DA8-A3DA-86F39E7C4888}
+          ExtendedDataType    #LogisticsAddressCountryRegionISOCode
+          StringSize          #2
+        ENDPROPERTIES
+        
+      FIELD #IsPrimary
+        ENUM
+        PROPERTIES
+          Name                #IsPrimary
+          Table               #dev_CustomerAddressDelete
+          Origin              #{6DEB3666-6087-47BD-9B9D-3F5DF47B6961}
+          ExtendedDataType    #LogisticsIsPrimaryAddress
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #IsPrimaryTaxRegistration
+        ENUM
+        PROPERTIES
+          Name                #IsPrimaryTaxRegistration
+          Table               #dev_CustomerAddressDelete
+          CountryRegionCodes  #RU
+          Origin              #{EDCE8B14-B496-4F36-8274-2266FF5743F2}
+          ExtendedDataType    #LogisticsIsPrimaryTaxRegistrationAddress
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #IsPrivate
+        ENUM
+        PROPERTIES
+          Name                #IsPrivate
+          Table               #dev_CustomerAddressDelete
+          Origin              #{9382FFAA-FFCB-4F9F-A7A7-D745683F44F9}
+          ExtendedDataType    #LogisticsIsPrivate
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Latitude
+        REAL
+        PROPERTIES
+          Name                #Latitude
+          Table               #dev_CustomerAddressDelete
+          Origin              #{EC465FAF-375E-440D-A2E4-974B656868E5}
+          ExtendedDataType    #LogisticsAddressLatitude
+        ENDPROPERTIES
+        
+      FIELD #Location
+        INT64
+        PROPERTIES
+          Name                #Location
+          Mandatory           #Yes
+          Table               #dev_CustomerAddressDelete
+          Origin              #{52767F29-CA8F-4CAB-808D-EE26939C8080}
+          ExtendedDataType    #LogisticsLocationRecId
+        ENDPROPERTIES
+        
+      FIELD #LocationName
+        STRING
+        PROPERTIES
+          Name                #LocationName
+          Label               #@SYS335041
+          HelpText            #@SYS344258
+          Table               #dev_CustomerAddressDelete
+          Origin              #{D8D2B40E-3DB3-4859-9876-F7C4C2233A53}
+          ExtendedDataType    #Description
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Longitude
+        REAL
+        PROPERTIES
+          Name                #Longitude
+          Table               #dev_CustomerAddressDelete
+          Origin              #{9507741B-5E48-44B1-A8FB-ABD50746FA3D}
+          ExtendedDataType    #LogisticsAddressLongitude
+        ENDPROPERTIES
+        
+      FIELD #Party
+        INT64
+        PROPERTIES
+          Name                #Party
+          Mandatory           #Yes
+          Table               #dev_CustomerAddressDelete
+          Origin              #{AF60B057-E838-46E2-91A9-8BD42982AC7C}
+          ExtendedDataType    #DirPartyRecId
+        ENDPROPERTIES
+        
+      FIELD #PartyLocation
+        INT64
+        PROPERTIES
+          Name                #PartyLocation
+          Table               #dev_CustomerAddressDelete
+          Origin              #{D498709E-E5A7-43A6-9D8D-3120A28E0A26}
+          ExtendedDataType    #RecId
+        ENDPROPERTIES
+        
+      FIELD #PostalAddress
+        INT64
+        PROPERTIES
+          Name                #PostalAddress
+          Table               #dev_CustomerAddressDelete
+          Origin              #{AFC0DCEA-221D-4248-B578-92CA680A5B0D}
+          ExtendedDataType    #RecId
+        ENDPROPERTIES
+        
+      FIELD #PostBox
+        STRING
+        PROPERTIES
+          Name                #PostBox
+          Table               #dev_CustomerAddressDelete
+          Origin              #{69EEC2C2-B78A-417E-AB8F-7A680F7ADD26}
+          ExtendedDataType    #LogisticsAddressPostBox
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #PrivateForParty
+        INT64
+        PROPERTIES
+          Name                #PrivateForParty
+          Table               #dev_CustomerAddressDelete
+          Origin              #{F295CAA0-68A0-4A2C-BB4A-AA3313115808}
+          ExtendedDataType    #DirPartyPrivateLocationRecId
+        ENDPROPERTIES
+        
+      FIELD #State
+        STRING
+        PROPERTIES
+          Name                #State
+          Table               #dev_CustomerAddressDelete
+          Origin              #{D99CDDA9-49F5-4945-8808-2E9CB07FBF31}
+          ExtendedDataType    #LogisticsAddressStateId
+        ENDPROPERTIES
+        
+      FIELD #Street
+        STRING
+        PROPERTIES
+          Name                #Street
+          Table               #dev_CustomerAddressDelete
+          Origin              #{20C240C8-C01D-4453-93E7-90206C46867E}
+          ExtendedDataType    #LogisticsAddressStreet
+          StringSize          #250
+        ENDPROPERTIES
+        
+      FIELD #StreetId_RU
+        INT64
+        PROPERTIES
+          Name                #StreetId_RU
+          Table               #dev_CustomerAddressDelete
+          Origin              #{A231C262-867E-4D20-9600-B3159DA7461A}
+          ExtendedDataType    #LogisticsAddressStreetID_RU
+        ENDPROPERTIES
+        
+      FIELD #StreetNumber
+        STRING
+        PROPERTIES
+          Name                #StreetNumber
+          Table               #dev_CustomerAddressDelete
+          Origin              #{06128FFF-A7F8-47B8-A75D-213B72C663E8}
+          ExtendedDataType    #LogisticsAddressStreetNumber
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #TimeZone
+        ENUM
+        PROPERTIES
+          Name                #TimeZone
+          Label               #@SYS102501
+          HelpText            #@SYS108837
+          Table               #dev_CustomerAddressDelete
+          Origin              #{2DA685DE-42C6-4666-9DBF-15F852CA86FC}
+          EnumType            #Timezone
+        ENDPROPERTIES
+        
+      FIELD #ValidFrom
+        DATETIME
+        PROPERTIES
+          Name                #ValidFrom
+          Table               #dev_CustomerAddressDelete
+          Origin              #{7DA446A3-9E28-497D-93C7-0A75C97D66B8}
+          ExtendedDataType    #EffectiveDateTime
+        ENDPROPERTIES
+        
+      FIELD #ValidTo
+        DATETIME
+        PROPERTIES
+          Name                #ValidTo
+          Table               #dev_CustomerAddressDelete
+          Origin              #{CBAF7CD0-5CD9-42D8-A777-9C51633089EC}
+          ExtendedDataType    #ExpirationDateTime
+        ENDPROPERTIES
+        
+      FIELD #ZipCode
+        STRING
+        PROPERTIES
+          Name                #ZipCode
+          Table               #dev_CustomerAddressDelete
+          Origin              #{F4F3D376-8F96-416C-AA51-F60D836E0C38}
+          ExtendedDataType    #LogisticsAddressZipCodeId
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #IdxAccountnum
+      PROPERTIES
+        Name                #IdxAccountnum
+        Origin              #{BB0FE646-3876-49CE-99FE-4D6F8B01C746}
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+        #Party
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    FULLTEXTINDICES
+    ENDFULLTEXTINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END
